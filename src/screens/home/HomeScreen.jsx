@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Button, Text } from "react-native";
-import styles from "../styles/home.Styles";
-import Login from "./Login";
-import Register from "./Register";
+import { View, Button } from "react-native";
+import LoginScreen from "../login/LoginScreen";
+import RegisterScreen from "../register/RegisterScreen";
+import styles from "./homeS.Styles";
 
-const Home = () => {
+const HomeScreen = () => {
   const [currentScreen, setCurrentScreen] = useState(null);
 
   const renderInitialButtons = () => {
@@ -23,19 +23,12 @@ const Home = () => {
   };
 
   const renderSelectedScreen = () => {
-    if (currentScreen !== null) {
-      return (
-        <View>
-          {currentScreen === "login" ? <Login /> : <Register />}
-          <Button
-            title="Go Back"
-            onPress={() => setCurrentScreen(null)}
-            style={styles.goBackButton}
-          />
-        </View>
-      );
-    }
-    return null;
+    return currentScreen !== null ? (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        {currentScreen === "login" ? <LoginScreen /> : <RegisterScreen />}
+        <Button title="Go Back Home" onPress={() => setCurrentScreen(null)} />
+      </View>
+    ) : null;
   };
 
   return (
@@ -46,4 +39,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeScreen;
