@@ -1,6 +1,13 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    margin: 18,
+    borderRadius: 4,
+    padding: 20,
+  },
   line: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     marginBottom: 25,
@@ -22,6 +29,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginVertical: 20,
   },
+  userAuth: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
   userData: {
     flex: 1,
     justifyContent: "flex-start",
@@ -30,7 +41,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontWeight: "500",
     color: "#333333",
-    padding: 4
+    padding: 4,
   },
 });
 

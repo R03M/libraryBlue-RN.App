@@ -1,11 +1,22 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, Alert, ScrollView } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  Alert,
+  ScrollView,
+  Image,
+} from "react-native";
 import BtnCustom from "../../components/BtnCustom";
 import styles from "./registerS.Styles";
 import { positionInf } from "../../utils/positionInf";
+import * as ImagePicker from "expo-image-picker";
+import { uploadImage } from "../../utils/cloudinary";
 
 const RegisterScreen = () => {
   const [screen, setScreen] = useState("auth");
+  const [picCloudinary, setPicCloudinary] = useState(null);
   const [auth, setAuth] = useState({
     email: "",
     password: "",
@@ -14,7 +25,7 @@ const RegisterScreen = () => {
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
-    image: "",
+    image: null,
     position: null,
     status: "Active",
   });
@@ -44,28 +55,39 @@ const RegisterScreen = () => {
 
   const descriptionTypeAccound = () => {
     if (userData.position === "Observant") {
-      return <Text style={styles.descripPosition}>{positionInf.Observant}</Text>;
+      return (
+        <Text style={styles.descripPosition}>{positionInf.Observant}</Text>
+      );
     }
     if (userData.position === "Manager") {
       return <Text style={styles.descripPosition}>{positionInf.Manager}</Text>;
     }
   };
 
+  const selectImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!result.canceled) {
+        const response = await uploadImage(result.assets[0].uri);
+        handlerValue(setUserData, "image", response);
+        setPicCloudinary(true);
+      }
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={{ height: "100%" }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "white",
-          margin: 18,
-          borderRadius: 4,
-          padding: 20,
-        }}
-      >
+    <ScrollView contentContainerStyle={{}}>
+      <View style={styles.container}>
         <Text style={{ fontSize: 30, fontWeight: "bold" }}>Registro</Text>
         <View style={styles.line}></View>
         {screen === "auth" ? (
-          <View style={styles.userData}>
+          <View style={styles.userAuth}>
             <TextInput
               style={styles.textInputAuth}
               onChangeText={(value) => handlerValue(setAuth, "email", value)}
@@ -108,17 +130,49 @@ const RegisterScreen = () => {
                 placeholder="smith"
               />
             </View>
+
             <View style={styles.rows}>
-              <Text>Image</Text>
-              <TextInput
-                style={styles.textInput}
-                onChangeText={(value) =>
-                  handlerValue(setUserData, "image", value)
-                }
-                value={userData.lastName}
-                placeholder="image"
-              />
+              <Text>Select Image</Text>
+              {userData.image && picCloudinary ? null : (
+                <TextInput
+                  style={[styles.textInput, { width: "30%" }]}
+                  onChangeText={(value) => {
+                    setPicCloudinary(false);
+                    handlerValue(setUserData, "image", value);
+                  }}
+                  value={userData.image}
+                  placeholder="https://image.jpg"
+                />
+              )}
+              {userData.image && !picCloudinary ? null : (
+                <BtnCustom
+                  title={"Galeria"}
+                  onPress={selectImage}
+                  backgroundColor={"purple"}
+                  textColor={"black"}
+                />
+              )}
+              {userData.image ? (
+                <BtnCustom
+                  title={"🗑"}
+                  onPress={() => {
+                    setPicCloudinary(null);
+                    handlerValue(setUserData, "image", null);
+                  }}
+                  backgroundColor={"red"}
+                  textColor={"black"}
+                />
+              ) : null}
             </View>
+            {!userData.image ? null : (
+              <View style={styles.rows}>
+                <Text>Image</Text>
+                <Image
+                  source={{ uri: userData.image }}
+                  style={{ height: 80, width: 80 }}
+                />
+              </View>
+            )}
             <View style={styles.rows}>
               <Text>Cuenta de </Text>
               <View style={{ flexDirection: "row" }}>
@@ -154,27 +208,19 @@ const RegisterScreen = () => {
               </View>
             </View>
             {descriptionTypeAccound()}
-            <View
-              style={{
-                position: "absolute",
-                bottom: 10,
-                width: "100%",
-              }}
-            >
-              <View style={styles.rows}>
-                <BtnCustom
-                  title={"Go Back"}
-                  onPress={() => setScreen("auth")}
-                  backgroundColor={"#cca120"}
-                  textColor={"white"}
-                />
-                <BtnCustom
-                  title={"Registrar"}
-                  onPress={register}
-                  backgroundColor={"#4caf50"}
-                  textColor={"white"}
-                />
-              </View>
+            <View style={styles.rows}>
+              <BtnCustom
+                title={"Go Back"}
+                onPress={() => setScreen("auth")}
+                backgroundColor={"#cca120"}
+                textColor={"white"}
+              />
+              <BtnCustom
+                title={"Registrar"}
+                onPress={register}
+                backgroundColor={"#4caf50"}
+                textColor={"white"}
+              />
             </View>
           </View>
         )}
