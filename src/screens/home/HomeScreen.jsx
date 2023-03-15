@@ -24,7 +24,7 @@ const HomeScreen = () => {
 
   const renderSelectedScreen = () => {
     return currentScreen !== null ? (
-      <View style={{ flex: 1, justifyContent: "center" }}>
+      <View style={{ flexGrow: 1, justifyContent: "center" }}>
         {currentScreen === "login" ? <LoginScreen /> : <RegisterScreen />}
         <Button title="Go Back Home" onPress={() => setCurrentScreen(null)} />
       </View>
