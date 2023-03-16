@@ -175,7 +175,13 @@ const RegisterScreen = () => {
             )}
             <View style={styles.rows}>
               <Text>Cuenta de </Text>
-              <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  width: "65%",
+                }}
+              >
                 {userData.position === "Observant" ? null : (
                   <BtnCustom
                     title={"Coordinador"}
