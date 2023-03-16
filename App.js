@@ -1,11 +1,11 @@
-import { StatusBar } from "react-native";
-import HomeScreen from "./src/screens/home/HomeScreen";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/store";
+import Navigation from "./Navigation";
 
 export default function App() {
   return (
-    <>
-      <StatusBar backgroundColor={"#5998c0"} />
-      <HomeScreen />
-    </>
+    <Provider store={store}>
+      <Navigation />
+    </Provider>
   );
 }
