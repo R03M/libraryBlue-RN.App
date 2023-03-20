@@ -1,20 +1,31 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { View, Text, TextInput, Button, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { deleteResponseEmail } from "../../redux/userSlice";
 import { validateEmail } from "../../utils/validateEmail";
 import { AntDesign } from "@expo/vector-icons";
-import styles from "./loginS.Styles";
 import { loginAccount, checkEmail } from "../../redux/actions";
+import { Entypo } from "@expo/vector-icons";
+import styles from "./loginS.Styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const infEmail = useSelector((state) => state.user.responseEmail.infocheck);
-  const user = useSelector((state) => state.user.dataUser.userData);
-  console.log(user)
+  const { status, error } = useSelector((state) => state.user);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [errorEmail, setErrorEmail] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const IconsStatus = () => {
     if (infEmail !== undefined) {
@@ -40,9 +51,33 @@ const LoginScreen = () => {
     }
   };
 
+  const ShowPassW = () => {
+    return (
+      <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+        {showPassword ? (
+          <Entypo
+            name="eye-with-line"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+          />
+        ) : (
+          <Entypo
+            name="eye"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+          />
+        )}
+      </TouchableOpacity>
+    );
+  };
+
   const handlerValidation = () => {
-    const error = validateEmail(email);
-    !error ? (dispatch(checkEmail(email)), setError(null)) : setError(error);
+    const errorM = validateEmail(email);
+    !errorM
+      ? (dispatch(checkEmail(email)), setErrorEmail(null))
+      : setErrorEmail(errorM);
   };
 
   const handlerChange = (value) => {
@@ -54,9 +89,9 @@ const LoginScreen = () => {
   };
 
   const logIn = () => {
-    // if (!error) {
+    if (errorEmail === null) {
       dispatch(loginAccount({ email, password }));
-    // }
+    }
   };
 
   return (
@@ -80,23 +115,20 @@ const LoginScreen = () => {
             />
             <IconsStatus />
           </View>
-          {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+          {errorEmail ? (
+            <Text style={{ color: "red" }}>{errorEmail}</Text>
+          ) : null}
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          ></View>
-
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setPassword}
-            value={password}
-            placeholder="Password"
-            secureTextEntry={true}
-          />
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TextInput
+              style={[styles.textInput, { width: "90%" }]}
+              onChangeText={setPassword}
+              value={password}
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+            />
+            <ShowPassW />
+          </View>
 
           <Button title="Iniciar sesión" onPress={logIn} />
         </View>
@@ -111,10 +143,14 @@ const LoginScreen = () => {
               }}
             >
               <Text style={{ color: "white", fontWeight: "600", fontSize: 15 }}>
-                El email {email} no existe
+                No existe una cuenta con el email {email}
               </Text>
             </View>
           ) : null)}
+        {status === "loading" && (
+          <ActivityIndicator size="large" color="#0000ff" />
+        )}
+        {error && <Text>{error.message}</Text>}
       </View>
     </ScrollView>
   );
