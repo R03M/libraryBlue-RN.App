@@ -3,7 +3,7 @@ import { checkEmail, loginAccount } from "./actions";
 
 const initialState = {
   dataUser: [],
-  token: null,
+  token: "n/a",
   responseEmail: [],
   status: "idle",
   error: [],
@@ -18,6 +18,12 @@ export const userSlice = createSlice({
     },
     setUserToken: (state, action) => {
       state.token = action.payload;
+    },
+    deleteDataUser: (state) => {
+      state.dataUser = [];
+    },
+    deleteUserToken: (state) => {
+      state.token = null;
     },
     deleteResponseEmail: (state) => {
       state.responseEmail = [];
@@ -37,7 +43,7 @@ export const userSlice = createSlice({
       })
       .addCase(checkEmail.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload.message;
+        // state.error = action.payload;
       })
 
       //? loginAccount
@@ -47,10 +53,10 @@ export const userSlice = createSlice({
       })
       .addCase(
         loginAccount.fulfilled,
-        (state, { payload: { userData } }) => {
+        (state, { payload: { userData, token } }) => {
           state.status = "succeeded";
           state.dataUser = userData;
-          // state.token = token;
+          state.token = token;
         }
       )
       .addCase(loginAccount.rejected, (state, action) => {
@@ -60,6 +66,12 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, setUserToken, deleteResponseEmail } = userSlice.actions;
+export const {
+  setUser,
+  setUserToken,
+  deleteUserToken,
+  deleteDataUser,
+  deleteResponseEmail,
+} = userSlice.actions;
 
 export default userSlice.reducer;
