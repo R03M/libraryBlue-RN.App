@@ -31,3 +31,8 @@ export const loginAccount = createAsyncThunk(
     }
   }
 );
+
+export const checkEmailToRegister = createAsyncThunk("user/checkEmailToRegister", async (email) => {
+  const response = await postInfEmail(email);
+  return response;
+});
