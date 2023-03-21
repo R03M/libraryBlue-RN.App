@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
   },
+  title: { 
+    fontSize: 30, 
+    fontWeight: "bold" 
+  },
   subContainer: {
     flex: 1,
     justifyContent: "space-between",
@@ -24,6 +28,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginVertical: 20,
     width: "100%",
+  },
+  viewEmailandPass: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  viewError: {
+    backgroundColor: "red",
+    marginTop: 20,
+    borderRadius: 4,
+    padding: 10,
+  },
+  textError: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 15,
   },
 });
 

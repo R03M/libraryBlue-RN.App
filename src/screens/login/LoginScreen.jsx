@@ -8,20 +8,25 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
-import { deleteResponseEmail } from "../../redux/userSlice";
+import {
+  cleanErrorLogin,
+  cleanResponseEmail,
+  cleanStatusLogin,
+} from "../../redux/userSlice";
 import { validateEmail } from "../../utils/validateEmail";
 import { AntDesign } from "@expo/vector-icons";
 import { loginAccount, checkEmail } from "../../redux/actions";
 import { Entypo } from "@expo/vector-icons";
 import styles from "./loginS.Styles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
-  const infEmail = useSelector((state) => state.user.responseEmail.infocheck);
-  const { status, error } = useSelector((state) => state.user);
-
+  const infEmail = useSelector(
+    (state) => state.user.responseCheckEmail.infocheck
+  );
+  const { statusLogin, errorLogin } = useSelector((state) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(null);
@@ -42,7 +47,7 @@ const LoginScreen = () => {
         return (
           <AntDesign
             name="closecircleo"
-            size={24}
+            size={20}
             color="red"
             style={{ marginLeft: 10 }}
           />
@@ -81,26 +86,40 @@ const LoginScreen = () => {
   };
 
   const handlerChange = (value) => {
+    dispatch(cleanResponseEmail());
+    dispatch(cleanStatusLogin());
+    dispatch(cleanErrorLogin());
     setEmail(value);
-    const error = validateEmail(email);
-    if (error) {
-      dispatch(deleteResponseEmail());
-    }
+  };
+
+  const handlerPassW = (value) => {
+    dispatch(cleanErrorLogin());
+    dispatch(cleanStatusLogin());
+    setPassword(value);
   };
 
   const logIn = () => {
-    if (errorEmail === null) {
+    if (errorEmail === null && email !== "" && password !== "") {
       dispatch(loginAccount({ email, password }));
+    } else {
+      Alert.alert(
+        "Credenciales Requeridas",
+        "Email y contraseña son requeridas para iniciar sesión.",
+        [],
+        {
+          cancelable: true,
+        }
+      );
     }
   };
 
   return (
     <ScrollView contentContainerStyle={{}}>
       <View style={styles.container}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>Iniciar Sesión</Text>
+        <Text style={styles.title}>Iniciar Sesión</Text>
         <View style={styles.line}></View>
         <View style={styles.subContainer}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.viewEmailandPass}>
             <TextInput
               style={
                 infEmail
@@ -119,38 +138,40 @@ const LoginScreen = () => {
             <Text style={{ color: "red" }}>{errorEmail}</Text>
           ) : null}
 
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.viewEmailandPass}>
             <TextInput
               style={[styles.textInput, { width: "90%" }]}
-              onChangeText={setPassword}
+              onChangeText={(value) => handlerPassW(value)}
               value={password}
               placeholder="Password"
               secureTextEntry={!showPassword}
             />
             <ShowPassW />
           </View>
-
-          <Button title="Iniciar sesión" onPress={logIn} />
+          <View style={{ marginTop: 30 }}>
+            <Button title="Iniciar sesión" onPress={logIn} color={"#5998c0"} />
+          </View>
         </View>
         {infEmail &&
           (!infEmail.email ? (
-            <View
-              style={{
-                backgroundColor: "red",
-                marginTop: 50,
-                borderRadius: 4,
-                padding: 10,
-              }}
-            >
-              <Text style={{ color: "white", fontWeight: "600", fontSize: 15 }}>
+            <View style={styles.viewError}>
+              <Text style={styles.textError}>
                 No existe una cuenta con el email {email}
               </Text>
             </View>
           ) : null)}
-        {status === "loading" && (
-          <ActivityIndicator size="large" color="#0000ff" />
+        {statusLogin === "loading" && (
+          <ActivityIndicator
+            size="large"
+            color="#2296f3"
+            style={{ marginVertical: "10%" }}
+          />
         )}
-        {error && <Text>{error.message}</Text>}
+        {errorLogin === 401 && (
+          <View style={styles.viewError}>
+            <Text style={styles.textError}>Contraseña incorrecta</Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
