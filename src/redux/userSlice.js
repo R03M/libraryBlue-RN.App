@@ -4,9 +4,11 @@ import { checkEmail, loginAccount } from "./actions";
 const initialState = {
   dataUser: [],
   token: "n/a",
-  responseEmail: [],
-  status: "idle",
-  error: [],
+  responseCheckEmail: [],
+  statusCheckMail: "idle",
+  errorCheckMail: null,
+  statusLogin: "idle",
+  errorLogin: null,
 };
 
 export const userSlice = createSlice({
@@ -25,8 +27,14 @@ export const userSlice = createSlice({
     deleteUserToken: (state) => {
       state.token = null;
     },
-    deleteResponseEmail: (state) => {
-      state.responseEmail = [];
+    cleanResponseEmail: (state) => {
+      state.responseCheckEmail = [];
+    },
+    cleanStatusLogin: (state) => {
+      state.statusLogin = "idle";
+    },
+    cleanErrorLogin: (state) => {
+      state.errorLogin = null;
     },
   },
   extraReducers: (builder) => {
@@ -35,33 +43,33 @@ export const userSlice = createSlice({
       //? checkEmail
 
       .addCase(checkEmail.pending, (state) => {
-        state.status = "loading";
+        state.statusCheckMail = "loading";
       })
       .addCase(checkEmail.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.responseEmail = action.payload;
+        state.statusCheckMail = "succeeded";
+        state.responseCheckEmail = action.payload;
       })
       .addCase(checkEmail.rejected, (state, action) => {
-        state.status = "failed";
-        // state.error = action.payload;
+        state.statusCheckMail = "failed";
+        state.errorCheckMail = action.payload;
       })
 
       //? loginAccount
 
       .addCase(loginAccount.pending, (state) => {
-        state.status = "loading";
+        state.statusLogin = "loading";
       })
       .addCase(
         loginAccount.fulfilled,
         (state, { payload: { userData, token } }) => {
-          state.status = "succeeded";
+          state.statusLogin = "succeeded";
           state.dataUser = userData;
           state.token = token;
         }
       )
       .addCase(loginAccount.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload;
+        state.statusLogin = "failed";
+        state.errorLogin = action.payload;
       });
   },
 });
@@ -71,7 +79,9 @@ export const {
   setUserToken,
   deleteUserToken,
   deleteDataUser,
-  deleteResponseEmail,
+  cleanResponseEmail,
+  cleanStatusLogin,
+  cleanErrorLogin,
 } = userSlice.actions;
 
 export default userSlice.reducer;

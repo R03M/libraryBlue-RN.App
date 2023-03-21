@@ -10,10 +10,24 @@ export const checkEmail = createAsyncThunk("user/checkEmail", async (email) => {
 
 export const loginAccount = createAsyncThunk(
   "user/loginAccount",
-  async ({ email, password }) => {
-    const response = await postLoginUser(email, password);
-    await AsyncStorage.setItem("@UserData", JSON.stringify(response.userData));
-    await AsyncStorage.setItem("@TokenAccess", JSON.stringify(response.token));
-    return response;
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await postLoginUser(email, password);
+      await AsyncStorage.setItem(
+        "@UserData",
+        JSON.stringify(response.userData)
+      );
+      await AsyncStorage.setItem(
+        "@TokenAccess",
+        JSON.stringify(response.token)
+      );
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
   }
 );
