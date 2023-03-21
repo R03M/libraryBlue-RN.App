@@ -43,6 +43,21 @@ const styles = StyleSheet.create({
     color: "#333333",
     padding: 4,
   },
+  viewError: {
+    backgroundColor: "red",
+    marginTop: 20,
+    borderRadius: 4,
+    padding: 10,
+  },
+  textError: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 15,
+  },
+  viewEmailandPass: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });
 
 export default styles;
