@@ -1,14 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkEmail, loginAccount } from "./actions";
+import { checkEmail, loginAccount, checkEmailToRegister } from "./actions";
 
 const initialState = {
   dataUser: [],
   token: "n/a",
+
+  //? to login
   responseCheckEmail: [],
-  statusCheckMail: "idle",
-  errorCheckMail: null,
+  statusCheckEmailToLogin: "idle",
+  errorCheckEmailToLogin: null,
+
+  //? login
   statusLogin: "idle",
   errorLogin: null,
+
+  //? to registe
+  responseCheckEmailToRegister: [],
+  statusCheckEmailRegister: "idle",
+  errorCheckEmailRegister: null,
 };
 
 export const userSlice = createSlice({
@@ -36,22 +45,39 @@ export const userSlice = createSlice({
     cleanErrorLogin: (state) => {
       state.errorLogin = null;
     },
+    cleanResponseEmailToRegister: (state) => {
+      state.responseCheckEmailToRegister = [];
+    },
   },
   extraReducers: (builder) => {
     builder
 
-      //? checkEmail
+      //? checkEmailToLogin
 
       .addCase(checkEmail.pending, (state) => {
-        state.statusCheckMail = "loading";
+        state.statusCheckEmailToLogin = "loading";
       })
       .addCase(checkEmail.fulfilled, (state, action) => {
-        state.statusCheckMail = "succeeded";
+        state.statusCheckEmailToLogin = "succeeded";
         state.responseCheckEmail = action.payload;
       })
       .addCase(checkEmail.rejected, (state, action) => {
-        state.statusCheckMail = "failed";
-        state.errorCheckMail = action.payload;
+        state.statusCheckEmailToLogin = "failed";
+        state.errorCheckEmailToLogin = action.payload;
+      })
+
+      //? checkEmailToRegister
+
+      .addCase(checkEmailToRegister.pending, (state) => {
+        state.statusCheckEmailRegister = "loading";
+      })
+      .addCase(checkEmailToRegister.fulfilled, (state, action) => {
+        state.statusCheckEmailRegister = "succeeded";
+        state.responseCheckEmailToRegister = action.payload;
+      })
+      .addCase(checkEmailToRegister.rejected, (state, action) => {
+        state.statusCheckEmailRegister = "failed";
+        state.errorCheckEmailRegister = action.payload;
       })
 
       //? loginAccount
@@ -82,6 +108,7 @@ export const {
   cleanResponseEmail,
   cleanStatusLogin,
   cleanErrorLogin,
+  cleanResponseEmailToRegister
 } = userSlice.actions;
 
 export default userSlice.reducer;
