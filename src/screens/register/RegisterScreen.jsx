@@ -7,16 +7,34 @@ import {
   Alert,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import BtnCustom from "../../components/BtnCustom";
-import styles from "./registerS.Styles";
-import { positionInf } from "../../utils/positionInf";
 import * as ImagePicker from "expo-image-picker";
+import { positionInf } from "../../utils/positionInf";
 import { uploadImage } from "../../utils/cloudinary";
+import { checkEmailToRegister } from "../../redux/actions";
+import { validateEmail } from "../../utils/validateEmail";
+import { cleanResponseEmailToRegister } from "../../redux/userSlice";
+import { validatePassword } from "../../utils/password";
+import { Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import styles from "./registerS.Styles";
 
 const RegisterScreen = () => {
+  const dispatch = useDispatch();
   const [screen, setScreen] = useState("auth");
+  const [errorEmail, setErrorEmail] = useState(null);
+  const [errorPassword, setErrorPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
   const [picCloudinary, setPicCloudinary] = useState(null);
+
+  const infEmail = useSelector(
+    (state) => state.user.responseCheckEmailToRegister.infocheck
+  );
+
   const [auth, setAuth] = useState({
     email: "",
     password: "",
@@ -31,11 +49,18 @@ const RegisterScreen = () => {
   });
 
   const nextScreen = () => {
-    // if (auth.email !== "" && auth.password !== "") {
-    // } else {
-    //   Alert.alert("Error", "Se requiere Email y Password para continuar");
-    // }
-    setScreen("userData");
+    const isValid =
+      auth.email && auth.password && !errorEmail && !errorPassword;
+    return isValid
+      ? setScreen("userData")
+      : Alert.alert(
+          "Error",
+          "Se requiere correo electronico y contraseña validos para continuar.",
+          [],
+          {
+            cancelable: true,
+          }
+        );
   };
 
   /**
@@ -47,12 +72,58 @@ const RegisterScreen = () => {
    */
   const handlerValue = (set, type, value) => {
     set((prevAuth) => ({ ...prevAuth, [type]: value }));
+    dispatch(cleanResponseEmailToRegister());
   };
 
   const register = () => {
-    console.log({ ...auth, ...userData });
+    // console.log({ ...auth, ...userData });
   };
 
+  const ShowPassW = () => {
+    return (
+      <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+        {showPassword ? (
+          <Entypo
+            name="eye-with-line"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+          />
+        ) : (
+          <Entypo
+            name="eye"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+          />
+        )}
+      </TouchableOpacity>
+    );
+  };
+
+  const IconsStatus = () => {
+    if (infEmail !== undefined) {
+      if (!infEmail.email) {
+        return (
+          <AntDesign
+            name="checkcircle"
+            size={20}
+            color="green"
+            style={{ marginLeft: 10 }}
+          />
+        );
+      } else {
+        return (
+          <AntDesign
+            name="closecircleo"
+            size={20}
+            color="red"
+            style={{ marginLeft: 10 }}
+          />
+        );
+      }
+    }
+  };
   const descriptionTypeAccound = () => {
     if (userData.position === "Observant") {
       return (
@@ -80,6 +151,19 @@ const RegisterScreen = () => {
       }
     }
   };
+  const emailValidation = () => {
+    const errorValidate = validateEmail(auth.email);
+    !errorValidate
+      ? (dispatch(checkEmailToRegister(auth.email)), setErrorEmail(null))
+      : setErrorEmail(errorValidate);
+  };
+
+  const passwordValidation = (value) => {
+    const passwordValidate = validatePassword(value);
+    !passwordValidate
+      ? setErrorPassword(null)
+      : setErrorPassword(passwordValidate);
+  };
 
   return (
     <ScrollView contentContainerStyle={{}}>
@@ -88,22 +172,54 @@ const RegisterScreen = () => {
         <View style={styles.line}></View>
         {screen === "auth" ? (
           <View style={styles.userAuth}>
-            <TextInput
-              style={styles.textInputAuth}
-              onChangeText={(value) => handlerValue(setAuth, "email", value)}
-              value={auth.email}
-              placeholder="email"
-            />
-            <TextInput
-              style={styles.textInputAuth}
-              onChangeText={(value) => handlerValue(setAuth, "password", value)}
-              value={auth.password}
-              placeholder="password"
-              secureTextEntry={true}
-            />
-            <View style={{ fontSize: 20, marginVertical: 20 }}>
+            <View style={styles.viewEmailandPass}>
+              <TextInput
+                style={[styles.textInputAuth, { width: "90%" }]}
+                onChangeText={(value) => handlerValue(setAuth, "email", value)}
+                value={auth.email}
+                placeholder="Email"
+                onBlur={emailValidation}
+              />
+              <IconsStatus />
+            </View>
+
+            {errorEmail ? (
+              <Text style={{ color: "red", fontWeight: 700 }}>
+                {errorEmail}
+              </Text>
+            ) : null}
+
+            <View style={styles.viewEmailandPass}>
+              <TextInput
+                style={[styles.textInputAuth, { width: "90%" }]}
+                onChangeText={(value) => {
+                  setErrorPassword(null);
+                  handlerValue(setAuth, "password", value);
+                  passwordValidation(value);
+                }}
+                value={auth.password}
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+              />
+              <ShowPassW />
+            </View>
+            {!errorPassword ? null : (
+              <Text style={{ color: "red", fontWeight: 700 }}>
+                {errorPassword}
+              </Text>
+            )}
+            <View style={{ marginTop: 20 }}>
               <Button title="Continuar" onPress={nextScreen} />
             </View>
+            {infEmail &&
+              (infEmail.email ? (
+                <View style={styles.viewError}>
+                  <Text style={styles.textError}>
+                    Ya existe una cuenta con ese correo electronico, si es tuya
+                    puedes ingresar directamente en el apartado Login.
+                  </Text>
+                </View>
+              ) : null)}
           </View>
         ) : (
           <View style={styles.userData}>
