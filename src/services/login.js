@@ -12,3 +12,14 @@ export const postLoginUser = async (email, password) => {
     throw error;
   }
 };
+
+export const postRegisterUser = async (data) => {
+  try {
+    const response = await axios.post(`${CORS_URL}/register/new`, {
+      data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
