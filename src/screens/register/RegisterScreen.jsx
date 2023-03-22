@@ -14,7 +14,7 @@ import BtnCustom from "../../components/BtnCustom";
 import * as ImagePicker from "expo-image-picker";
 import { positionInf } from "../../utils/positionInf";
 import { uploadImage } from "../../utils/cloudinary";
-import { checkEmailToRegister } from "../../redux/actions";
+import { checkEmailToRegister, registerAccount } from "../../redux/actions";
 import { validateEmail } from "../../utils/validateEmail";
 import { cleanResponseEmailToRegister } from "../../redux/userSlice";
 import { validatePassword } from "../../utils/password";
@@ -28,6 +28,10 @@ const RegisterScreen = () => {
   const [errorEmail, setErrorEmail] = useState(null);
   const [errorPassword, setErrorPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const { statusCreateAccount, errorCreateAccount } = useSelector(
+    (state) => state.user
+  );
+  console.log(statusCreateAccount, errorCreateAccount);
 
   const [picCloudinary, setPicCloudinary] = useState(null);
 
@@ -76,7 +80,7 @@ const RegisterScreen = () => {
   };
 
   const register = () => {
-    // console.log({ ...auth, ...userData });
+    dispatch(registerAccount({ data: { ...auth, ...userData } }));
   };
 
   const ShowPassW = () => {
@@ -168,7 +172,23 @@ const RegisterScreen = () => {
   return (
     <ScrollView contentContainerStyle={{}}>
       <View style={styles.container}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>Registro</Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 30, fontWeight: "bold", margin: 10 }}>
+            Registro
+          </Text>
+          {!userData.image ? null : (
+            <Image
+              source={{ uri: userData.image }}
+              style={{
+                height: 60,
+                width: 60,
+                borderRadius: 10,
+                marginHorizontal: 10,
+                marginTop: -10,
+              }}
+            />
+          )}
+        </View>
         <View style={styles.line}></View>
         {screen === "auth" ? (
           <View style={styles.userAuth}>
@@ -224,18 +244,18 @@ const RegisterScreen = () => {
         ) : (
           <View style={styles.userData}>
             <View style={styles.rows}>
-              <Text>FirstName</Text>
+              <Text>Nombre</Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) =>
                   handlerValue(setUserData, "firstName", value)
                 }
                 value={userData.firstName}
-                placeholder="jhon"
+                placeholder="Jhon"
               />
             </View>
             <View style={styles.rows}>
-              <Text>LastName</Text>
+              <Text>Apellido</Text>
 
               <TextInput
                 style={styles.textInput}
@@ -243,12 +263,12 @@ const RegisterScreen = () => {
                   handlerValue(setUserData, "lastName", value)
                 }
                 value={userData.lastName}
-                placeholder="smith"
+                placeholder="Smith"
               />
             </View>
 
             <View style={styles.rows}>
-              <Text>Select Image</Text>
+              <Text>Imagen</Text>
               {userData.image && picCloudinary ? null : (
                 <TextInput
                   style={[styles.textInput, { width: "30%" }]}
@@ -261,16 +281,18 @@ const RegisterScreen = () => {
                 />
               )}
               {userData.image && !picCloudinary ? null : (
-                <BtnCustom
-                  title={"Galeria"}
-                  onPress={selectImage}
-                  backgroundColor={"purple"}
-                  textColor={"black"}
-                />
+                <View style={{ marginHorizontal: -10 }}>
+                  <BtnCustom
+                    title={"Galeria"}
+                    onPress={selectImage}
+                    backgroundColor={"purple"}
+                    textColor={"black"}
+                  />
+                </View>
               )}
               {userData.image ? (
                 <BtnCustom
-                  title={"🗑"}
+                  title={<AntDesign name="delete" size={20} color="white" />}
                   onPress={() => {
                     setPicCloudinary(null);
                     handlerValue(setUserData, "image", null);
@@ -280,17 +302,9 @@ const RegisterScreen = () => {
                 />
               ) : null}
             </View>
-            {!userData.image ? null : (
-              <View style={styles.rows}>
-                <Text>Image</Text>
-                <Image
-                  source={{ uri: userData.image }}
-                  style={{ height: 80, width: 80 }}
-                />
-              </View>
-            )}
+
             <View style={styles.rows}>
-              <Text>Cuenta de </Text>
+              <Text>Cuenta</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -321,7 +335,7 @@ const RegisterScreen = () => {
 
                 {userData.position ? (
                   <BtnCustom
-                    title={"🗑"}
+                    title={<AntDesign name="delete" size={20} color="white" />}
                     onPress={() => handlerValue(setUserData, "position", null)}
                     backgroundColor={"red"}
                     textColor={"black"}
