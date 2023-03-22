@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkEmail, loginAccount, checkEmailToRegister } from "./actions";
+import { checkEmail, loginAccount, checkEmailToRegister, registerAccount } from "./actions";
 
 const initialState = {
   dataUser: [],
@@ -14,10 +14,13 @@ const initialState = {
   statusLogin: "idle",
   errorLogin: null,
 
-  //? to registe
+  //? to register
   responseCheckEmailToRegister: [],
   statusCheckEmailRegister: "idle",
   errorCheckEmailRegister: null,
+  statusCreateAccount: 'idle',
+  errorCreateAccount: null,
+
 };
 
 export const userSlice = createSlice({
@@ -96,6 +99,24 @@ export const userSlice = createSlice({
       .addCase(loginAccount.rejected, (state, action) => {
         state.statusLogin = "failed";
         state.errorLogin = action.payload;
+      })
+
+      //? registerAccount
+
+      .addCase(registerAccount.pending, (state) => {
+        state.statusCreateAccount = "loading";
+      })
+      .addCase(
+        registerAccount.fulfilled,
+        (state, { payload: { userData, token } }) => {
+          state.statusCreateAccount = "succeeded";
+          state.dataUser = userData;
+          state.token = token;
+        }
+      )
+      .addCase(registerAccount.rejected, (state, action) => {
+        state.statusCreateAccount = "failed";
+        state.errorCreateAccount = action.payload;
       });
   },
 });
@@ -108,7 +129,7 @@ export const {
   cleanResponseEmail,
   cleanStatusLogin,
   cleanErrorLogin,
-  cleanResponseEmailToRegister
+  cleanResponseEmailToRegister,
 } = userSlice.actions;
 
 export default userSlice.reducer;
