@@ -20,6 +20,8 @@ import { cleanResponseEmailToRegister } from "../../redux/userSlice";
 import { validatePassword } from "../../utils/password";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import handlerValue from "../../utils/handlerValue";
+import IconStatusNegative from "../../components/IconStatusNegative";
 import styles from "./registerS.Styles";
 
 const RegisterScreen = () => {
@@ -31,7 +33,6 @@ const RegisterScreen = () => {
   const { statusCreateAccount, errorCreateAccount } = useSelector(
     (state) => state.user
   );
-  console.log(statusCreateAccount, errorCreateAccount);
 
   const [picCloudinary, setPicCloudinary] = useState(null);
 
@@ -67,18 +68,6 @@ const RegisterScreen = () => {
         );
   };
 
-  /**
-   * Actualiza el estado de una variable con una propiedad dinámica
-   * @param {React.Dispatch<React.SetStateAction<{[key: string]: any}>>} set La función para actualizar el estado de la variable
-   * @param {string} type El nombre de la propiedad dinámica
-   * @param {any} value El nuevo valor de la propiedad
-   * @returns {void}
-   */
-  const handlerValue = (set, type, value) => {
-    set((prevAuth) => ({ ...prevAuth, [type]: value }));
-    dispatch(cleanResponseEmailToRegister());
-  };
-
   const register = () => {
     dispatch(registerAccount({ data: { ...auth, ...userData } }));
   };
@@ -105,29 +94,6 @@ const RegisterScreen = () => {
     );
   };
 
-  const IconsStatus = () => {
-    if (infEmail !== undefined) {
-      if (!infEmail.email) {
-        return (
-          <AntDesign
-            name="checkcircle"
-            size={20}
-            color="green"
-            style={{ marginLeft: 10 }}
-          />
-        );
-      } else {
-        return (
-          <AntDesign
-            name="closecircleo"
-            size={20}
-            color="red"
-            style={{ marginLeft: 10 }}
-          />
-        );
-      }
-    }
-  };
   const descriptionTypeAccound = () => {
     if (userData.position === "Observant") {
       return (
@@ -195,12 +161,15 @@ const RegisterScreen = () => {
             <View style={styles.viewEmailandPass}>
               <TextInput
                 style={[styles.textInputAuth, { width: "90%" }]}
-                onChangeText={(value) => handlerValue(setAuth, "email", value)}
+                onChangeText={(value) => {
+                  handlerValue(setAuth, "email", value);
+                  dispatch(cleanResponseEmailToRegister());
+                }}
                 value={auth.email}
                 placeholder="Email"
                 onBlur={emailValidation}
               />
-              <IconsStatus />
+              <IconStatusNegative value={infEmail} />
             </View>
 
             {errorEmail ? (

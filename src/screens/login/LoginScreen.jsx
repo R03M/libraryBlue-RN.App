@@ -16,9 +16,9 @@ import {
   cleanStatusLogin,
 } from "../../redux/userSlice";
 import { validateEmail } from "../../utils/validateEmail";
-import { AntDesign } from "@expo/vector-icons";
 import { loginAccount, checkEmail } from "../../redux/actions";
 import { Entypo } from "@expo/vector-icons";
+import IconStatusPositive from "../../components/IconStatusPositive";
 import styles from "./loginS.Styles";
 
 const LoginScreen = () => {
@@ -31,30 +31,6 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-
-  const IconsStatus = () => {
-    if (infEmail !== undefined) {
-      if (infEmail.email) {
-        return (
-          <AntDesign
-            name="checkcircle"
-            size={20}
-            color="green"
-            style={{ marginLeft: 10 }}
-          />
-        );
-      } else {
-        return (
-          <AntDesign
-            name="closecircleo"
-            size={20}
-            color="red"
-            style={{ marginLeft: 10 }}
-          />
-        );
-      }
-    }
-  };
 
   const ShowPassW = () => {
     return (
@@ -132,7 +108,7 @@ const LoginScreen = () => {
               value={email}
               onBlur={handlerValidation}
             />
-            <IconsStatus />
+            <IconStatusPositive value={infEmail} />
           </View>
           {errorEmail ? (
             <Text style={{ color: "red" }}>{errorEmail}</Text>
