@@ -11,8 +11,6 @@ const ItemsScreen = () => {
   const { dataUser } = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.company);
 
-  console.log("Item", dataUser.id);
-
   const CompanyAlert = () => {
     return dataUser.position === "Manager" ? (
       <View
@@ -58,7 +56,7 @@ const ItemsScreen = () => {
       {!dataUser.company ? (
         <>
           <CompanyAlert />
-          
+
           <ModalCompany
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
