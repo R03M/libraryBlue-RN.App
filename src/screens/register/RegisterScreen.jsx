@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -21,7 +21,7 @@ import { validatePassword } from "../../utils/password";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import handlerValue from "../../utils/handlerValue";
-import IconStatusNegative from "../../components/IconStatusNegative";
+import IconStatus from "../../components/IconStatus";
 import styles from "./registerS.Styles";
 
 const RegisterScreen = () => {
@@ -33,6 +33,7 @@ const RegisterScreen = () => {
   const { statusCreateAccount, errorCreateAccount } = useSelector(
     (state) => state.user
   );
+  const [thereIsEmail, setThereIsEmail] = useState("idle");
 
   const [picCloudinary, setPicCloudinary] = useState(null);
 
@@ -54,18 +55,19 @@ const RegisterScreen = () => {
   });
 
   const nextScreen = () => {
-    const isValid =
-      auth.email && auth.password && !errorEmail && !errorPassword;
-    return isValid
-      ? setScreen("userData")
-      : Alert.alert(
-          "Error",
-          "Se requiere correo electronico y contraseña validos para continuar.",
-          [],
-          {
-            cancelable: true,
-          }
-        );
+    if (thereIsEmail === 404) {
+      setScreen("userData");
+    }
+    if (thereIsEmail === 200) {
+      Alert.alert(
+        null,
+        `No puedes crear una cuenta con el correo ${auth.email} porque ya existe, si es tu cuenta, ingresa directamente en el apartado Login.`,
+        [],
+        {
+          cancelable: true,
+        }
+      );
+    }
   };
 
   const register = () => {
@@ -135,6 +137,15 @@ const RegisterScreen = () => {
       : setErrorPassword(passwordValidate);
   };
 
+  useEffect(() => {
+    const handlerStatusCheckEmail = () => {
+      if (infEmail) {
+        return !infEmail.email ? setThereIsEmail(404) : setThereIsEmail(200);
+      }
+    };
+    handlerStatusCheckEmail();
+  }, [infEmail]);
+
   return (
     <ScrollView contentContainerStyle={{}}>
       <View style={styles.container}>
@@ -164,12 +175,13 @@ const RegisterScreen = () => {
                 onChangeText={(value) => {
                   handlerValue(setAuth, "email", value);
                   dispatch(cleanResponseEmailToRegister());
+                  setThereIsEmail("idle");
                 }}
                 value={auth.email}
                 placeholder="Email"
                 onBlur={emailValidation}
               />
-              <IconStatusNegative value={infEmail} />
+              <IconStatus value={thereIsEmail} typePositive={false} />
             </View>
 
             {errorEmail ? (
@@ -182,8 +194,18 @@ const RegisterScreen = () => {
               <TextInput
                 style={[styles.textInputAuth, { width: "90%" }]}
                 onChangeText={(value) => {
+                  thereIsEmail === 200
+                    ? (handlerValue(setAuth, "password", ""),
+                      Alert.alert(
+                        null,
+                        "Si la cuenta no es aceptada ¿que sentido tiene escribir una contraseña?",
+                        [],
+                        {
+                          cancelable: true,
+                        }
+                      ))
+                    : handlerValue(setAuth, "password", value);
                   setErrorPassword(null);
-                  handlerValue(setAuth, "password", value);
                   passwordValidation(value);
                 }}
                 value={auth.password}
@@ -200,15 +222,14 @@ const RegisterScreen = () => {
             <View style={{ marginTop: 20 }}>
               <Button title="Continuar" onPress={nextScreen} />
             </View>
-            {infEmail &&
-              (infEmail.email ? (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>
-                    Ya existe una cuenta con ese correo electronico, si es tuya
-                    puedes ingresar directamente en el apartado Login.
-                  </Text>
-                </View>
-              ) : null)}
+            {thereIsEmail === 200 ? (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>
+                  Ya existe una cuenta con ese correo electronico, si es tuya
+                  puedes ingresar directamente en el apartado Login.
+                </Text>
+              </View>
+            ) : null}
           </View>
         ) : (
           <View style={styles.userData}>

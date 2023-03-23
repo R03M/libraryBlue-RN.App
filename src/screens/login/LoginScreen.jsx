@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   View,
@@ -18,7 +18,7 @@ import {
 import { validateEmail } from "../../utils/validateEmail";
 import { loginAccount, checkEmail } from "../../redux/actions";
 import { Entypo } from "@expo/vector-icons";
-import IconStatusPositive from "../../components/IconStatusPositive";
+import IconStatus from "../../components/IconStatus";
 import styles from "./loginS.Styles";
 
 const LoginScreen = () => {
@@ -31,6 +31,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [thereIsEmail, setThereIsEmail] = useState("idle");
 
   const ShowPassW = () => {
     return (
@@ -75,19 +76,24 @@ const LoginScreen = () => {
   };
 
   const logIn = () => {
-    if (errorEmail === null && email !== "" && password !== "") {
+    if (thereIsEmail === 200) {
       dispatch(loginAccount({ email, password }));
-    } else {
-      Alert.alert(
-        "Credenciales Requeridas",
-        "Email y contraseña son requeridas para iniciar sesión.",
-        [],
-        {
-          cancelable: true,
-        }
-      );
+    }
+    if (thereIsEmail === 404) {
+      Alert.alert(null, `Cuenta inexistente`, [], {
+        cancelable: true,
+      });
     }
   };
+
+  useEffect(() => {
+    const handlerStatusCheckEmail = () => {
+      if (infEmail) {
+        return !infEmail.email ? setThereIsEmail(404) : setThereIsEmail(200);
+      }
+    };
+    handlerStatusCheckEmail();
+  }, [infEmail]);
 
   return (
     <ScrollView contentContainerStyle={{}}>
@@ -97,18 +103,17 @@ const LoginScreen = () => {
         <View style={styles.subContainer}>
           <View style={styles.viewEmailandPass}>
             <TextInput
-              style={
-                infEmail
-                  ? [styles.textInput, { width: "90%" }]
-                  : styles.textInput
-              }
+              style={[styles.textInput, { width: "90%" }]}
               placeholder="Email"
               keyboardType="email-address"
-              onChangeText={(value) => handlerChange(value)}
+              onChangeText={(value) => {
+                handlerChange(value);
+                setThereIsEmail("idle");
+              }}
               value={email}
               onBlur={handlerValidation}
             />
-            <IconStatusPositive value={infEmail} />
+            <IconStatus value={thereIsEmail} typePositive={true} />
           </View>
           {errorEmail ? (
             <Text style={{ color: "red" }}>{errorEmail}</Text>
@@ -117,7 +122,19 @@ const LoginScreen = () => {
           <View style={styles.viewEmailandPass}>
             <TextInput
               style={[styles.textInput, { width: "90%" }]}
-              onChangeText={(value) => handlerPassW(value)}
+              onChangeText={(value) => {
+                thereIsEmail === 404
+                  ? (handlerPassW(""),
+                    Alert.alert(
+                      null,
+                      "Sin un cuenta existente ¿que sentido tiene escribir una contraseña?",
+                      [],
+                      {
+                        cancelable: true,
+                      }
+                    ))
+                  : handlerPassW(value);
+              }}
               value={password}
               placeholder="Password"
               secureTextEntry={!showPassword}
@@ -128,14 +145,13 @@ const LoginScreen = () => {
             <Button title="Iniciar sesión" onPress={logIn} color={"#5998c0"} />
           </View>
         </View>
-        {infEmail &&
-          (!infEmail.email ? (
-            <View style={styles.viewError}>
-              <Text style={styles.textError}>
-                No existe una cuenta con el email {email}
-              </Text>
-            </View>
-          ) : null)}
+        {thereIsEmail === 404 ? (
+          <View style={styles.viewError}>
+            <Text style={styles.textError}>
+              No existe una cuenta con el email {email}
+            </Text>
+          </View>
+        ) : null}
         {statusLogin === "loading" && (
           <ActivityIndicator
             size="large"
