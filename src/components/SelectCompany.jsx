@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TextInput, Text, Alert, Button } from "react-native";
 import handlerValue from "../utils/handlerValue";
-import IconStatusCompany from "./IconStatusCompany";
+import IconStatus from "./IconStatus";
 
 const SelectCompany = ({ companies, associateCompany }) => {
   const [thereIsCompany, setThereIsCompany] = useState("idle");
@@ -81,7 +81,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
             }}
             value={associatedCompany.name}
           />
-          <IconStatusCompany value={thereIsCompany} />
+          <IconStatus value={thereIsCompany} typePositive={true} />
         </View>
       </View>
       <View
@@ -107,7 +107,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
             }}
             value={associatedCompany.code}
           />
-          <IconStatusCompany value={isCode} />
+          <IconStatus value={isCode} typePositive={true} />
         </View>
       </View>
       {thereIsCompany === 404 && (
