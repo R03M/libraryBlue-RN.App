@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TextInput, Text, Alert, Button } from "react-native";
 import handlerValue from "../utils/handlerValue";
 import IconStatus from "./IconStatus";
@@ -13,49 +13,71 @@ const SelectCompany = ({ companies, associateCompany }) => {
   });
 
   const validateCompany = (value) => {
-    const thereIsCompany = companies.find((e) => e.name === value);
+    if (typeof companies !== "string") {
+      const thereIsCompany = companies.find((e) => e.name === value);
 
-    if (thereIsCompany) {
-      setThereIsCompany(200);
-    }
-    if (!thereIsCompany) {
-      setThereIsCompany(404);
-    }
-    if (value === "") {
-      setThereIsCompany("idle");
+      if (thereIsCompany) {
+        setThereIsCompany(200);
+      }
+      if (!thereIsCompany) {
+        setThereIsCompany(404);
+      }
+      if (value === "") {
+        setThereIsCompany("idle");
+      }
     }
   };
 
   const validateCode = (value) => {
-    const company = companies.find((e) => e.name === associatedCompany.name);
-    if (company) {
-      const codeIsTrue = company.code === value;
+    if (typeof companies !== "string") {
+      const company = companies.find((e) => e.name === associatedCompany.name);
+      if (company) {
+        const codeIsTrue = company.code === value;
 
-      if (codeIsTrue) {
-        setIsCode(200);
+        if (codeIsTrue) {
+          setIsCode(200);
+        }
+        if (!codeIsTrue) {
+          setIsCode(404);
+        }
+        if (value === "") {
+          setIsCode("idle");
+        }
       }
-      if (!codeIsTrue) {
-        setIsCode(404);
+      if (associatedCompany.name === "") {
+        Alert.alert("Error", "Primero escribe en nombre de la compañia", [], {
+          cancelable: true,
+        });
+        handlerValue(setAssociatedCompany, "code", "");
       }
-      if (value === "") {
-        setIsCode("idle");
-      }
-    }
-    if (associatedCompany.name === "") {
-      Alert.alert(null, "Primero escribe en nombre de la compañia", [], {
-        cancelable: true,
-      });
-      handlerValue(setAssociatedCompany, "code", "");
     }
   };
 
-  const associate = () => {
-    associateCompany(associatedCompany.name);
-  };
+  useEffect(() => {
+    if (thereIsCompany === 200 && isCode === 200) {
+      const company = companies.find((e) => e.name === associatedCompany.name);
+      const codeIsTrue = company.code === associatedCompany.code;
+      if (company && codeIsTrue) {
+        const associate = () => {
+          associateCompany(associatedCompany.name);
+        };
+        associate();
+      }
+    }
+  }, [associatedCompany]);
 
   return (
     <View style={styles.container}>
-      <Text style={{ textAlign: "center" }}>Compañia asociada</Text>
+      <Text
+        style={{
+          textAlign: "center",
+          fontSize: 16,
+          fontWeight: "bold",
+          textTransform: "uppercase",
+        }}
+      >
+        compañia asociada
+      </Text>
 
       <View
         style={{
@@ -117,7 +139,10 @@ const SelectCompany = ({ companies, associateCompany }) => {
           </Text>
         </View>
       )}
-      <Button title="Asociar" onPress={associate} />
+
+      <Text style={{ fontStyle: "italic" }}>
+        La compañia asociada es opcional y se puede agregar y/o cambiar luego.
+      </Text>
     </View>
   );
 };
@@ -129,6 +154,15 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 4,
     marginVertical: 10,
+    backgroundColor: "#ff9e80",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
   },
   textInput: {
     borderBottomColor: "grey",
