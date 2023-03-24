@@ -46,6 +46,14 @@ export const registerAccount = createAsyncThunk(
   async ({ data }, { rejectWithValue }) => {
     try {
       const response = await postRegisterUser(data);
+      await AsyncStorage.setItem(
+        "@UserData",
+        JSON.stringify(response.userData)
+      );
+      await AsyncStorage.setItem(
+        "@TokenAccess",
+        JSON.stringify(response.token)
+      );
       return response;
     } catch (error) {
       if (error.response) {
