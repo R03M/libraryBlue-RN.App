@@ -11,9 +11,9 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BtnCustom from "../../components/BtnCustom";
-import * as ImagePicker from "expo-image-picker";
+// import * as ImagePicker from "expo-image-picker";
 import { positionInf } from "../../utils/positionInf";
-import { uploadImage } from "../../utils/cloudinary";
+// import { uploadImage } from "../../utils/cloudinary";
 import { checkEmailToRegister, registerAccount } from "../../redux/actions";
 import { validateEmail } from "../../utils/validateEmail";
 import { cleanResponseEmailToRegister } from "../../redux/userSlice";
@@ -23,20 +23,20 @@ import { AntDesign } from "@expo/vector-icons";
 import handlerValue from "../../utils/handlerValue";
 import IconStatus from "../../components/IconStatus";
 import styles from "./registerS.Styles";
+import AddImage from "../../components/AddImage";
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();
   const [screen, setScreen] = useState("auth");
+
   const [errorEmail, setErrorEmail] = useState(null);
-  const [errorPassword, setErrorPassword] = useState(null);
+  const [thereIsEmail, setThereIsEmail] = useState("idle");
   const [showPassword, setShowPassword] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(null);
+
   const { statusCreateAccount, errorCreateAccount } = useSelector(
     (state) => state.user
   );
-  const [thereIsEmail, setThereIsEmail] = useState("idle");
-
-  const [picCloudinary, setPicCloudinary] = useState(null);
-
   const infEmail = useSelector(
     (state) => state.user.responseCheckEmailToRegister.infocheck
   );
@@ -61,11 +61,10 @@ const RegisterScreen = () => {
     if (thereIsEmail === 200) {
       Alert.alert(
         null,
-        `No puedes crear una cuenta con el correo ${auth.email} porque ya existe, si es tu cuenta, ingresa directamente en el apartado Login.`,
+        `No puedes crear una cuenta con el correo ${auth.email} porque ya 
+        existe, si es tu cuenta, ingresa directamente en el apartado Login.`,
         [],
-        {
-          cancelable: true,
-        }
+        { cancelable: true }
       );
     }
   };
@@ -77,21 +76,12 @@ const RegisterScreen = () => {
   const ShowPassW = () => {
     return (
       <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-        {showPassword ? (
-          <Entypo
-            name="eye-with-line"
-            size={24}
-            color="black"
-            style={{ marginLeft: 10 }}
-          />
-        ) : (
-          <Entypo
-            name="eye"
-            size={24}
-            color="black"
-            style={{ marginLeft: 10 }}
-          />
-        )}
+        <Entypo
+          name={showPassword ? "eye-with-line" : "eye"}
+          size={24}
+          color="black"
+          style={{ marginLeft: 10 }}
+        />
       </TouchableOpacity>
     );
   };
@@ -107,22 +97,6 @@ const RegisterScreen = () => {
     }
   };
 
-  const selectImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === "granted") {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      if (!result.canceled) {
-        const response = await uploadImage(result.assets[0].uri);
-        handlerValue(setUserData, "image", response);
-        setPicCloudinary(true);
-      }
-    }
-  };
   const emailValidation = () => {
     const errorValidate = validateEmail(auth.email);
     !errorValidate
@@ -146,8 +120,12 @@ const RegisterScreen = () => {
     handlerStatusCheckEmail();
   }, [infEmail]);
 
+  const handlerChangeImage = (value) => {
+    handlerValue(setUserData, "image", value);
+  };
+
   return (
-    <ScrollView contentContainerStyle={{}}>
+    <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={{ fontSize: 30, fontWeight: "bold", margin: 10 }}>
@@ -257,41 +235,7 @@ const RegisterScreen = () => {
               />
             </View>
 
-            <View style={styles.rows}>
-              <Text>Imagen</Text>
-              {userData.image && picCloudinary ? null : (
-                <TextInput
-                  style={[styles.textInput, { width: "30%" }]}
-                  onChangeText={(value) => {
-                    setPicCloudinary(false);
-                    handlerValue(setUserData, "image", value);
-                  }}
-                  value={userData.image}
-                  placeholder="https://image.jpg"
-                />
-              )}
-              {userData.image && !picCloudinary ? null : (
-                <View style={{ marginHorizontal: -10 }}>
-                  <BtnCustom
-                    title={"Galeria"}
-                    onPress={selectImage}
-                    backgroundColor={"purple"}
-                    textColor={"black"}
-                  />
-                </View>
-              )}
-              {userData.image ? (
-                <BtnCustom
-                  title={<AntDesign name="delete" size={20} color="white" />}
-                  onPress={() => {
-                    setPicCloudinary(null);
-                    handlerValue(setUserData, "image", null);
-                  }}
-                  backgroundColor={"red"}
-                  textColor={"black"}
-                />
-              ) : null}
-            </View>
+            <AddImage onChangeImage={handlerChangeImage} />
 
             <View style={styles.rows}>
               <Text>Cuenta</Text>
