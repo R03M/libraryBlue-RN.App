@@ -96,7 +96,7 @@ const LoginScreen = () => {
   }, [infEmail]);
 
   return (
-    <ScrollView contentContainerStyle={{}}>
+    <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.title}>Iniciar Sesión</Text>
         <View style={styles.line}></View>

@@ -26,49 +26,18 @@ const ProfileScreen = () => {
     }
   };
 
+  const deactivateAccount = () => {};
+
   return (
-    <ScrollView>
-      <View
-        style={{
-          margin: 20,
-          backgroundColor: "#5998c0",
-          padding: 20,
-          borderRadius: 4,
-          elevation: 4, // para Android
-          shadowColor: "#000000", // para iOS
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.2,
-          shadowRadius: 1.41,
-        }}
-      >
-        <Image
-          source={{ uri: user.image }}
-          style={{
-            height: 60,
-            width: 60,
-            borderRadius: 10,
-            marginHorizontal: 10,
-            marginTop: -10,
-          }}
-        />
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={[styles.cardOne, { backgroundColor: "#5998c0" }]}>
+        <Image source={{ uri: user.image }} style={styles.img} />
         <Text>{user.fullName}</Text>
         <Text>{user.auth.email}</Text>
         <Text>{user.accountCreation}</Text>
         <Text>Tipo de cuenta {user.position}</Text>
       </View>
-      <View
-        style={{
-          margin: 20,
-          backgroundColor: "#5982c9",
-          padding: 20,
-          borderRadius: 4,
-          elevation: 4, // para Android
-          shadowColor: "#000000", // para iOS
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.2,
-          shadowRadius: 1.41,
-        }}
-      >
+      <View style={[styles.cardOne, { backgroundColor: "#bfbfbf" }]}>
         <Text>Your Company</Text>
         {user.company ? (
           <>
@@ -76,7 +45,14 @@ const ProfileScreen = () => {
             <Text>{user.company.image}</Text>
           </>
         ) : null}
-        <Button title="Cerrar Sesion" onPress={closeSession} />
+      </View>
+      <View style={styles.btnsView}>
+        <Button title="Cerrar Sesion" onPress={closeSession} color={"red"} />
+        <Button
+          title="Desactivar Cuenta"
+          onPress={deactivateAccount}
+          color={"red"}
+        />
       </View>
     </ScrollView>
   );
