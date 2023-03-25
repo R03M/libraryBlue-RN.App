@@ -9,3 +9,14 @@ export const getCompanies = async () => {
     throw error;
   }
 };
+
+export const postNewCompany = async (company) => {
+  try {
+    const response = await axios.post(`${CORS_URL}/company/new`, {
+      company,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
