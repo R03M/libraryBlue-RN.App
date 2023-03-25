@@ -11,6 +11,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
   },
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
   img: {
     height: 190,
     width: "100%",
@@ -20,6 +26,7 @@ const styles = StyleSheet.create({
   btnsView: {
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: "#333333",
     margin: 20,
     padding: 20,
     borderRadius: 4,
