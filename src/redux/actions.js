@@ -1,8 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { postInfEmail } from "../services/register.js";
-import { postLoginUser, postRegisterUser } from "../services/login.js";
+import {
+  postInfEmail,
+  postLoginUser,
+  postRegisterUser,
+} from "../services/user.js";
+import { getCompanies, postNewCompany } from "../services/company.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getCompanies } from "../services/company.js";
 
 export const checkEmail = createAsyncThunk("user/checkEmail", async (email) => {
   const response = await postInfEmail(email);
@@ -78,5 +81,28 @@ export const getAllCompanies = createAsyncThunk(
         return rejectWithValue(error.message);
       }
     }
+  }
+);
+export const createNewCompany = createAsyncThunk(
+  "company/createNewCompany",
+  async ({ company }) => {
+    try {
+      const response = await postNewCompany(company);
+      dispatch(updateDataUser(response.user));
+      return response.company;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const updateDataUser = createAsyncThunk(
+  "user/updateDataUser",
+  async (response) => {
+    return response;
   }
 );

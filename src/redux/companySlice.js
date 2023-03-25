@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllCompanies } from "./actions";
+import { createNewCompany, getAllCompanies } from "./actions";
 
 const initialState = {
+  
+  //? get Company
   companies: [],
   getCompaniesStatus: "idle",
   getCompaniesError: null,
+
+  //? Create New Company
+  createCompanyStatus: "idle",
+  createCompanyError: null,
 };
 
 export const companySlice = createSlice({
@@ -21,7 +27,7 @@ export const companySlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //? getCompany
+      //? get Company
 
       .addCase(getAllCompanies.pending, (state) => {
         state.getCompaniesStatus = "loading";
@@ -36,6 +42,23 @@ export const companySlice = createSlice({
       .addCase(getAllCompanies.rejected, (state, action) => {
         state.getCompaniesStatus = "failed";
         state.getCompaniesError = action.payload;
+      })
+
+      //? Create New Company
+
+      .addCase(createNewCompany.pending, (state) => {
+        state.createCompanyStatus = "loading";
+      })
+      .addCase(
+        createNewCompany.fulfilled,
+        (state, { payload: { allCompanies } }) => {
+          state.createCompanyStatus = "succeeded";
+          state.companies = allCompanies;
+        }
+      )
+      .addCase(createNewCompany.rejected, (state, action) => {
+        state.createCompanyStatus = "failed";
+        state.createCompanyError = action.payload;
       });
   },
 });
