@@ -1,6 +1,13 @@
 import { CORS_URL } from "@env";
 import axios from "axios";
 
+export const postInfEmail = async (email) => {
+  const response = await axios.post(`${CORS_URL}/register/checkEmail`, {
+    email,
+  });
+  return response.data;
+};
+
 export const postLoginUser = async (email, password) => {
   try {
     const response = await axios.post(`${CORS_URL}/login`, {
@@ -23,3 +30,4 @@ export const postRegisterUser = async (data) => {
     throw error;
   }
 };
+
