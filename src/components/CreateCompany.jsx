@@ -13,7 +13,7 @@ import {
 import handlerValue from "../utils/handlerValue";
 import SelectComany from "./SelectCompany";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCompanies } from "../redux/actions";
+import { createNewCompany, getAllCompanies } from "../redux/actions";
 import AddImage from "./AddImage";
 
 const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
@@ -25,8 +25,8 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
     name: "",
     image: "",
     code: "",
-    associatedCompany: null,
-    codeAssociated: null,
+    associatedCompany: "",
+    codeAssociated: "",
     idUser: idUser,
   });
 
@@ -44,13 +44,14 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
 
   const handlerName = (value) => {
     handlerValue(setCompany, "name", value);
-    const alreadyExists = companies.find((company) => company.name === value);
-
-    if (alreadyExists) {
-      setError("Ya existe una compañia con ese nombre");
-      return;
+    if (typeof companies !== "string") {
+      const alreadyExists = companies.find((company) => company.name === value);
+      if (alreadyExists) {
+        setError("Ya existe una compañia con ese nombre");
+        return;
+      }
+      setError(null);
     }
-    setError(null);
   };
 
   const handlerCode = (value) => {
@@ -64,7 +65,9 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
       });
       return;
     }
-    // dispatch(createNewCompany(company))
+
+    dispatch(createNewCompany({ company }));
+    
   };
 
   return (
