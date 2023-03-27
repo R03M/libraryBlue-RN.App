@@ -13,7 +13,11 @@ import {
 import handlerValue from "../utils/handlerValue";
 import SelectComany from "./SelectCompany";
 import { useDispatch, useSelector } from "react-redux";
-import { createNewCompany, getAllCompanies } from "../redux/actions";
+import {
+  createNewCompany,
+  getAllCompanies,
+  newUserSelectCompany,
+} from "../redux/actions";
 import AddImage from "./AddImage";
 
 const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
@@ -27,15 +31,24 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
     code: "",
     associatedCompany: "",
     codeAssociated: "",
-    idUser: idUser,
+    idUser,
   });
 
+  const [selectCompany, setSelectCompany] = useState({
+    nameCompany: "",
+    idUser,
+  });
+  
   useEffect(() => {
     dispatch(getAllCompanies());
   }, []);
 
   const handlerAssociatedC = (value) => {
     handlerValue(setCompany, "associatedCompany", value);
+  };
+
+  const handlerSelectCompany = (value) => {
+    handlerValue(setSelectCompany, "nameCompany", value);
   };
 
   const handlerChangeImage = (value) => {
@@ -67,7 +80,10 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
     }
 
     dispatch(createNewCompany({ company }));
-    
+  };
+
+  const handlerSelectC = () => {
+    dispatch(newUserSelectCompany({ selectCompanyInf: selectCompany }));
   };
 
   return (
@@ -135,11 +151,22 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
               ) : (
                 <View>
                   <Text style={styles.modalText}>Seleccionar Compañia</Text>
-                  <Button
-                    title="cancelar"
-                    onPress={() => setModalVisible(!modalVisible)}
-                    color={"red"}
+                  <SelectComany
+                    companies={companies}
+                    associateCompany={handlerSelectCompany}
                   />
+                  <View style={styles.btonsView}>
+                    <Button
+                      title="Vincular"
+                      onPress={handlerSelectC}
+                      color={"green"}
+                    />
+                    <Button
+                      title="cancelar"
+                      onPress={() => setModalVisible(!modalVisible)}
+                      color={"red"}
+                    />
+                  </View>
                 </View>
               )}
             </ScrollView>

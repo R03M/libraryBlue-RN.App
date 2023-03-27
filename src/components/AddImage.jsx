@@ -54,7 +54,6 @@ const AddImage = ({ onChangeImage }) => {
   return (
     <View>
       <View style={styles.rows}>
-        <Text>Imagen</Text>
         {image && service === cloudinary ? null : (
           <TextInput
             style={[styles.textInput, { width: "50%" }]}
