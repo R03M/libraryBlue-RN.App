@@ -1,35 +1,35 @@
 import React, { useState } from "react";
-import { View, Text, Button } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllCompanies } from "../../redux/actions";
-import CreateCompany from "../../components/CreateCompany";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
+import SearchBar from "../../components/SearchBar";
+import NoCompany from "../../components/NoCompany";
+import NewItem from "../../components/NewItem";
 import styles from "./items.Styles";
-import NotCompanyAlert from "../../components/NotCompanyAlert";
+import ItemsList from "../../components/ItemsList";
 
 const ItemsScreen = () => {
-  const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
   const { dataUser } = useSelector((state) => state.user);
-  const { companies } = useSelector((state) => state.company);
+  const [modalItem, setModalItem] = useState(false);
 
   return (
-    <View>
+    <>
       {!dataUser.company ? (
-        <>
-          <NotCompanyAlert
-            position={dataUser.position}
-            setModalVisible={setModalVisible}
-          />
+        <NoCompany />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <SearchBar />
+          <ItemsList />
 
-          <CreateCompany
-            modalVisible={modalVisible}
-            setModalVisible={setModalVisible}
-            type={dataUser.position}
-            idUser={dataUser.id}
-          />
-        </>
-      ) : null}
-    </View>
+          <NewItem modalItem={modalItem} setModalItem={setModalItem} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalItem(!modalItem)}
+          >
+            <Text style={styles.plus}>+</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
   );
 };
 
