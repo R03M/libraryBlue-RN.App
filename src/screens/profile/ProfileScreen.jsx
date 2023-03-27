@@ -87,14 +87,16 @@ const ProfileScreen = () => {
               <Text>{user.company.name}</Text>
             </View>
           </View>
-          <View style={{ marginBottom: -5, alignItems: "flex-end" }}>
-            <BtnCustom
-              title={<MaterialIcons name="admin-panel-settings" size={20} />}
-              backgroundColor={"black"}
-              onPress={editProfile}
-              textColor={"white"}
-            />
-          </View>
+          {user.position === "Manager" ? (
+            <View style={{ marginBottom: -5, alignItems: "flex-end" }}>
+              <BtnCustom
+                title={<MaterialIcons name="admin-panel-settings" size={20} />}
+                backgroundColor={"black"}
+                onPress={editProfile}
+                textColor={"white"}
+              />
+            </View>
+          ) : null}
         </View>
       ) : null}
       <View style={styles.btnsView}>
