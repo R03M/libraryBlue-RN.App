@@ -16,6 +16,7 @@ import ProfileScreen from "./src/screens/profile/ProfileScreen";
 import SettingsScreen from "./src/screens/settings/SettingsScreen";
 import RegisterScreen from "./src/screens/register/RegisterScreen";
 import LoginScreen from "./src/screens/login/LoginScreen";
+import useUserData from "./src/hooks/useUserData";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ const MyTabs = () => {
               tabBarIcon: ({ color, size }) => (
                 <Entypo name="list" color={color} size={size} />
               ),
-              headerShown: true,
+              headerShown: false,
             }}
           />
           <Tab.Screen
@@ -61,7 +62,7 @@ const MyTabs = () => {
                   color={color}
                 />
               ),
-              headerShown: true,
+              headerShown: false,
             }}
           />
           <Tab.Screen
@@ -72,7 +73,7 @@ const MyTabs = () => {
               tabBarIcon: ({ color, size }) => (
                 <AntDesign name="setting" color={color} size={size} />
               ),
-              headerShown: true,
+              headerShown: false,
             }}
           />
         </>
@@ -107,31 +108,7 @@ const MyTabs = () => {
 };
 
 export default function Navigation() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getDataUser = async () => {
-      try {
-        const token = await AsyncStorage.getItem("@TokenAccess");
-        const userData = await AsyncStorage.getItem("@UserData");
-        dispatch(setUser(JSON.parse(userData)));
-        dispatch(setUserToken(JSON.parse(token)));
-      } catch (error) {
-        Alert.alert(
-          "Error",
-          "Ocurrió un error al obtener los datos del usuario, ese enviará un email con el error al desarrollador",
-          [
-            { text: "Enviar", onPress: () => sendEmail(error) },
-            {
-              text: "Cancel",
-              onPress: () => Alert.alert("No se enviará nada"),
-            },
-          ]
-        );
-      }
-    };
-    getDataUser();
-  }, []);
+  useUserData();
 
   return (
     <NavigationContainer>
