@@ -4,7 +4,11 @@ import {
   postLoginUser,
   postRegisterUser,
 } from "../services/user.js";
-import { getCompanies, postNewCompany } from "../services/company.js";
+import {
+  getCompanies,
+  postNewCompany,
+  postSelectCompany,
+} from "../services/company.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const checkEmail = createAsyncThunk("user/checkEmail", async (email) => {
@@ -83,6 +87,13 @@ export const getAllCompanies = createAsyncThunk(
     }
   }
 );
+export const updateDataUser = createAsyncThunk(
+  "user/updateDataUser",
+  async (response) => {
+    return response;
+  }
+);
+
 export const createNewCompany = createAsyncThunk(
   "company/createNewCompany",
   async ({ company }) => {
@@ -100,9 +111,19 @@ export const createNewCompany = createAsyncThunk(
   }
 );
 
-export const updateDataUser = createAsyncThunk(
-  "user/updateDataUser",
-  async (response) => {
-    return response;
+export const newUserSelectCompany = createAsyncThunk(
+  "company/select",
+  async ({ selectCompanyInf }) => {
+    try {
+      const response = await postSelectCompany(selectCompanyInf);
+      dispatch(updateDataUser(response.user));
+      return response.message;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
   }
 );

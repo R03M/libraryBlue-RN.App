@@ -20,3 +20,14 @@ export const postNewCompany = async (company) => {
     throw error;
   }
 };
+
+export const postSelectCompany = async (selectCompanyInf) => {
+  try {
+    const response = await axios.post(`${CORS_URL}/company/selectCompany`, {
+      selectCompanyInf,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
