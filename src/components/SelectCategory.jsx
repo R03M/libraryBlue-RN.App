@@ -3,7 +3,7 @@ import { Picker } from "@react-native-picker/picker";
 import { StyleSheet, View } from "react-native";
 
 const SelectItem = ({ items, onValueChange }) => {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState(null);
 
   const handleValueChange = (itemValue) => {
     setSelectedValue(itemValue);
@@ -18,6 +18,7 @@ const SelectItem = ({ items, onValueChange }) => {
         style={styles.picker}
         itemStyle={styles.pickerItem}
       >
+        <Picker.Item label={"N/A"} value={"N/A"}/>
         {items.map((item) => (
           <Picker.Item label={item.label} value={item.value} key={item.value} />
         ))}

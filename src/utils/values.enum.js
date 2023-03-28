@@ -1,9 +1,5 @@
 export const editions = [
   {
-    label: "-",
-    value: null,
-  },
-  {
     label: "Público",
     value: "Public",
   },
@@ -15,10 +11,6 @@ export const editions = [
 
 export const letters = [
   {
-    label: "-",
-    value: null,
-  },
-  {
     label: "Grande",
     value: "Big",
   },
@@ -29,10 +21,6 @@ export const letters = [
 ];
 
 export const categories = [
-  {
-    label: "-",
-    value: null,
-  },
   {
     label: "Revistas",
     value: "Magazines",
@@ -52,6 +40,10 @@ export const categories = [
   {
     label: "Tratados",
     value: "Treaties",
+  },
+  {
+    label: "Tarjetas",
+    value: "Cards",
   },
   {
     label: "Otros",
