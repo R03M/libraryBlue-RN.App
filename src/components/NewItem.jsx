@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,74 +10,80 @@ import {
   Switch,
   Image,
   Alert,
-} from "react-native";
-import handlerValue from "../utils/handlerValue";
-import AddImage from "./AddImage";
-import SelectItem from "./SelectCategory";
-import SelectDate from "./SelectDate";
-import { categories, editions, letters } from "../utils/values.enum";
-import validateName from "../utils/validateString";
-import noBlankSpaces from "../utils/noBlankSpaces";
+} from 'react-native';
+import handlerValue from '../utils/handlerValue';
+import AddImage from './AddImage';
+import SelectItem from './SelectCategory';
+import SelectDate from './SelectDate';
+import { categories, editions, letters } from '../utils/values.enum';
+import validateName from '../utils/validateString';
+import noBlankSpaces from '../utils/noBlankSpaces';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewItem } from '../redux/actions';
 
 const NewItem = ({ modalItem, setModalItem }) => {
+  const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(false);
-  const [errorName, setErrorName] = useState("idle");
-  const [errorCode, setErrorCode] = useState("idle");
-  const [errorLang, setErrorLang] = useState("idle");
+  const [errorName, setErrorName] = useState('idle');
+  const [errorCode, setErrorCode] = useState('idle');
+  const [errorLang, setErrorLang] = useState('idle');
 
-  const [newItem, setNewItem] = useState({
-    code: "",
-    name: "",
-    language: "",
+  const idCompany = useSelector((state) => state.user.dataUser.company.id);
+
+  const INITIAL_NEW_ITEM_STATE = {
+    code: '',
+    name: '',
+    language: '',
     image: null,
-    edition: "N/A",
-    letter: "N/A",
-    category: "N/A",
+    edition: 'N/A',
+    letter: 'N/A',
+    category: 'N/A',
     lastCount: null,
     lastCountDate: null,
     currentCount: null,
     itemEntryDate: null,
     associatedCompany: false,
-  });
+  };
+
+  const [newItem, setNewItem] = useState(INITIAL_NEW_ITEM_STATE);
 
   const Asterisk = () => {
     return (
       <Text
         style={{
-          color: "#2296f3",
+          color: '#2296f3',
           marginHorizontal: 2,
-        }}
-      >
+        }}>
         *
       </Text>
     );
   };
 
   const handleCode = (value) => {
-    const valueNoSpaces = noBlankSpaces(value)
-    handlerValue(setNewItem, "code", valueNoSpaces);
-    const error = validateName(valueNoSpaces, "código");
+    const valueNoSpaces = noBlankSpaces(value);
+    handlerValue(setNewItem, 'code', valueNoSpaces);
+    const error = validateName(valueNoSpaces, 'código');
     error ? setErrorCode(error) : setErrorCode(false);
   };
 
   const handleName = (value) => {
-    const valueNoSpaces = noBlankSpaces(value)
-    handlerValue(setNewItem, "name", valueNoSpaces);
-    const error = validateName(valueNoSpaces, "nombre");
+    const valueNoSpaces = noBlankSpaces(value);
+    handlerValue(setNewItem, 'name', valueNoSpaces);
+    const error = validateName(valueNoSpaces, 'nombre');
     error ? setErrorName(error) : setErrorName(false);
   };
   const handleLanguage = (value) => {
-    const valueNoSpaces = noBlankSpaces(value)
-    handlerValue(setNewItem, "language", valueNoSpaces);
-    const error = validateName(valueNoSpaces, "lenguaje");
+    const valueNoSpaces = noBlankSpaces(value);
+    handlerValue(setNewItem, 'language', valueNoSpaces);
+    const error = validateName(valueNoSpaces, 'lenguaje');
     error ? setErrorLang(error) : setErrorLang(false);
   };
 
   const createItem = () => {
     if (errorName || errorCode || errorLang) {
       Alert.alert(
-        "Faltan datos basicos",
-        "Revisa: Código, Nombre, Lenguaje",
+        'Faltan datos basicos',
+        'Revisa: Código, Nombre, Lenguaje',
         [],
         {
           cancelable: true,
@@ -85,7 +91,12 @@ const NewItem = ({ modalItem, setModalItem }) => {
       );
       return;
     }
-    console.log(newItem);
+    const item = { ...newItem, ...{ idCompany } };
+    dispatch(createNewItem({ item }));
+    setNewItem({
+      ...INITIAL_NEW_ITEM_STATE,
+    });
+    setModalItem(!modalItem)
   };
 
   return (
@@ -94,8 +105,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
         animationType="slide"
         transparent={true}
         visible={modalItem}
-        onRequestClose={() => setModalItem(!modalItem)}
-      >
+        onRequestClose={() => setModalItem(!modalItem)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {!newItem.image ? (
@@ -112,28 +122,28 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   Código <Asterisk />
                 </Text>
                 <TextInput
-                  style={[styles.textInput, { width: "60%" }]}
+                  style={[styles.textInput, { width: '60%' }]}
                   onChangeText={handleCode}
                   value={newItem.code}
                 />
               </View>
 
-              <Text style={{ color: "red", textAlign: "center" }}>
-                {errorCode !== "idle" && errorCode}
+              <Text style={{ color: 'red', textAlign: 'center' }}>
+                {errorCode !== 'idle' && errorCode}
               </Text>
               <View style={styles.rowsView}>
                 <Text>
                   Nombre <Asterisk />
                 </Text>
                 <TextInput
-                  style={[styles.textInput, { width: "60%" }]}
+                  style={[styles.textInput, { width: '60%' }]}
                   onChangeText={handleName}
                   value={newItem.name}
                 />
               </View>
 
-              <Text style={{ color: "red", textAlign: "center" }}>
-                {errorName !== "idle" && errorName}
+              <Text style={{ color: 'red', textAlign: 'center' }}>
+                {errorName !== 'idle' && errorName}
               </Text>
 
               <View style={styles.rowsView}>
@@ -141,20 +151,20 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   Lenguaje <Asterisk />
                 </Text>
                 <TextInput
-                  style={[styles.textInput, { width: "60%" }]}
+                  style={[styles.textInput, { width: '60%' }]}
                   onChangeText={handleLanguage}
                   value={newItem.language}
                 />
               </View>
-              <Text style={{ color: "red", textAlign: "center" }}>
-                {errorLang !== "idle" && errorLang}
+              <Text style={{ color: 'red', textAlign: 'center' }}>
+                {errorLang !== 'idle' && errorLang}
               </Text>
 
               <View style={styles.rowsView}>
                 <Text>Imagen</Text>
                 <AddImage
                   onChangeImage={(value) =>
-                    handlerValue(setNewItem, "image", value)
+                    handlerValue(setNewItem, 'image', value)
                   }
                 />
               </View>
@@ -167,7 +177,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   <SelectItem
                     items={editions}
                     onValueChange={(itemValue) =>
-                      handlerValue(setNewItem, "edition", itemValue)
+                      handlerValue(setNewItem, 'edition', itemValue)
                     }
                   />
                 </View>
@@ -181,7 +191,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   <SelectItem
                     items={letters}
                     onValueChange={(itemValue) =>
-                      handlerValue(setNewItem, "letter", itemValue)
+                      handlerValue(setNewItem, 'letter', itemValue)
                     }
                   />
                 </View>
@@ -195,7 +205,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   <SelectItem
                     items={categories}
                     onValueChange={(itemValue) =>
-                      handlerValue(setNewItem, "category", itemValue)
+                      handlerValue(setNewItem, 'category', itemValue)
                     }
                   />
                 </View>
@@ -205,12 +215,11 @@ const NewItem = ({ modalItem, setModalItem }) => {
 
               <Text
                 style={{
-                  textAlign: "center",
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
                   fontSize: 18,
-                }}
-              >
+                }}>
                 Ultimo conteo
               </Text>
 
@@ -218,9 +227,9 @@ const NewItem = ({ modalItem, setModalItem }) => {
                 <Text>Cantidad</Text>
 
                 <TextInput
-                  style={[styles.textInput, { width: "40%" }]}
+                  style={[styles.textInput, { width: '40%' }]}
                   onChangeText={(value) =>
-                    handlerValue(setNewItem, "lastCount", value)
+                    handlerValue(setNewItem, 'lastCount', value)
                   }
                   value={newItem.lastCount}
                   keyboardType="numeric"
@@ -232,7 +241,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
                 <View>
                   <SelectDate
                     handlerDate={(value) =>
-                      handlerValue(setNewItem, "lastCountDate", value)
+                      handlerValue(setNewItem, 'lastCountDate', value)
                     }
                   />
                 </View>
@@ -241,13 +250,12 @@ const NewItem = ({ modalItem, setModalItem }) => {
 
               <Text
                 style={{
-                  textAlign: "center",
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
+                  textAlign: 'center',
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
                   fontSize: 18,
                   marginBottom: 20,
-                }}
-              >
+                }}>
                 Ultimo ingreso
               </Text>
               <View style={styles.rowsView}>
@@ -255,7 +263,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
                 <View>
                   <SelectDate
                     handlerDate={(value) =>
-                      handlerValue(setNewItem, "itemEntryDate", value)
+                      handlerValue(setNewItem, 'itemEntryDate', value)
                     }
                   />
                 </View>
@@ -264,9 +272,9 @@ const NewItem = ({ modalItem, setModalItem }) => {
               <View style={styles.rowsView}>
                 <Text>Cantidad Actual</Text>
                 <TextInput
-                  style={[styles.textInput, { width: "40%" }]}
+                  style={[styles.textInput, { width: '40%' }]}
                   onChangeText={(value) =>
-                    handlerValue(setNewItem, "currentCount", value)
+                    handlerValue(setNewItem, 'currentCount', value)
                   }
                   value={newItem.currentCount}
                   keyboardType="numeric"
@@ -277,48 +285,47 @@ const NewItem = ({ modalItem, setModalItem }) => {
               <View style={styles.rowsView}>
                 <Text>Compartir con Asociados</Text>
                 <Switch
-                  trackColor={{ false: "#767577", true: "#3ccc15" }}
-                  thumbColor={isEnabled ? "#2296f3" : "#f4f3f4"}
+                  trackColor={{ false: '#767577', true: '#3ccc15' }}
+                  thumbColor={isEnabled ? '#2296f3' : '#f4f3f4'}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={() => {
                     setIsEnabled(!isEnabled);
-                    handlerValue(setNewItem, "associatedCompany", !isEnabled);
+                    handlerValue(setNewItem, 'associatedCompany', !isEnabled);
                   }}
                   value={isEnabled}
                 />
               </View>
               <Text
                 style={{
-                  color: "grey",
+                  color: 'grey',
                   marginHorizontal: 8,
                   marginTop: 10,
                   marginBottom: 20,
-                  fontStyle: "italic",
-                }}
-              >
+                  fontStyle: 'italic',
+                }}>
                 Si se activa se la compañia asociada que tengas podra ver y
                 editar este item.
               </Text>
 
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: 'row' }}>
                 <Asterisk />
                 <Text
                   style={{
-                    color: "#000",
+                    color: '#000',
                     marginHorizontal: 2,
-                    fontWeight: "bold",
-                  }}
-                >
+                    fontWeight: 'bold',
+                  }}>
                   Obligatorio
                 </Text>
               </View>
+
               <View style={[styles.rowsView, { margin: 20 }]}>
                 <Button
                   title="cancelar"
                   onPress={() => setModalItem(!modalItem)}
-                  color={"red"}
+                  color={'red'}
                 />
-                <Button title="crear" onPress={createItem} color={"green"} />
+                <Button title="crear" onPress={createItem} color={'green'} />
               </View>
             </ScrollView>
           </View>
@@ -331,36 +338,36 @@ const NewItem = ({ modalItem, setModalItem }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalView: {
     margin: 20,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 4,
   },
   title: {
-    textAlign: "center",
-    fontWeight: "bold",
+    textAlign: 'center',
+    fontWeight: 'bold',
     fontSize: 25,
     marginVertical: 10,
   },
   rowsView: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginHorizontal: 2,
   },
   textInput: {
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
     marginVertical: 20,
-    width: "70%",
+    width: '70%',
   },
   line: {
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: '#ccc',
     marginVertical: 20,
   },
   img: {
@@ -370,8 +377,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   viewWithImg: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

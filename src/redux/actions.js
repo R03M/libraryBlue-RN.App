@@ -1,32 +1,33 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   postInfEmail,
   postLoginUser,
   postRegisterUser,
-} from "../services/user.js";
+} from '../services/user.js';
 import {
   getCompanies,
   postNewCompany,
   postSelectCompany,
-} from "../services/company.js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from '../services/company.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getItems, postNewItem } from '../services/item.js';
 
-export const checkEmail = createAsyncThunk("user/checkEmail", async (email) => {
+export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
   const response = await postInfEmail(email);
   return response;
 });
 
 export const loginAccount = createAsyncThunk(
-  "user/loginAccount",
+  'user/loginAccount',
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await postLoginUser(email, password);
       await AsyncStorage.setItem(
-        "@UserData",
+        '@UserData',
         JSON.stringify(response.userData)
       );
       await AsyncStorage.setItem(
-        "@TokenAccess",
+        '@TokenAccess',
         JSON.stringify(response.token)
       );
       return response;
@@ -41,7 +42,7 @@ export const loginAccount = createAsyncThunk(
 );
 
 export const checkEmailToRegister = createAsyncThunk(
-  "user/checkEmailToRegister",
+  'user/checkEmailToRegister',
   async (email) => {
     const response = await postInfEmail(email);
     return response;
@@ -49,16 +50,16 @@ export const checkEmailToRegister = createAsyncThunk(
 );
 
 export const registerAccount = createAsyncThunk(
-  "user/registerAccount",
+  'user/registerAccount',
   async ({ data }, { rejectWithValue }) => {
     try {
       const response = await postRegisterUser(data);
       await AsyncStorage.setItem(
-        "@UserData",
+        '@UserData',
         JSON.stringify(response.userData)
       );
       await AsyncStorage.setItem(
-        "@TokenAccess",
+        '@TokenAccess',
         JSON.stringify(response.token)
       );
       return response;
@@ -73,7 +74,7 @@ export const registerAccount = createAsyncThunk(
 );
 
 export const getAllCompanies = createAsyncThunk(
-  "company/getAllCompanies",
+  'company/getAllCompanies',
   async () => {
     try {
       const response = await getCompanies();
@@ -88,14 +89,14 @@ export const getAllCompanies = createAsyncThunk(
   }
 );
 export const updateDataUser = createAsyncThunk(
-  "user/updateDataUser",
+  'user/updateDataUser',
   async (response) => {
     return response;
   }
 );
 
 export const createNewCompany = createAsyncThunk(
-  "company/createNewCompany",
+  'company/createNewCompany',
   async ({ company }) => {
     try {
       const response = await postNewCompany(company);
@@ -112,12 +113,44 @@ export const createNewCompany = createAsyncThunk(
 );
 
 export const newUserSelectCompany = createAsyncThunk(
-  "company/select",
+  'company/select',
   async ({ selectCompanyInf }) => {
     try {
       const response = await postSelectCompany(selectCompanyInf);
       dispatch(updateDataUser(response.user));
       return response.message;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const getAllItems = createAsyncThunk(
+  'item/all',
+  async ({ idCompany, idAssociated }) => {
+    try {
+      const response = await getItems(idCompany, idAssociated);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const createNewItem = createAsyncThunk(
+  'item/createNewItem',
+  async ({ item }) => {
+    try {
+      const response = await postNewItem(item);
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);
