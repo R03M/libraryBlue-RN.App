@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     backgroundColor: "black",
     position: "absolute",
-    bottom: 30,
+    bottom: 25,
     right: 25,
     shadowColor: "#000",
     shadowOffset: {

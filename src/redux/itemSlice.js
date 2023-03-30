@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createNewItem, getAllItems } from './actions';
+import searchInItems from '../utils/searchInItems';
 
 const initialState = {
   //? get items
@@ -11,12 +12,33 @@ const initialState = {
   //? create item
   statusCreateItem: 'idle',
   errorCreateItem: null,
+
+  //? search item
+  errorSearch: null,
 };
 
 export const itemSlice = createSlice({
   name: 'item',
   initialState,
-  reducers: {},
+  reducers: {
+    searchItem: (state, action) => {
+      let response = searchInItems(action.payload, state.unalterableItems);
+      if (!response) {
+        state.errorSearch = 'Not found';
+        state.items = [];
+      } else {
+        state.errorSearch = '';
+        state.items = response;
+      }
+      return state;
+    },
+    setItems: (state) => {
+      state.items = state.unalterableItems;
+    },
+    cleanErrorSearch: (state) => {
+      state.errorSearch = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -50,6 +72,6 @@ export const itemSlice = createSlice({
   },
 });
 
-// export const { searchAtItem } = itemSlice.actions;
+export const { searchItem, cleanErrorSearch, setItems } = itemSlice.actions;
 
 export default itemSlice.reducer;
