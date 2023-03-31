@@ -18,10 +18,11 @@ import SelectDate from './SelectDate';
 import { categories, editions, letters } from '../utils/values.enum';
 import validateName from '../utils/validateString';
 import noBlankSpaces from '../utils/noBlankSpaces';
+import onlyNumbers from '../utils/onlyNumbers';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewItem } from '../redux/actions';
 
-const NewItem = ({ modalItem, setModalItem }) => {
+const CreateNewItem = ({ modalItem, setModalItem }) => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(false);
   const [errorName, setErrorName] = useState('idle');
@@ -34,7 +35,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
     code: '',
     name: '',
     language: '',
-    image: null,
+    image: '',
     edition: 'N/A',
     letter: 'N/A',
     category: 'N/A',
@@ -79,6 +80,22 @@ const NewItem = ({ modalItem, setModalItem }) => {
     error ? setErrorLang(error) : setErrorLang(false);
   };
 
+  const handleLastCount = (value) => {
+    const valueNoSpaces = noBlankSpaces(value);
+    const isValid = onlyNumbers(valueNoSpaces);
+    isValid
+      ? handlerValue(setNewItem, 'lastCount', valueNoSpaces)
+      : handlerValue(setNewItem, 'lastCount', '');
+  };
+
+  const handleCurrentCount = (value) => {
+    const valueNoSpaces = noBlankSpaces(value);
+    const isValid = onlyNumbers(valueNoSpaces);
+    isValid
+      ? handlerValue(setNewItem, 'currentCount', valueNoSpaces)
+      : handlerValue(setNewItem, 'currentCount', '');
+  };
+
   const createItem = () => {
     if (errorName || errorCode || errorLang) {
       Alert.alert(
@@ -96,7 +113,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
     setNewItem({
       ...INITIAL_NEW_ITEM_STATE,
     });
-    setModalItem(!modalItem)
+    setModalItem(!modalItem);
   };
 
   return (
@@ -113,7 +130,22 @@ const NewItem = ({ modalItem, setModalItem }) => {
             ) : (
               <View style={styles.viewWithImg}>
                 <Text style={styles.title}>Nuevo Item</Text>
-                <Image source={{ uri: newItem.image }} style={styles.img} />
+
+                <View
+                  style={{
+                    height: 110,
+                    width: 70,
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                  }}>
+                  <Image
+                    source={{ uri: newItem.image }}
+                    style={{
+                      flex: 1,
+                      resizeMode: 'cover',
+                    }}
+                  />
+                </View>
               </View>
             )}
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -228,9 +260,7 @@ const NewItem = ({ modalItem, setModalItem }) => {
 
                 <TextInput
                   style={[styles.textInput, { width: '40%' }]}
-                  onChangeText={(value) =>
-                    handlerValue(setNewItem, 'lastCount', value)
-                  }
+                  onChangeText={handleLastCount}
                   value={newItem.lastCount}
                   keyboardType="numeric"
                 />
@@ -246,36 +276,13 @@ const NewItem = ({ modalItem, setModalItem }) => {
                   />
                 </View>
               </View>
-              <View style={styles.line} />
 
-              <Text
-                style={{
-                  textAlign: 'center',
-                  textTransform: 'uppercase',
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  marginBottom: 20,
-                }}>
-                Ultimo ingreso
-              </Text>
-              <View style={styles.rowsView}>
-                <Text style={styles.priorityText}>Fecha</Text>
-                <View>
-                  <SelectDate
-                    handlerDate={(value) =>
-                      handlerValue(setNewItem, 'itemEntryDate', value)
-                    }
-                  />
-                </View>
-              </View>
               <View style={styles.line} />
               <View style={styles.rowsView}>
                 <Text>Cantidad Actual</Text>
                 <TextInput
                   style={[styles.textInput, { width: '40%' }]}
-                  onChangeText={(value) =>
-                    handlerValue(setNewItem, 'currentCount', value)
-                  }
+                  onChangeText={handleCurrentCount}
                   value={newItem.currentCount}
                   keyboardType="numeric"
                 />
@@ -298,13 +305,13 @@ const NewItem = ({ modalItem, setModalItem }) => {
               <Text
                 style={{
                   color: 'grey',
-                  marginHorizontal: 8,
-                  marginTop: 10,
-                  marginBottom: 20,
+                  paddingHorizontal: 8,
+                  paddingTop: 10,
+                  paddingBottom: 20,
                   fontStyle: 'italic',
                 }}>
-                Si se activa se la compañia asociada que tengas podra ver y
-                editar este item.
+                Si se activa, la compañia asociada que tengas podra ver y editar
+                este item.
               </Text>
 
               <View style={{ flexDirection: 'row' }}>
@@ -382,4 +389,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewItem;
+export default CreateNewItem;
