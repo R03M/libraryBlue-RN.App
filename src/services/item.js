@@ -12,10 +12,22 @@ export const getItems = async (idCompany, idAssociated) => {
     throw error;
   }
 };
+
 export const postNewItem = async (item) => {
   try {
     const response = await axios.post(`${CORS_URL}/item/new`, {
       item,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAItem = async (idItem) => {
+  try {
+    const response = await axios.delete(`${CORS_URL}/item/delete`, {
+      data: { idItem },
     });
     return response.data;
   } catch (error) {

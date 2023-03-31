@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewItem, getAllItems } from './actions';
+import { createNewItem, deleteItem, getAllItems } from './actions';
 import searchInItems from '../utils/searchInItems';
 
 const initialState = {
@@ -15,6 +15,10 @@ const initialState = {
 
   //? search item
   errorSearch: null,
+
+  //? delete item
+  statusDeleteItem: 'idle',
+  errorDeleteItem: null,
 };
 
 export const itemSlice = createSlice({
@@ -68,6 +72,25 @@ export const itemSlice = createSlice({
       .addCase(createNewItem.rejected, (state, action) => {
         state.statusCreateItem = 'failed';
         state.errorCreateItem = action.payload;
+      })
+
+      //? delete item
+
+      .addCase(deleteItem.pending, (state) => {
+        state.statusDeleteItem = 'loading';
+      })
+      .addCase(deleteItem.fulfilled, (state, { payload: { id } }) => {
+        state.statusDeleteItem = 'succeeded';
+        const currentStateItems = state.items.filter((item) => item.id !== id);
+        const currentUnalterableItems = state.unalterableItems.filter(
+          (item) => item.id !== id
+        );
+        state.items = currentStateItems;
+        state.unalterableItems = currentUnalterableItems;
+      })
+      .addCase(deleteItem.rejected, (state, action) => {
+        state.statusDeleteItem = 'failed';
+        state.errorDeleteItem = action.payload;
       });
   },
 });

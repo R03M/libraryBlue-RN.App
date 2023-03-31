@@ -10,7 +10,7 @@ import {
   postSelectCompany,
 } from '../services/company.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getItems, postNewItem } from '../services/item.js';
+import { deleteAItem, getItems, postNewItem } from '../services/item.js';
 
 export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
   const response = await postInfEmail(email);
@@ -150,6 +150,22 @@ export const createNewItem = createAsyncThunk(
   async ({ item }) => {
     try {
       const response = await postNewItem(item);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const deleteItem = createAsyncThunk(
+  'item/deleteItem',
+  async ({ idItem }) => {
+    try {
+      const response = await deleteAItem(idItem);
       return response;
     } catch (error) {
       if (error.response) {
