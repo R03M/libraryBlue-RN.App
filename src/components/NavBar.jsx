@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import BtnCustom from './BtnCustom';
-import SelectItem from './SelectCategory';
-import { categories } from '../utils/values.enum';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
+import { useSelector } from 'react-redux';
 
 const NavBar = ({ activeNewItem }) => {
-  const [filterBy, setFilterBy] = useState('N/A');
   const [status, setStatus] = useState('idle');
+  const { dataUser } = useSelector((state) => state.user);
 
   const Show = () => {
     return (
@@ -21,6 +20,8 @@ const NavBar = ({ activeNewItem }) => {
             size={30}
           />
         }
+        title0={status === 'idle' ? 'libraryBlue' : 'Busca algo...'}
+        title2={status === 'idle' ? `Hola ${dataUser.firstName} !` : 'o crea un item'}
         onPress={
           status === 'idle'
             ? () => setStatus('active')
@@ -37,18 +38,12 @@ const NavBar = ({ activeNewItem }) => {
       {status === 'active' && (
         <View style={styles.container}>
           <SearchBar />
-          <View>
-            <SelectItem
-              items={categories}
-              onValueChange={(value) => setFilterBy(value)}
-            />
-          </View>
           <BtnCustom
-            title={'Crear item'}
+            title={'CREAR'}
             onPress={activeNewItem}
             backgroundColor={'black'}
             textColor={'white'}
-            styles={{ borderWidth: 1 }}
+            styles={{ padding: 12, marginHorizontal: 8 }}
           />
         </View>
       )}
