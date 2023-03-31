@@ -12,66 +12,80 @@ import BtnCustom from './BtnCustom';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { naImg } from '../utils/naImg';
+import FullItem from './FullItem';
 
 const SimplifiedItem = ({ item }) => {
   const [output, setOuput] = useState(false);
   const [outputDate, setOuputDate] = useState(null);
+  const [modalFullItem, setModalFullItem] = useState(false);
+  const [selectItem, setSelectItem] = useState([]);
 
   return (
-    <TouchableOpacity onPress={() => console.log('all data')}>
-      <View style={styles.card}>
-        <Image
-          source={{
-            uri: item.image ? item.image : naImg,
-          }}
-          style={styles.img}
-        />
-        <View style={styles.textData}>
-          <Text>{item.code}</Text>
-          <Text>{item.name}</Text>
-          <Text>{item.currentCount ? item.currentCount : 'N/A'}</Text>
-          <Text>{item.category}</Text>
-          <Text>{item.language}</Text>
-          <Text>{item.edition}</Text>
-          <Text>{item.letter}</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          {output ? (
-            <View style={styles.output}>
-              <TextInput
-                style={styles.textInputNro}
-                onChangeText={(value) => setOuputDate(value)}
-                value={outputDate}
-                keyboardType="numeric"
+    <>
+      <TouchableOpacity
+        onPress={() => {
+          setSelectItem(item);
+          setModalFullItem(!modalFullItem);
+        }}>
+        <View style={styles.card}>
+          <Image
+            source={{
+              uri: item.image ? item.image : naImg,
+            }}
+            style={styles.img}
+          />
+          <View style={styles.textData}>
+            <Text>{item.code}</Text>
+            <Text>{item.name}</Text>
+            <Text>{item.currentCount ? item.currentCount : 'N/A'}</Text>
+            <Text>{item.category}</Text>
+            <Text>{item.language}</Text>
+            <Text>{item.edition}</Text>
+            <Text>{item.letter}</Text>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            {output ? (
+              <View style={styles.output}>
+                <TextInput
+                  style={styles.textInputNro}
+                  onChangeText={(value) => setOuputDate(value)}
+                  value={outputDate}
+                  keyboardType="numeric"
+                />
+                <View style={{ margin: 2 }}>
+                  <BtnCustom
+                    title={<Entypo name="save" size={22} />}
+                    onPress={() => console.log(outputDate)}
+                    textColor={'green'}
+                  />
+                </View>
+                <View style={{ margin: 2 }}>
+                  <BtnCustom
+                    title={<MaterialIcons name="cancel" size={22} />}
+                    onPress={() => {
+                      setOuput(false);
+                      setOuputDate(null);
+                    }}
+                    textColor={'red'}
+                  />
+                </View>
+              </View>
+            ) : (
+              <BtnCustom
+                title={<MaterialCommunityIcons name="exit-run" size={24} />}
+                textColor={'#5998c0'}
+                onPress={() => setOuput(true)}
               />
-              <View style={{ margin: 2 }}>
-                <BtnCustom
-                  title={<Entypo name="save" size={22} />}
-                  onPress={() => console.log(outputDate)}
-                  textColor={'green'}
-                />
-              </View>
-              <View style={{ margin: 2 }}>
-                <BtnCustom
-                  title={<MaterialIcons name="cancel" size={22} />}
-                  onPress={() => {
-                    setOuput(false);
-                    setOuputDate(null);
-                  }}
-                  textColor={'red'}
-                />
-              </View>
-            </View>
-          ) : (
-            <BtnCustom
-              title={<MaterialCommunityIcons name="exit-run" size={24} />}
-              textColor={'#5998c0'}
-              onPress={() => setOuput(true)}
-            />
-          )}
+            )}
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <FullItem
+        item={selectItem}
+        modalFullItem={modalFullItem}
+        setModalFullItem={setModalFullItem}
+      />
+    </>
   );
 };
 
