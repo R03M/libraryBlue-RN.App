@@ -5,12 +5,13 @@ import { uploadImage } from "../utils/cloudinary";
 import { AntDesign } from "@expo/vector-icons";
 import BtnCustom from "./BtnCustom";
 import validateUrlImage from "../utils/validateUrlImage";
+import noBlankSpaces from "../utils/noBlankSpaces";
 
 const AddImage = ({ onChangeImage }) => {
   const cloudinary = "cloudinary";
   const externalURL = "externalURL";
 
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
   const [service, setService] = useState(null);
   const [error, setError] = useState(null);
 
@@ -32,14 +33,15 @@ const AddImage = ({ onChangeImage }) => {
   };
 
   const handlerUrlImage = (value) => {
-    const isValid = validateUrlImage(value);
+    const valueNoSpaces = noBlankSpaces(value);
+    const isValid = validateUrlImage(valueNoSpaces);
     if (isValid) {
       setService(externalURL);
-      setImage(value);
+      setImage(valueNoSpaces);
       setError(null);
     }
     if (isValid !== true) setError(isValid);
-    if (value === "") setError(null);
+    if (valueNoSpaces === "") setError(null);
   };
 
   useEffect(() => {
@@ -57,9 +59,9 @@ const AddImage = ({ onChangeImage }) => {
         {image && service === cloudinary ? null : (
           <TextInput
             style={[styles.textInput, { width: "50%" }]}
-            onChangeText={(value) => handlerUrlImage(value)}
+            onChangeText={handlerUrlImage}
             value={image}
-            placeholder="https://img.com/1.jpg"
+            placeholder="https://img.jpg"
           />
         )}
         {image && service === externalURL ? null : (
