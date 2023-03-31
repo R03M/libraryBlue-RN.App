@@ -22,7 +22,7 @@ const SearchBar = () => {
     <TextInput
       onChangeText={handlerSearch}
       value={search}
-      placeholder="Search"
+      placeholder={`Encuentra lo que necesitas`}
       style={styles.search}
     />
   );
@@ -30,10 +30,14 @@ const SearchBar = () => {
 
 const styles = StyleSheet.create({
   search: {
-    backgroundColor: '#ffce6a',
+    flex: 1,
+    backgroundColor: '#5998c0',
     margin: 8,
-    padding: 10,
+    padding: 8,
     borderRadius: 4,
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18
   },
 });
 
