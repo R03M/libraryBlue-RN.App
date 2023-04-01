@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { StyleSheet, View } from "react-native";
 
-const SelectItem = ({ items, onValueChange }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
+const SelectItem = ({ items, onValueChange, value }) => {
+  const [selectedValue, setSelectedValue] = useState(value);
+
 
   const handleValueChange = (itemValue) => {
     setSelectedValue(itemValue);

@@ -4,7 +4,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import es from "date-fns/locale/es";
 
-const SelectDate = ({ handlerDate }) => {
+const SelectDate = ({ handlerDate, value }) => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
@@ -21,7 +21,7 @@ const SelectDate = ({ handlerDate }) => {
     handlerDate(currentDate);
   };
 
-  const dateCurrent = format(date, "dd 'de' MMMM 'del' yyyy", {
+  const dateCurrent = format(date ? date : value , "dd 'de' MMMM 'del' yyyy", {
     locale: es,
   });
 
