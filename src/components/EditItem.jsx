@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import SelectItem from './SelectCategory';
 import SelectDate from './SelectDate';
@@ -15,19 +16,27 @@ import validateString from '../utils/validateString';
 import noBlankSpaces from '../utils/noBlankSpaces';
 import onlyNumbers from '../utils/onlyNumbers';
 import { categories, editions, letters } from '../utils/values.enum';
+import isEqual from 'lodash/isEqual';
 import BtnCustom from './BtnCustom';
 import { naImg } from '../utils/naImg';
 import ModalImage from './ModalImage';
+import handlerValue from '../utils/handlerValue';
+import { useDispatch, useSelector } from 'react-redux';
+import { action_UpdateItem } from '../redux/actions';
 
 const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
+  const dispatch = useDispatch();
   const [errorName, setErrorName] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
   const [modalImage, setModalImage] = useState(false);
   const [isEnabled, setIsEnabled] = useState(oldItem.associatedCompany);
-  
+  const idCompany = useSelector((state) => state.user.dataUser.company.id);
+
 
   const INITIAL_NEW_ITEM_STATE = {
+    idCompany: idCompany,
+    id: oldItem.id,
     code: oldItem.code,
     name: oldItem.name,
     language: oldItem.language,
@@ -41,6 +50,7 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
     itemEntry: oldItem.itemEntry ? oldItem.itemEntry.toString() : '',
     itemEntryDate: oldItem.itemEntryDate,
     associatedCompany: isEnabled,
+    exitOnly: false
   };
 
   const [updateItem, setUpdateItem] = useState(INITIAL_NEW_ITEM_STATE);
@@ -87,6 +97,16 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
 
   const handleShowModalImage = () => {
     setModalImage(!modalImage);
+  };
+
+  const handleSave = () => {
+    if (isEqual(updateItem, INITIAL_NEW_ITEM_STATE)) {
+      Alert.alert('No hay cambios', 'El item no se actualizará', [], {
+        cancelable: true,
+      });
+      return;
+    }
+    dispatch(action_UpdateItem({ updateItem }));
   };
 
   return (
@@ -254,7 +274,7 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
               title="Cancelar"
               onPress={() => setModeEdit(!modeEdit)}
             />
-            <BtnCustom title="Guardar" />
+            <BtnCustom title="Guardar" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>
