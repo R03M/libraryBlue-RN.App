@@ -34,3 +34,14 @@ export const deleteAItem = async (idItem) => {
     throw error;
   }
 };
+
+export const postUpdateItem = async (item) => {
+  try {
+    const response = await axios.put(`${CORS_URL}/item/update`, {
+      item,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

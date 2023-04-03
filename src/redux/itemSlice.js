@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewItem, deleteItem, getAllItems } from './actions';
+import { createNewItem, deleteItem, getAllItems, action_UpdateItem } from './actions';
 import searchInItems from '../utils/searchInItems';
 
 const initialState = {
@@ -19,6 +19,10 @@ const initialState = {
   //? delete item
   statusDeleteItem: 'idle',
   errorDeleteItem: null,
+
+  //? update item
+  statusUpdateItem: 'idle',
+  errorUpdateItem: null,
 };
 
 export const itemSlice = createSlice({
@@ -91,6 +95,31 @@ export const itemSlice = createSlice({
       .addCase(deleteItem.rejected, (state, action) => {
         state.statusDeleteItem = 'failed';
         state.errorDeleteItem = action.payload;
+      })
+
+      //? update item
+
+      .addCase(action_UpdateItem.pending, (state) => {
+        state.statusUpdateItem = 'loading';
+      })
+      .addCase(action_UpdateItem.fulfilled, (state, { payload: { itemUpdated } }) => {
+        state.statusUpdateItem = 'succeeded';
+
+        let currentStateItems = state.items.filter(
+          (item) => item.id !== itemUpdated.id
+        );
+        let currentUnalterableItems = state.unalterableItems.filter(
+          (item) => item.i !== itemUpdated.id
+        );
+        currentStateItems.push(itemUpdated);
+        currentUnalterableItems.push(itemUpdated);
+
+        state.items = currentStateItems;
+        state.unalterableItems = currentUnalterableItems;
+      })
+      .addCase(action_UpdateItem.rejected, (state, action) => {
+        state.statusUpdateItem = 'failed';
+        state.errorUpdateItem = action.payload;
       });
   },
 });
