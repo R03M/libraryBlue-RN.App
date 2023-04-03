@@ -32,7 +32,7 @@ const ItemsScreen = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <NavBar activeNewItem={() => setModalItem(!modalItem)} />
-          <ItemsList data={items} />
+          <ItemsList data={items} idCompany={idCompany}/>
           <CreateNewItem modalItem={modalItem} setModalItem={setModalItem} />
         </View>
       )}

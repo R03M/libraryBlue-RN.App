@@ -3,7 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import SimplifiedItem from './SimplifiedItem';
 import { useSelector } from 'react-redux';
 
-const ItemsList = ({ data }) => {
+const ItemsList = ({ data, idCompany }) => {
   const errorSearchItems = useSelector((state) => state.item.errorSearch);
 
   const RenderItems = () => {
@@ -17,7 +17,7 @@ const ItemsList = ({ data }) => {
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <SimplifiedItem item={item} />}
+          renderItem={({ item }) => <SimplifiedItem item={item} idCompany={idCompany}/>}
           showsVerticalScrollIndicator={false}
         />
       );
