@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import BtnCustom from './BtnCustom';
@@ -13,12 +14,43 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { naImg } from '../utils/naImg';
 import FullItem from './FullItem';
+import { useDispatch } from 'react-redux';
+import { action_UpdateItem } from '../redux/actions';
+import isEqual from 'lodash/isEqual';
 
-const SimplifiedItem = ({ item }) => {
+const SimplifiedItem = ({ item, idCompany }) => {
+  const dispatch = useDispatch();
+  const INITIAL_ITEM_STATE = {
+    id: item.id,
+    idCompany: idCompany,
+    currentCount: '',
+    exitOnly: true
+  };
   const [output, setOuput] = useState(false);
-  const [outputDate, setOuputDate] = useState(null);
+  const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
   const [modalFullItem, setModalFullItem] = useState(false);
   const [selectItem, setSelectItem] = useState([]);
+
+  const handleUpdateCurrentItem = () => {
+    if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
+      Alert.alert('No hay cambios', `No se actualizará`, [], {
+        cancelable: true,
+      });
+      return;
+    }
+    if (parseInt(updateItem.currentCount) > item.currentCount) {
+      Alert.alert(
+        null,
+        `El valor de salida no puede ser mayor a ${item.currentCount}`,
+        [],
+        {
+          cancelable: true,
+        }
+      );
+      return;
+    }
+    dispatch(action_UpdateItem({ updateItem }));
+  };
 
   return (
     <>
@@ -48,14 +80,19 @@ const SimplifiedItem = ({ item }) => {
               <View style={styles.output}>
                 <TextInput
                   style={styles.textInputNro}
-                  onChangeText={(value) => setOuputDate(value)}
-                  value={outputDate}
+                  onChangeText={(value) =>
+                    setUpdateItem((prevItem) => ({
+                      ...prevItem,
+                      currentCount: value,
+                    }))
+                  }
+                  value={updateItem.currentCount}
                   keyboardType="numeric"
                 />
                 <View style={{ margin: 2 }}>
                   <BtnCustom
                     title={<Entypo name="save" size={22} />}
-                    onPress={() => console.log(outputDate)}
+                    onPress={handleUpdateCurrentItem}
                     textColor={'green'}
                   />
                 </View>
@@ -64,7 +101,7 @@ const SimplifiedItem = ({ item }) => {
                     title={<MaterialIcons name="cancel" size={22} />}
                     onPress={() => {
                       setOuput(false);
-                      setOuputDate(null);
+                      setUpdateItem(null);
                     }}
                     textColor={'red'}
                   />
