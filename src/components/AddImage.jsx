@@ -7,11 +7,11 @@ import BtnCustom from "./BtnCustom";
 import validateUrlImage from "../utils/validateUrlImage";
 import noBlankSpaces from "../utils/noBlankSpaces";
 
-const AddImage = ({ onChangeImage }) => {
+const AddImage = ({ onChangeImage, value }) => {
   const cloudinary = "cloudinary";
   const externalURL = "externalURL";
 
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(value);
   const [service, setService] = useState(null);
   const [error, setError] = useState(null);
 
