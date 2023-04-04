@@ -3,15 +3,26 @@ import { Alert, Image, Modal, TouchableOpacity } from 'react-native';
 import { View, StyleSheet, Text } from 'react-native';
 import { naImg } from '../utils/naImg';
 import BtnCustom from './BtnCustom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteItem } from '../redux/actions';
 import EditItem from './EditItem';
 import ModalImage from './ModalImage';
+import { format } from 'date-fns';
+import es from 'date-fns/locale/es';
 
 const FullItem = ({ item, modalFullItem, setModalFullItem }) => {
   const dispatch = useDispatch();
   const [modalImage, setModalImage] = useState(false);
   const [modeEdit, setModeEdit] = useState(false);
+  const user = useSelector((state) => state.user.dataUser);
+
+  const dateFormated = (value) => {
+    const parseDate = new Date(value);
+    const date = format(parseDate, "dd 'de' MMMM 'de' yyyy", {
+      locale: es,
+    });
+    return date;
+  };
 
   const handleShowModalImage = () => {
     modalImage ? setModalImage(false) : setModalImage(true);
@@ -115,13 +126,23 @@ const FullItem = ({ item, modalFullItem, setModalFullItem }) => {
                   </View>
                   <View style={styles.rows}>
                     <Text>Fecha</Text>
-                    <Text>{item.lastCountDate}</Text>
+                    <Text>
+                      {item.lastCountDate
+                        ? dateFormated(item.lastCountDate)
+                        : 'n/a'}
+                    </Text>
                   </View>
                   <View style={styles.rows}></View>
 
                   <Text style={{ textAlign: 'center' }}>Ultimo ingreso</Text>
-                  <Text>Fecha</Text>
-                  <Text>{item.itemEntryDate}</Text>
+                  <View style={styles.rows}>
+                    <Text>Fecha</Text>
+                    <Text>
+                      {item.itemEntryDate
+                        ? dateFormated(item.itemEntryDate)
+                        : 'n/a'}
+                    </Text>
+                  </View>
                   <View style={styles.rows}>
                     <Text>Compartido con compañia asociada</Text>
                     <Text>{item.associatedCompany ? ' Si' : ' No'}</Text>
@@ -129,6 +150,7 @@ const FullItem = ({ item, modalFullItem, setModalFullItem }) => {
                 </View>
               </View>
             </View>
+
             <View
               style={{
                 flexDirection: 'row',
@@ -143,20 +165,24 @@ const FullItem = ({ item, modalFullItem, setModalFullItem }) => {
                   setModalFullItem(!modalFullItem);
                 }}
               />
-              <BtnCustom
-                title="Editar"
-                backgroundColor={'green'}
-                textColor={'white'}
-                onPress={() => {
-                  setModeEdit(!modeEdit);
-                }}
-              />
-              <BtnCustom
-                title="Eliminar"
-                backgroundColor={'red'}
-                textColor={'white'}
-                onPress={handledeleteItem}
-              />
+              {user.position !== 'Observant' && (
+                <>
+                  <BtnCustom
+                    title="Editar"
+                    backgroundColor={'green'}
+                    textColor={'white'}
+                    onPress={() => {
+                      setModeEdit(!modeEdit);
+                    }}
+                  />
+                  <BtnCustom
+                    title="Eliminar"
+                    backgroundColor={'red'}
+                    textColor={'white'}
+                    onPress={handledeleteItem}
+                  />
+                </>
+              )}
             </View>
           </>
         ) : (
