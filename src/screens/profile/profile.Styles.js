@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
   },
+  rowsBetween: { flexDirection: "row", justifyContent: "space-between" }
 });
 
 export default styles;

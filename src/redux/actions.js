@@ -3,14 +3,21 @@ import {
   postInfEmail,
   postLoginUser,
   postRegisterUser,
+  updateUserProfile,
 } from '../services/user.js';
 import {
   getCompanies,
+  postAllCompanyUser,
   postNewCompany,
   postSelectCompany,
 } from '../services/company.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteAItem, getItems, postNewItem, postUpdateItem } from '../services/item.js';
+import {
+  deleteAItem,
+  getItems,
+  postNewItem,
+  postUpdateItem,
+} from '../services/item.js';
 
 export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
   const response = await postInfEmail(email);
@@ -182,6 +189,42 @@ export const action_UpdateItem = createAsyncThunk(
   async ({ updateItem }) => {
     try {
       const response = await postUpdateItem(updateItem);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_UpdateProfile = createAsyncThunk(
+  'user/updateProfile',
+  async ({ updateProfile }) => {
+    try {
+      const response = await updateUserProfile(updateProfile);
+      await AsyncStorage.setItem(
+        '@UserData',
+        JSON.stringify(response.userData)
+      );
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_getAllCompanyUsers = createAsyncThunk(
+  'user/getAllCompanyUsers',
+  async ({ companyName }) => {
+    try {
+      const response = await postAllCompanyUser(companyName);
       return response;
     } catch (error) {
       if (error.response) {

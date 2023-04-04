@@ -31,4 +31,15 @@ export const postRegisterUser = async (data) => {
   }
 };
 
+export const updateUserProfile = async (data) => {
+  try {
+    const response = await axios.put(`${CORS_URL}/user/update`, {
+      data,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 

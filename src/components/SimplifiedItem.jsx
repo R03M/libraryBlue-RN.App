@@ -14,7 +14,7 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { naImg } from '../utils/naImg';
 import FullItem from './FullItem';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
 import isEqual from 'lodash/isEqual';
 
@@ -24,12 +24,14 @@ const SimplifiedItem = ({ item, idCompany }) => {
     id: item.id,
     idCompany: idCompany,
     currentCount: '',
-    exitOnly: true
+    exitOnly: true,
   };
   const [output, setOuput] = useState(false);
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
   const [modalFullItem, setModalFullItem] = useState(false);
   const [selectItem, setSelectItem] = useState([]);
+  const user = useSelector((state) => state.user.dataUser);
+
 
   const handleUpdateCurrentItem = () => {
     if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
@@ -75,46 +77,48 @@ const SimplifiedItem = ({ item, idCompany }) => {
             <Text>{item.edition}</Text>
             <Text>{item.letter}</Text>
           </View>
-          <View style={{ alignItems: 'center' }}>
-            {output ? (
-              <View style={styles.output}>
-                <TextInput
-                  style={styles.textInputNro}
-                  onChangeText={(value) =>
-                    setUpdateItem((prevItem) => ({
-                      ...prevItem,
-                      currentCount: value,
-                    }))
-                  }
-                  value={updateItem.currentCount}
-                  keyboardType="numeric"
+          {user.position !== 'Observant' && (
+            <View style={{ alignItems: 'center' }}>
+              {output ? (
+                <View style={styles.output}>
+                  <TextInput
+                    style={styles.textInputNro}
+                    onChangeText={(value) =>
+                      setUpdateItem((prevItem) => ({
+                        ...prevItem,
+                        currentCount: value,
+                      }))
+                    }
+                    value={updateItem.currentCount}
+                    keyboardType="numeric"
+                  />
+                  <View style={{ margin: 2 }}>
+                    <BtnCustom
+                      title={<Entypo name="save" size={22} />}
+                      onPress={handleUpdateCurrentItem}
+                      textColor={'green'}
+                    />
+                  </View>
+                  <View style={{ margin: 2 }}>
+                    <BtnCustom
+                      title={<MaterialIcons name="cancel" size={22} />}
+                      onPress={() => {
+                        setOuput(false);
+                        setUpdateItem(null);
+                      }}
+                      textColor={'red'}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <BtnCustom
+                  title={<MaterialCommunityIcons name="exit-run" size={24} />}
+                  textColor={'#5998c0'}
+                  onPress={() => setOuput(true)}
                 />
-                <View style={{ margin: 2 }}>
-                  <BtnCustom
-                    title={<Entypo name="save" size={22} />}
-                    onPress={handleUpdateCurrentItem}
-                    textColor={'green'}
-                  />
-                </View>
-                <View style={{ margin: 2 }}>
-                  <BtnCustom
-                    title={<MaterialIcons name="cancel" size={22} />}
-                    onPress={() => {
-                      setOuput(false);
-                      setUpdateItem(null);
-                    }}
-                    textColor={'red'}
-                  />
-                </View>
-              </View>
-            ) : (
-              <BtnCustom
-                title={<MaterialCommunityIcons name="exit-run" size={24} />}
-                textColor={'#5998c0'}
-                onPress={() => setOuput(true)}
-              />
-            )}
-          </View>
+              )}
+            </View>
+          )}
         </View>
       </TouchableOpacity>
       <FullItem

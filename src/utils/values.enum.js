@@ -1,52 +1,57 @@
 export const editions = [
   {
-    label: "Público",
-    value: "Public",
+    label: 'Público',
+    value: 'Public',
   },
   {
-    label: "Estudio",
-    value: "Study",
+    label: 'Estudio',
+    value: 'Study',
   },
 ];
 
 export const letters = [
   {
-    label: "Grande",
-    value: "Big",
+    label: 'Grande',
+    value: 'Big',
   },
   {
-    label: "Normal",
-    value: "Normal",
+    label: 'Normal',
+    value: 'Normal',
   },
 ];
 
 export const categories = [
   {
-    label: "Revistas",
-    value: "Magazines",
+    label: 'Revistas',
+    value: 'Magazines',
   },
   {
-    label: "Libros",
-    value: "Books",
+    label: 'Libros',
+    value: 'Books',
   },
   {
-    label: "Folletos",
-    value: "Brochures",
+    label: 'Folletos',
+    value: 'Brochures',
   },
   {
-    label: "Guia de Actividades",
-    value: "Activity Guide",
+    label: 'Guia de Actividades',
+    value: 'Activity Guide',
   },
   {
-    label: "Tratados",
-    value: "Treaties",
+    label: 'Tratados',
+    value: 'Treaties',
   },
   {
-    label: "Tarjetas",
-    value: "Cards",
+    label: 'Tarjetas',
+    value: 'Cards',
   },
   {
-    label: "Otros",
-    value: "Others",
+    label: 'Otros',
+    value: 'Others',
   },
+];
+
+export const POSITION = [
+  { label: 'Colaborador', value: 'Helper' },
+  { label: 'Observante', value: 'Observant' },
 ];

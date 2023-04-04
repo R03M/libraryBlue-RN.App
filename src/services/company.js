@@ -31,3 +31,14 @@ export const postSelectCompany = async (selectCompanyInf) => {
     throw error;
   }
 };
+
+export const postAllCompanyUser = async (companyName) => {
+  try {
+    const response = await axios.post(`${CORS_URL}/company/allCompanyUsers`, {
+      companyName,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,36 +1,36 @@
-import { useState } from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { format } from "date-fns";
-import es from "date-fns/locale/es";
+import { useState } from 'react';
+import { View, StyleSheet, Text, Button } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
+import es from 'date-fns/locale/es';
+import isEqual from 'lodash/isEqual';
 
 const SelectDate = ({ handlerDate, value }) => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(value ? new Date(value) : new Date());
   const [show, setShow] = useState(false);
 
   const showMode = () => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === 'android') {
       setShow(true);
     }
   };
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
     setShow(false);
-    setDate(currentDate);
-    handlerDate(currentDate);
+    if (selectedDate) {
+      setDate(selectedDate);
+      handlerDate(selectedDate);
+    }
   };
 
-  const dateCurrent = format(date ? date : value , "dd 'de' MMMM 'del' yyyy", {
-    locale: es,
-  });
+  const dateCurrent = format(date, "dd 'de' MMMM 'de' yyyy", { locale: es });
 
   return (
     <View style={styles.container}>
       {show && (
         <DateTimePicker
           value={date}
-          mode={"date"}
+          mode={'date'}
           onChange={onChange}
           locale="es-ES"
         />
@@ -43,8 +43,8 @@ const SelectDate = ({ handlerDate, value }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

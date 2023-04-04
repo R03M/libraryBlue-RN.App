@@ -16,6 +16,7 @@ const ItemsScreen = () => {
   const { items, errorDeleteItem, statusDeleteItem, unalterableItems } =
     useSelector((state) => state.item);
 
+
   useEffect(() => {
     if (unalterableItems.length === 0) {
       const getItems = () => {
@@ -32,7 +33,7 @@ const ItemsScreen = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <NavBar activeNewItem={() => setModalItem(!modalItem)} />
-          <ItemsList data={items} idCompany={idCompany}/>
+          <ItemsList data={items} idCompany={idCompany} />
           <CreateNewItem modalItem={modalItem} setModalItem={setModalItem} />
         </View>
       )}

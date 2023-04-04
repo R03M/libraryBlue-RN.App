@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import handlerValue from "../utils/handlerValue";
-import SelectComany from "./SelectCompany";
+import SelectItem from "./SelectItem";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createNewCompany,
@@ -130,7 +130,7 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
 
                   <AddImage onChangeImage={handlerChangeImage} />
 
-                  <SelectComany
+                  <SelectItem
                     companies={companies}
                     associateCompany={handlerAssociatedC}
                   />
@@ -151,7 +151,7 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
               ) : (
                 <View>
                   <Text style={styles.modalText}>Seleccionar Compañia</Text>
-                  <SelectComany
+                  <SelectItem
                     companies={companies}
                     associateCompany={handlerSelectCompany}
                   />

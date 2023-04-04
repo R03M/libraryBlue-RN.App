@@ -10,7 +10,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import SelectItem from './SelectCategory';
+import SelectItem from './SelectItem';
 import SelectDate from './SelectDate';
 import validateString from '../utils/validateString';
 import noBlankSpaces from '../utils/noBlankSpaces';
@@ -23,6 +23,7 @@ import ModalImage from './ModalImage';
 import handlerValue from '../utils/handlerValue';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
+import AddImage from './AddImage';
 
 const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
   const dispatch = useDispatch();
@@ -33,8 +34,7 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
   const [isEnabled, setIsEnabled] = useState(oldItem.associatedCompany);
   const idCompany = useSelector((state) => state.user.dataUser.company.id);
 
-
-  const INITIAL_NEW_ITEM_STATE = {
+  const INITIAL_ITEM_STATE = {
     idCompany: idCompany,
     id: oldItem.id,
     code: oldItem.code,
@@ -50,10 +50,10 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
     itemEntry: oldItem.itemEntry ? oldItem.itemEntry.toString() : '',
     itemEntryDate: oldItem.itemEntryDate,
     associatedCompany: isEnabled,
-    exitOnly: false
+    exitOnly: false,
   };
 
-  const [updateItem, setUpdateItem] = useState(INITIAL_NEW_ITEM_STATE);
+  const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
 
   function handleCode(value) {
     const valueNoSpaces = noBlankSpaces(value);
@@ -165,7 +165,24 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
               value={updateItem.currentCount}
             />
           </View>
+          <View style={styles.rows}>
+            <Text>Lenguaje</Text>
+            <TextInput
+              style={[styles.textInput, { width: '60%' }]}
+              onChangeText={handleLanguage}
+              value={updateItem.language}
+            />
+          </View>
 
+          <View style={styles.rowsView}>
+            <Text>Imagen</Text>
+            <AddImage
+              onChangeImage={(value) =>
+                handlerValue(setUpdateItem, 'image', value)
+              }
+              value={updateItem.image}
+            />
+          </View>
           <View style={styles.rows}>
             <Text>Categoria</Text>
             <View>
@@ -177,14 +194,6 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
                 }
               />
             </View>
-          </View>
-          <View style={styles.rows}>
-            <Text>Lenguaje</Text>
-            <TextInput
-              style={[styles.textInput, { width: '60%' }]}
-              onChangeText={handleLanguage}
-              value={updateItem.language}
-            />
           </View>
 
           <View style={styles.rows}>
