@@ -1,20 +1,27 @@
-import { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch } from "react-redux";
-import { deleteUserToken, setUser, setUserToken } from "../redux/userSlice";
-import axios from "axios";
-import { CORS_URL } from "@env";
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import {
+  deleteDataUser,
+  deleteUserToken,
+  setErrorCheck,
+  setUser,
+  setUserToken,
+} from '../redux/userSlice';
+import axios from 'axios';
+import { CORS_URL } from '@env';
 
 const useUserData = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getDataUser = async () => {
-      const token = await AsyncStorage.getItem("@TokenAccess");
-      const user = await AsyncStorage.getItem("@UserData");
-     
+      const token = await AsyncStorage.getItem('@TokenAccess');
+      const user = await AsyncStorage.getItem('@UserData');
+
       if (!user && !token) {
         dispatch(deleteUserToken());
+        dispatch(deleteDataUser());
         return;
       }
 
@@ -42,7 +49,15 @@ const useUserData = () => {
           dispatch(setUserToken(JSON.parse(token)));
         }
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 406) {
+          dispatch(setErrorCheck());
+          setTimeout(() => {
+            AsyncStorage.removeItem('@TokenAccess');
+            AsyncStorage.removeItem('@UserData');
+            dispatch(deleteUserToken());
+            dispatch(deleteDataUser());
+          }, 3000);
+        }
       }
     };
     getDataUser();
