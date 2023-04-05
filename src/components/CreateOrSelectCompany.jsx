@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Button,
@@ -9,58 +9,53 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import handlerValue from "../utils/handlerValue";
-import SelectItem from "./SelectItem";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  createNewCompany,
-  getAllCompanies,
-  newUserSelectCompany,
-} from "../redux/actions";
-import AddImage from "./AddImage";
+} from 'react-native';
+import handlerValue from '../utils/handlerValue';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewCompany, newUserSelectCompany } from '../redux/actions';
+import AddImage from './AddImage';
+import SelectCompany from './SelectCompany';
 
-const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
+const CreateOrSelectCompany = ({
+  companies,
+  modalVisible,
+  setModalVisible,
+  type,
+  idUser,
+}) => {
   const dispatch = useDispatch();
-  const { companies } = useSelector((state) => state.company);
-
   const [error, setError] = useState(null);
+
   const [company, setCompany] = useState({
-    name: "",
-    image: "",
-    code: "",
-    associatedCompany: "",
-    codeAssociated: "",
+    name: '',
+    image: '',
+    code: '',
+    associatedCompany: '',
+    codeAssociated: '',
     idUser,
   });
 
   const [selectCompany, setSelectCompany] = useState({
-    nameCompany: "",
     idUser,
+    nameCompany: '',
+    codeCompany: '',
   });
-  
-  useEffect(() => {
-    dispatch(getAllCompanies());
-  }, []);
 
-  const handlerAssociatedC = (value) => {
-    handlerValue(setCompany, "associatedCompany", value);
-  };
-
-  const handlerSelectCompany = (value) => {
-    handlerValue(setSelectCompany, "nameCompany", value);
+  const handlerSelectCompany = (name, code) => {
+    handlerValue(setSelectCompany, 'nameCompany', name);
+    handlerValue(setSelectCompany, 'codeCompany', code);
   };
 
   const handlerChangeImage = (value) => {
-    handlerValue(setCompany, "image", value);
+    handlerValue(setCompany, 'image', value);
   };
 
   const handlerName = (value) => {
-    handlerValue(setCompany, "name", value);
-    if (typeof companies !== "string") {
+    handlerValue(setCompany, 'name', value);
+    if (typeof companies !== 'string') {
       const alreadyExists = companies.find((company) => company.name === value);
       if (alreadyExists) {
-        setError("Ya existe una compañia con ese nombre");
+        setError('Ya existe una compañia con ese nombre');
         return;
       }
       setError(null);
@@ -68,12 +63,12 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
   };
 
   const handlerCode = (value) => {
-    handlerValue(setCompany, "code", value);
+    handlerValue(setCompany, 'code', value);
   };
 
   const createCompany = () => {
     if (error) {
-      Alert.alert("Error", error, [], {
+      Alert.alert('Error', error, [], {
         cancelable: true,
       });
       return;
@@ -94,12 +89,11 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-        }}
-      >
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              {type === "Manager" ? (
+              {type === 'Manager' ? (
                 <>
                   <Text style={styles.modalText}>Crear Compañia</Text>
                   {!company.image ? null : (
@@ -130,41 +124,38 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
 
                   <AddImage onChangeImage={handlerChangeImage} />
 
-                  <SelectItem
-                    companies={companies}
-                    associateCompany={handlerAssociatedC}
-                  />
-
                   <View style={styles.btonsView}>
                     <Button
                       title="cancelar"
                       onPress={() => setModalVisible(!modalVisible)}
-                      color={"red"}
+                      color={'red'}
                     />
                     <Button
                       title="crear"
                       onPress={createCompany}
-                      color={"green"}
+                      color={'green'}
                     />
                   </View>
                 </>
               ) : (
                 <View>
                   <Text style={styles.modalText}>Seleccionar Compañia</Text>
-                  <SelectItem
+                  <SelectCompany
                     companies={companies}
-                    associateCompany={handlerSelectCompany}
+                    associateCompany={({ name, code }) =>
+                      handlerSelectCompany(name, code)
+                    }
                   />
                   <View style={styles.btonsView}>
                     <Button
                       title="Vincular"
                       onPress={handlerSelectC}
-                      color={"green"}
+                      color={'green'}
                     />
                     <Button
                       title="cancelar"
                       onPress={() => setModalVisible(!modalVisible)}
-                      color={"red"}
+                      color={'red'}
                     />
                   </View>
                 </View>
@@ -180,15 +171,15 @@ const CreateCompany = ({ modalVisible, setModalVisible, type, idUser }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     padding: 25,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -198,49 +189,49 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     fontSize: 20,
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 700,
   },
   textInput: {
-    borderBottomColor: "grey",
+    borderBottomColor: 'grey',
     borderBottomWidth: 1,
     marginVertical: 20,
-    width: "70%",
+    width: '70%',
   },
   img: {
     height: 190,
-    width: "100%",
+    width: '100%',
     borderRadius: 10,
     marginVertical: 10,
   },
   rowsView: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   textError: {
-    textAlign: "center",
-    color: "red",
-    fontWeight: "bold",
+    textAlign: 'center',
+    color: 'red',
+    fontWeight: 'bold',
   },
   textCode: {
-    textAlign: "center",
-    color: "gray",
-    fontWeight: "bold",
-    fontStyle: "italic",
+    textAlign: 'center',
+    color: 'gray',
+    fontWeight: 'bold',
+    fontStyle: 'italic',
   },
   btonsView: {
     marginVertical: 20,
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 
-export default CreateCompany;
+export default CreateOrSelectCompany;

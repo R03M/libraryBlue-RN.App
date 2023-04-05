@@ -10,16 +10,16 @@ import styles from './items.Styles';
 
 const ItemsScreen = () => {
   const dispatch = useDispatch();
-  const { dataUser } = useSelector((state) => state.user);
-  const [modalItem, setModalItem] = useState(false);
-  const idCompany = useSelector((state) => state.user.dataUser.company.id);
-  const { items, errorDeleteItem, statusDeleteItem, unalterableItems } =
-    useSelector((state) => state.item);
 
+  const { dataUser } = useSelector((state) => state.user);
+  const { items } = useSelector((state) => state.item);
+
+  const [modalItem, setModalItem] = useState(false);
 
   useEffect(() => {
-    if (unalterableItems.length === 0) {
+    if (dataUser.company) {
       const getItems = () => {
+        let idCompany = dataUser.company.id;
         dispatch(getAllItems({ idCompany }));
       };
       getItems();
@@ -33,7 +33,7 @@ const ItemsScreen = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <NavBar activeNewItem={() => setModalItem(!modalItem)} />
-          <ItemsList data={items} idCompany={idCompany} />
+          <ItemsList data={items} idCompany={dataUser.company.id} />
           <CreateNewItem modalItem={modalItem} setModalItem={setModalItem} />
         </View>
       )}

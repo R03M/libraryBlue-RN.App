@@ -18,7 +18,7 @@ const SelectItem = ({ items, onValueChange, value, notItemNA }) => {
         style={styles.picker}
         itemStyle={styles.pickerItem}>
         {!notItemNA && <Picker.Item label={'N/A'} value={'N/A'} />}
-        {items.map((item) => (
+        {items?.map((item) => (
           <Picker.Item label={item.label} value={item.value} key={item.value} />
         ))}
       </Picker>

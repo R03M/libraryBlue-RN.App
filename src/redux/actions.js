@@ -82,10 +82,13 @@ export const registerAccount = createAsyncThunk(
 
 export const getAllCompanies = createAsyncThunk(
   'company/getAllCompanies',
-  async () => {
+  async ({ idCompany }) => {
     try {
-      const response = await getCompanies();
-      return response;
+      const response = await getCompanies(idCompany);
+      if (response.data) {
+        return response.data;
+      }
+      return 'No companies';
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);
@@ -221,11 +224,14 @@ export const action_UpdateProfile = createAsyncThunk(
 );
 
 export const action_getAllCompanyUsers = createAsyncThunk(
-  'user/getAllCompanyUsers',
+  'company/getAllCompanyUsers',
   async ({ companyName }) => {
     try {
       const response = await postAllCompanyUser(companyName);
-      return response;
+      if (response.data) {
+        return response.data;
+      }
+      return response.status;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);

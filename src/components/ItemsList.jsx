@@ -8,16 +8,38 @@ const ItemsList = ({ data, idCompany }) => {
 
   const RenderItems = () => {
     if (errorSearchItems) {
-      return <Text>No encontrado</Text>;
+      return (
+        <Text
+          style={{
+            textAlign: 'center',
+            marginVertical: 20,
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}>
+          No encontrado
+        </Text>
+      );
     }
     if (data.length === 0) {
-      return <Text>No hay items por ahora</Text>;
+      return (
+        <Text
+          style={{
+            textAlign: 'center',
+            marginVertical: 20,
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}>
+          No hay items por ahora
+        </Text>
+      );
     } else {
       return (
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <SimplifiedItem item={item} idCompany={idCompany}/>}
+          renderItem={({ item }) => (
+            <SimplifiedItem item={item} idCompany={idCompany} />
+          )}
           showsVerticalScrollIndicator={false}
         />
       );

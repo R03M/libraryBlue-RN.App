@@ -1,10 +1,10 @@
-import { CORS_URL } from "@env";
-import axios from "axios";
+import { CORS_URL } from '@env';
+import axios from 'axios';
 
-export const getCompanies = async () => {
+export const getCompanies = async (idCompany) => {
   try {
-    const response = await axios.get(`${CORS_URL}/company/all`);
-    return response.data;
+    const response = await axios.post(`${CORS_URL}/company/all`, { idCompany });
+    return response;
   } catch (error) {
     throw error;
   }
@@ -37,7 +37,8 @@ export const postAllCompanyUser = async (companyName) => {
     const response = await axios.post(`${CORS_URL}/company/allCompanyUsers`, {
       companyName,
     });
-    return response.data;
+
+    return response;
   } catch (error) {
     throw error;
   }

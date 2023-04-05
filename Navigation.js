@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ActivityIndicator, Image, StatusBar, View } from 'react-native';
@@ -13,6 +14,34 @@ import RegisterScreen from './src/screens/register/RegisterScreen';
 import LoginScreen from './src/screens/login/LoginScreen';
 import useUserData from './src/hooks/useUserData';
 import ConsoleLoading from './src/components/ConsoleLoading';
+import EditProfile from './src/components/EditProfile';
+import PanelManager from './src/components/PanelManager';
+import UpdateCompany from './src/components/UpdateCompany';
+
+const ProfileStack = createNativeStackNavigator();
+
+const MyStack = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Perfil"
+        component={ProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <ProfileStack.Screen name="Editar Perfil" component={EditProfile} />
+      <ProfileStack.Screen
+        name="Administrar Permisos"
+        component={PanelManager}
+      />
+      <ProfileStack.Screen
+        name="Actualizar Compañia"
+        component={UpdateCompany}
+      />
+    </ProfileStack.Navigator>
+  );
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +78,7 @@ const MyTabs = () => {
           />
           <Tab.Screen
             name="Profile"
-            component={ProfileScreen}
+            component={MyStack}
             options={{
               tabBarShowLabel: false,
               headerShown: false,

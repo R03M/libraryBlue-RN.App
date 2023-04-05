@@ -45,13 +45,10 @@ export const companySlice = createSlice({
       .addCase(getAllCompanies.pending, (state) => {
         state.getCompaniesStatus = 'loading';
       })
-      .addCase(
-        getAllCompanies.fulfilled,
-        (state, { payload: { allCompanies } }) => {
-          state.getCompaniesStatus = 'succeeded';
-          state.companies = allCompanies;
-        }
-      )
+      .addCase(getAllCompanies.fulfilled, (state, action) => {
+        state.getCompaniesStatus = 'succeeded';
+        state.companies = action.payload;
+      })
       .addCase(getAllCompanies.rejected, (state, action) => {
         state.getCompaniesStatus = 'failed';
         state.getCompaniesError = action.payload;
@@ -62,13 +59,10 @@ export const companySlice = createSlice({
       .addCase(createNewCompany.pending, (state) => {
         state.createCompanyStatus = 'loading';
       })
-      .addCase(
-        createNewCompany.fulfilled,
-        (state, { payload: { allCompanies } }) => {
-          state.createCompanyStatus = 'succeeded';
-          // state.companies = allCompanies;
-        }
-      )
+      .addCase(createNewCompany.fulfilled, (state, action) => {
+        state.createCompanyStatus = 'succeeded';
+        // state.companies = action.payload;
+      })
       .addCase(createNewCompany.rejected, (state, action) => {
         state.createCompanyStatus = 'failed';
         state.createCompanyError = action.payload;
@@ -92,13 +86,10 @@ export const companySlice = createSlice({
       .addCase(action_getAllCompanyUsers.pending, (state) => {
         state.statusGetAllUsers = 'loading';
       })
-      .addCase(
-        action_getAllCompanyUsers.fulfilled,
-        (state, { payload: { allCompanyUsers } }) => {
-          state.statusGetAllUsers = 'succeeded';
-          state.allUsers = allCompanyUsers.users;
-        }
-      )
+      .addCase(action_getAllCompanyUsers.fulfilled, (state, action) => {
+        state.statusGetAllUsers = 'succeeded';
+        state.allUsers = action.payload;
+      })
       .addCase(action_getAllCompanyUsers.rejected, (state, action) => {
         state.statusGetAllUsers = 'failed';
         state.errorGetAllUsers = action.payload;

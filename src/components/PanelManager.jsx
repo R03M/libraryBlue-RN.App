@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import {
   View,
@@ -7,102 +7,60 @@ import {
   Modal,
   ScrollView,
   Button,
+  Alert,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_getAllCompanyUsers } from '../redux/actions';
-import SelectItem from './SelectItem';
-import { POSITION } from '../utils/values.enum';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import BtnCustom from './BtnCustom';
+import ChangePermissions from './ChangePermissions';
 
-const PanelManager = ({
-  companyName,
-  modalPanelManager,
-  setModalPanelManager,
-}) => {
+const PanelManager = () => {
   const dispatch = useDispatch();
+  const { dataUser } = useSelector((state) => state.user);
   const { allUsers } = useSelector((state) => state.company);
 
   useEffect(() => {
+    const companyName = dataUser.company.name;
     dispatch(action_getAllCompanyUsers({ companyName }));
   }, []);
-
+  
   function handlerPosition() {}
 
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalPanelManager}
-      onRequestClose={() => setModalPanelManager(!modalPanelManager)}>
-      <View style={styles.centered}>
-        <View style={styles.card}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 20,
-              marginBottom: 20,
-            }}>
-            Cambiar permisos
-          </Text>
+  function handleRemoveToCompany(id, fullName) {
+    Alert.alert(
+      'Espera',
+      `La eliminaras de la compañia a ${fullName}, esta accion no se puede deshacer.`,
+      [
+        {
+          text: 'eliminar',
+          onPress: () => {
+            console.log('delete user', id);
+          },
+        },
+        {
+          text: 'cancelar',
+        },
+      ]
+    );
+  }
 
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {allUsers?.map(({ id, fullName, position }) => {
-              return (
-                position !== 'Manager' && (
-                  <View
-                    key={id}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text>{fullName}</Text>
-                    <SelectItem
-                      items={POSITION}
-                      onValueChange={handlerPosition}
-                      value={position}
-                      notItemNA={true}
-                    />
-                    <BtnCustom
-                      title={
-                        <MaterialCommunityIcons
-                          name="location-exit"
-                          size={34}
-                          color="red"
-                        />
-                      }
-                    />
-                  </View>
-                )
-              );
-            })}
-          </ScrollView>
-          <Button
-            title="Hecho"
-            onPress={() => setModalPanelManager(!modalPanelManager)}
-          />
-        </View>
-      </View>
-    </Modal>
+  return (
+    <View style={styles.card}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <ChangePermissions
+          allUsers={allUsers}
+          handlerPosition={handlerPosition}
+          handleRemoveToCompany={handleRemoveToCompany}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   card: {
-    height: '80%',
-    backgroundColor: 'white',
-    margin: '4%',
+    flex: 1,
     padding: '4%',
-    borderRadius: 8,
-    borderColor: '#5998c0',
-    borderWidth: 1,
-    backgroundColor: 'grey',
+    justifyContent: 'space-between',
   },
 });
 
