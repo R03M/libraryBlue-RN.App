@@ -32,64 +32,79 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View>
-        <View style={styles.cardOne}>
-          <Text style={styles.title}>{user.fullName}</Text>
-          <Image source={{ uri: user.image }} style={styles.img} />
-          <View style={{ margin: 10 }}>
+      <View style={styles.container}>
+        <View style={styles.cards}>
+          <Text style={styles.nameUser}>{user.fullName}</Text>
+          <View style={styles.viewImg}>
+            <Image source={{ uri: user.image }} style={styles.img} />
+          </View>
+          <View style={styles.viewData}>
             <View style={styles.rowsBetween}>
-              <Text>Cuenta</Text>
-              <Text>{user.position}</Text>
-            </View>
-            <View style={styles.rowsBetween}>
-              <Text>Inicio</Text>
+              <Text style={styles.text}>Inicio</Text>
               <Text>{user.accountCreation}</Text>
             </View>
             <View style={styles.rowsBetween}>
-              <Text>Email</Text>
+              <Text style={styles.text}>Email</Text>
               <Text>{user.auth.email}</Text>
             </View>
           </View>
 
-          <View style={{ marginBottom: -5, alignItems: 'flex-end' }}>
+          <View style={styles.btnsView}>
             <BtnCustom
-              title={<AntDesign name="edit" size={20} />}
+              title="Desactivar Cuenta"
+              onPress={deactivateAccount}
               backgroundColor={'black'}
+              textColor={'white'}
+            />
+            <BtnCustom
+              title="Cerrar Sesion"
+              onPress={closeSession}
+              backgroundColor={'#F44336'}
+              textColor={'white'}
+            />
+            <BtnCustom
+              title={'Editar'}
+              backgroundColor={'#5998c0'}
               onPress={() => navigation.navigate('Editar Perfil')}
               textColor={'white'}
             />
           </View>
         </View>
-
+        <View style={styles.line}></View>
         {user.company ? (
-          <View style={[styles.cardOne, { backgroundColor: '#bfbfbf' }]}>
-            <Text style={styles.title}>Company</Text>
-            <Image source={{ uri: user.company.image }} style={styles.img} />
-            <View style={{ margin: 10 }}>
+          <View style={styles.cards}>
+            <Text style={styles.companyTitle}>Compañia</Text>
+            <View style={styles.viewImgCompany}>
+              <Image source={{ uri: user.company.image }} style={styles.img} />
+            </View>
+
+            <View style={styles.viewData}>
               <View style={styles.rowsBetween}>
-                <Text>Nombre</Text>
+                <Text style={styles.text}>Nombre</Text>
                 <Text>{user.company.name}</Text>
+              </View>
+              <View style={styles.rowsBetween}>
+                <Text style={styles.text}>Cargo</Text>
+                <Text>{user.position}</Text>
               </View>
             </View>
 
             {user.position === 'Manager' ? (
               <View
                 style={{
+                  width: '100%',
                   flexDirection: 'row',
-                  marginBottom: -5,
                   justifyContent: 'space-between',
                 }}>
                 <BtnCustom
-                  title={<AntDesign name="edit" size={20} />}
-                  backgroundColor={'black'}
+                  title={'Editar'}
+                  backgroundColor={'#5998c0'}
                   onPress={() => navigation.navigate('Actualizar Compañia')}
                   textColor={'white'}
                 />
                 <BtnCustom
-                  title={
-                    <MaterialIcons name="admin-panel-settings" size={20} />
-                  }
-                  backgroundColor={'black'}
+                  title={'Administrar'}
+                  backgroundColor={'#5998c0'}
                   onPress={() => navigation.navigate('Administrar Permisos')}
                   textColor={'white'}
                 />
@@ -97,18 +112,6 @@ const ProfileScreen = () => {
             ) : null}
           </View>
         ) : null}
-        <View style={styles.btnsView}>
-          <Button
-            title="Desactivar Cuenta"
-            onPress={deactivateAccount}
-            color={'#F44336'}
-          />
-          <Button
-            title="Cerrar Sesion"
-            onPress={closeSession}
-            color={'#F44336'}
-          />
-        </View>
       </View>
     </ScrollView>
   );

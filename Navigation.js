@@ -48,6 +48,7 @@ const Tab = createBottomTabNavigator();
 const MyTabs = () => {
   const userToken = useSelector((state) => state.user.token);
   const imageUser = useSelector((state) => state.user.dataUser.image);
+  const { items } = useSelector((state) => state.item);
   return (
     <Tab.Navigator initialRouteName="Login" screenOptions={{}}>
       {userToken === 'n/a' ? (
@@ -74,6 +75,8 @@ const MyTabs = () => {
               tabBarIcon: ({ color, size }) => (
                 <Entypo name="list" color={color} size={size} />
               ),
+              tabBarBadge: items.length,
+              tabBarBadgeStyle: { backgroundColor: '#5998c0', color: 'white' },
             }}
           />
           <Tab.Screen

@@ -91,8 +91,13 @@ const FullItem = ({ item, modalFullItem, setModalFullItem }) => {
                     <Text>{item.code}</Text>
                   </View>
                   <View style={styles.rows}>
-                    <Text>Nombre</Text>
-                    <Text>{item.name}</Text>
+                    <Text>Título</Text>
+                    <Text>{item.title}</Text>
+                  </View>
+
+                  <View style={styles.rows}>
+                    <Text>Subtítulo</Text>
+                    <Text>{item.subtitle}</Text>
                   </View>
 
                   <View style={styles.rows}>

@@ -70,7 +70,8 @@ const SimplifiedItem = ({ item, idCompany }) => {
           />
           <View style={styles.textData}>
             <Text>{item.code}</Text>
-            <Text>{item.name}</Text>
+            <Text>{item.title}</Text>
+            <Text>{item.subtitle}</Text>
             <Text>{item.currentCount ? item.currentCount : 'N/A'}</Text>
             <Text>{item.category}</Text>
             <Text>{item.language}</Text>
