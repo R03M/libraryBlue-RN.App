@@ -17,10 +17,13 @@ import ConsoleLoading from './src/components/ConsoleLoading';
 import EditProfile from './src/components/EditProfile';
 import PanelManager from './src/components/PanelManager';
 import UpdateCompany from './src/components/UpdateCompany';
+import CreateNewItem from './src/components/CreateNewItem';
+import EditItem from './src/components/EditItem';
+import FullItem from './src/components/FullItem';
 
 const ProfileStack = createNativeStackNavigator();
 
-const MyStack = () => {
+const Profile = () => {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
@@ -40,6 +43,25 @@ const MyStack = () => {
         component={UpdateCompany}
       />
     </ProfileStack.Navigator>
+  );
+};
+
+const ItemStack = createNativeStackNavigator();
+
+const Item = () => {
+  return (
+    <ItemStack.Navigator>
+      <ItemStack.Screen
+        name="ItemsScreen"
+        component={ItemsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <ItemStack.Screen name="Crear Item" component={CreateNewItem} />
+      <ItemStack.Screen name="Detalle" component={FullItem} />
+      <ItemStack.Screen name="Editar Item" component={EditItem} />
+    </ItemStack.Navigator>
   );
 };
 
@@ -68,7 +90,7 @@ const MyTabs = () => {
         <>
           <Tab.Screen
             name="Item"
-            component={ItemsScreen}
+            component={Item}
             options={{
               tabBarShowLabel: false,
               headerShown: false,
@@ -81,7 +103,7 @@ const MyTabs = () => {
           />
           <Tab.Screen
             name="Profile"
-            component={MyStack}
+            component={Profile}
             options={{
               tabBarShowLabel: false,
               headerShown: false,
