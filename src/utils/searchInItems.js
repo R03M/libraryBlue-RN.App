@@ -3,7 +3,8 @@ const searchInItems = (value, arr) => {
 
   const keysToSearch = [
     'category',
-    'name',
+    'title',
+    'subtitle',
     'language',
     'code',
     'edition',
