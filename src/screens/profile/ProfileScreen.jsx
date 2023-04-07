@@ -73,16 +73,12 @@ const ProfileScreen = () => {
         <View style={styles.line}></View>
         {user.company ? (
           <View style={styles.cards}>
-            <Text style={styles.companyTitle}>Compañia</Text>
+            <Text style={styles.companyTitle}>{user.company.name}</Text>
             <View style={styles.viewImgCompany}>
               <Image source={{ uri: user.company.image }} style={styles.img} />
             </View>
 
             <View style={styles.viewData}>
-              <View style={styles.rowsBetween}>
-                <Text style={styles.text}>Nombre</Text>
-                <Text>{user.company.name}</Text>
-              </View>
               <View style={styles.rowsBetween}>
                 <Text style={styles.text}>Cargo</Text>
                 <Text>{user.position}</Text>
@@ -95,6 +91,7 @@ const ProfileScreen = () => {
                   width: '100%',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  paddingHorizontal: '8%'
                 }}>
                 <BtnCustom
                   title={'Editar'}

@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   rowsBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: '2%'
   },
   text: {
     fontWeight: 'bold'
