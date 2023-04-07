@@ -7,19 +7,21 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import BtnCustom from './BtnCustom';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { naImg } from '../utils/naImg';
-import FullItem from './FullItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
+import { useNavigation } from '@react-navigation/native';
 
 const SimplifiedItem = ({ item, idCompany }) => {
   const dispatch = useDispatch();
+  const navigator = useNavigation();
   const INITIAL_ITEM_STATE = {
     id: item.id,
     idCompany: idCompany,
@@ -28,10 +30,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
   };
   const [output, setOuput] = useState(false);
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
-  const [modalFullItem, setModalFullItem] = useState(false);
-  const [selectItem, setSelectItem] = useState([]);
   const user = useSelector((state) => state.user.dataUser);
-
 
   const handleUpdateCurrentItem = () => {
     if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
@@ -58,8 +57,9 @@ const SimplifiedItem = ({ item, idCompany }) => {
     <>
       <TouchableOpacity
         onPress={() => {
-          setSelectItem(item);
-          setModalFullItem(!modalFullItem);
+          navigator.navigate('Detalle', {
+            item,
+          });
         }}>
         <View style={styles.card}>
           <Image
@@ -122,11 +122,6 @@ const SimplifiedItem = ({ item, idCompany }) => {
           )}
         </View>
       </TouchableOpacity>
-      <FullItem
-        item={selectItem}
-        modalFullItem={modalFullItem}
-        setModalFullItem={setModalFullItem}
-      />
     </>
   );
 };

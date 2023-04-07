@@ -24,10 +24,14 @@ import handlerValue from '../utils/handlerValue';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
 import AddImage from './AddImage';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
+const EditItem = ({ modeEdit, setModeEdit }) => {
+  const route = useRoute();
   const dispatch = useDispatch();
-  const [errorName, setErrorName] = useState('idle');
+  const navigator = useNavigation()
+  const { oldItem } = route.params;
+  const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
   const [modalImage, setModalImage] = useState(false);
@@ -38,7 +42,8 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
     idCompany: idCompany,
     id: oldItem.id,
     code: oldItem.code,
-    name: oldItem.name,
+    title: oldItem.title,
+    subtitle: oldItem.subtitle,
     language: oldItem.language,
     image: oldItem.image,
     edition: oldItem.edition,
@@ -61,11 +66,11 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
     const error = validateString(valueNoSpaces, 'código');
     error ? setErrorCode(error) : setErrorCode(false);
   }
-  function handleName(value) {
+  function handleTitle(value) {
     const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setUpdateItem, 'name', valueNoSpaces);
+    handlerValue(setUpdateItem, 'title', valueNoSpaces);
     const error = validateString(valueNoSpaces, 'nombre');
-    error ? setErrorName(error) : setErrorName(false);
+    error ? setErrorTitle(error) : setErrorTitle(false);
   }
   function handleLanguage(value) {
     const valueNoSpaces = noBlankSpaces(value);
@@ -100,13 +105,14 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
   };
 
   const handleSave = () => {
-    if (isEqual(updateItem, INITIAL_NEW_ITEM_STATE)) {
+    if (isEqual(updateItem, INITIAL_ITEM_STATE)) {
       Alert.alert('No hay cambios', 'El item no se actualizará', [], {
         cancelable: true,
       });
       return;
     }
     dispatch(action_UpdateItem({ updateItem }));
+    navigator.goBack()
   };
 
   return (
@@ -149,11 +155,22 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
             />
           </View>
           <View style={styles.rows}>
-            <Text>Nombre</Text>
+            <Text>Titulo</Text>
             <TextInput
               style={[styles.textInput, { width: '60%' }]}
-              onChangeText={handleName}
-              value={updateItem.name}
+              onChangeText={handleTitle}
+              value={updateItem.title}
+            />
+          </View>
+
+          <View style={styles.rows}>
+            <Text>Subtítulo</Text>
+            <TextInput
+              style={[styles.textInput, { width: '60%' }]}
+              onChangeText={(value) =>
+                handlerValue(setUpdateItem, 'subtitle', value)
+              }
+              value={updateItem.subtitle}
             />
           </View>
 
@@ -174,7 +191,7 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
             />
           </View>
 
-          <View style={styles.rowsView}>
+          <View style={styles.rows}>
             <Text>Imagen</Text>
             <AddImage
               onChangeImage={(value) =>
@@ -278,12 +295,13 @@ const EditItem = ({ oldItem, modeEdit, setModeEdit }) => {
               value={isEnabled}
             />
           </View>
-          <View style={styles.rows}>
+          <View style={{marginTop: 20}}>
             <BtnCustom
-              title="Cancelar"
-              onPress={() => setModeEdit(!modeEdit)}
+              title="Guardar"
+              onPress={handleSave}
+              backgroundColor={'green'}
+              textColor={'white'}
             />
-            <BtnCustom title="Guardar" onPress={handleSave} />
           </View>
         </View>
       </ScrollView>

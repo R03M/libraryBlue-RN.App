@@ -4,8 +4,10 @@ import BtnCustom from './BtnCustom';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-const NavBar = ({ activeNewItem }) => {
+const NavBar = () => {
+  const navigation = useNavigation();
   const [status, setStatus] = useState('idle');
   const { dataUser } = useSelector((state) => state.user);
 
@@ -21,7 +23,9 @@ const NavBar = ({ activeNewItem }) => {
           />
         }
         title0={status === 'idle' ? 'libraryBlue' : 'Busca algo...'}
-        title2={status === 'idle' ? `Hola ${dataUser.firstName} !` : 'o crea un item'}
+        title2={
+          status === 'idle' ? `Hola ${dataUser.firstName} !` : 'o crea un item'
+        }
         onPress={
           status === 'idle'
             ? () => setStatus('active')
@@ -40,7 +44,7 @@ const NavBar = ({ activeNewItem }) => {
           <SearchBar />
           <BtnCustom
             title={'CREAR'}
-            onPress={activeNewItem}
+            onPress={() => navigation.navigate('Crear Item')}
             backgroundColor={'black'}
             textColor={'white'}
             styles={{ padding: 12, marginHorizontal: 8 }}

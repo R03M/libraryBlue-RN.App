@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import SimplifiedItem from './SimplifiedItem';
 import { useSelector } from 'react-redux';
@@ -41,6 +41,8 @@ const ItemsList = ({ data, idCompany }) => {
             <SimplifiedItem item={item} idCompany={idCompany} />
           )}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={10}
+          windowSize={5}
         />
       );
     }
@@ -52,4 +54,4 @@ const ItemsList = ({ data, idCompany }) => {
   );
 };
 
-export default ItemsList;
+export default memo(ItemsList);
