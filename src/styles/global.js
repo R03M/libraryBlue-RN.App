@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 export const pHTCGlobal = '#565656';
 export const principalColor = '#5998c0';
 export const errorColor = '#8B0000';
-export const successColor = '#21bd67';
+export const successColor = '#007e11';
 export const whiteColor = '#EAEAEA';
 export const blackColor = '#151515';
-export const orangeColor = '#FFA500';
+export const orangeColor = '#eca641';
 
 const stylesGlobal = StyleSheet.create({
   backLight: {
@@ -27,7 +27,6 @@ const stylesGlobal = StyleSheet.create({
   },
   line: {
     borderBottomWidth: 1.5,
-    marginBottom: 25,
     borderBottomColor: '#5998c0',
   },
   textInput: {

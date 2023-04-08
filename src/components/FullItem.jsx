@@ -9,12 +9,17 @@ import ModalImage from './ModalImage';
 import { format } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, { errorColor, successColor } from '../styles/global';
 
 const FullItem = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const navigator = useNavigation();
-
+  const isDarkTheme = useTheme();
+  const stylesText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
   const { item } = route.params;
   const [modalImage, setModalImage] = useState(false);
   const { dataUser, token } = useSelector((state) => state.user);
@@ -53,7 +58,12 @@ const FullItem = () => {
   };
 
   return (
-    <View style={styles.modalView}>
+    <View
+      style={
+        isDarkTheme
+          ? [styles.modalView, stylesGlobal.backDark]
+          : [styles.modalView, stylesGlobal.backLight]
+      }>
       <ModalImage
         handleShowModalImage={handleShowModalImage}
         image={item.image}
@@ -89,18 +99,18 @@ const FullItem = () => {
             <>
               <BtnCustom
                 title="Editar"
-                backgroundColor={'green'}
-                textColor={'white'}
+                backgroundColor={successColor}
+                textColor={'#fff'}
                 onPress={() => {
-                  navigator.navigate('Editar Item', {
+                  navigator.navigate('EditItem', {
                     oldItem: item,
                   });
                 }}
               />
               <BtnCustom
                 title="Eliminar"
-                backgroundColor={'red'}
-                textColor={'white'}
+                backgroundColor={errorColor}
+                textColor={'#fff'}
                 onPress={handledeleteItem}
               />
             </>
@@ -110,66 +120,74 @@ const FullItem = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.textData}>
           <View style={styles.rows}>
-            <Text>Codigo</Text>
-            <Text>{item.code}</Text>
+            <Text style={stylesText}>Codigo</Text>
+            <Text style={stylesText}>{item.code}</Text>
           </View>
           <View style={styles.rows}>
-            <Text>Título</Text>
-            <Text>{item.title}</Text>
-          </View>
-
-          <View style={styles.rows}>
-            <Text>Subtítulo</Text>
-            <Text>{item.subtitle}</Text>
+            <Text style={stylesText}>Título</Text>
+            <Text style={stylesText}>{item.title}</Text>
           </View>
 
           <View style={styles.rows}>
-            <Text>Stock Actual</Text>
-            <Text>{item.currentCount ? item.currentCount : 'N/A'}</Text>
+            <Text style={stylesText}>Subtítulo</Text>
+            <Text style={stylesText}>{item.subtitle}</Text>
           </View>
 
           <View style={styles.rows}>
-            <Text>Categoria</Text>
-            <Text>{item.category}</Text>
-          </View>
-          <View style={styles.rows}>
-            <Text>Lenguaje</Text>
-            <Text>{item.language}</Text>
+            <Text style={stylesText}>Stock Actual</Text>
+            <Text style={stylesText}>
+              {item.currentCount ? item.currentCount : 'N/A'}
+            </Text>
           </View>
 
           <View style={styles.rows}>
-            <Text>Edicion de</Text>
-            <Text>{item.edition}</Text>
+            <Text style={stylesText}>Categoria</Text>
+            <Text style={stylesText}>{item.category}</Text>
+          </View>
+          <View style={styles.rows}>
+            <Text style={stylesText}>Lenguaje</Text>
+            <Text style={stylesText}>{item.language}</Text>
           </View>
 
           <View style={styles.rows}>
-            <Text>Tipo de letra</Text>
-            <Text>{item.letter}</Text>
+            <Text style={stylesText}>Edicion de</Text>
+            <Text style={stylesText}>{item.edition}</Text>
           </View>
 
-          <Text style={{ textAlign: 'center' }}>Ultimo conteo</Text>
           <View style={styles.rows}>
-            <Text>Cantidad</Text>
-            <Text>{item.lastCount}</Text>
+            <Text style={stylesText}>Tipo de letra</Text>
+            <Text style={stylesText}>{item.letter}</Text>
+          </View>
+
+          <Text style={[stylesText, { textAlign: 'center' }]}>
+            Ultimo conteo
+          </Text>
+          <View style={styles.rows}>
+            <Text style={stylesText}>Cantidad</Text>
+            <Text style={stylesText}>{item.lastCount}</Text>
           </View>
           <View style={styles.rows}>
-            <Text>Fecha</Text>
-            <Text>
+            <Text style={stylesText}>Fecha</Text>
+            <Text style={stylesText}>
               {item.lastCountDate ? dateFormated(item.lastCountDate) : 'n/a'}
             </Text>
           </View>
           <View style={styles.rows}></View>
 
-          <Text style={{ textAlign: 'center' }}>Ultimo ingreso</Text>
+          <Text style={[stylesText, { textAlign: 'center' }]}>
+            Ultimo ingreso
+          </Text>
           <View style={styles.rows}>
-            <Text>Fecha</Text>
-            <Text>
+            <Text style={stylesText}>Fecha</Text>
+            <Text style={stylesText}>
               {item.itemEntryDate ? dateFormated(item.itemEntryDate) : 'n/a'}
             </Text>
           </View>
           <View style={styles.rows}>
-            <Text>Compartido con compañia asociada</Text>
-            <Text>{item.associatedCompany ? ' Si' : ' No'}</Text>
+            <Text style={stylesText}>Compartido con compañia asociada</Text>
+            <Text style={stylesText}>
+              {item.associatedCompany ? ' Si' : ' No'}
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -180,7 +198,7 @@ const FullItem = () => {
 const styles = StyleSheet.create({
   modalView: {
     flex: 1,
-    marginTop: 20,
+    paddingTop: 20,
   },
   img: {
     height: 500,

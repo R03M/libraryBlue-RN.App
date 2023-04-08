@@ -20,9 +20,13 @@ const AddImage = ({ onChangeImage, value }) => {
   const cloudinary = 'cloudinary';
   const externalURL = 'externalURL';
 
-  const [image, setImage] = useState(value);
   const [service, setService] = useState(null);
   const [error, setError] = useState(null);
+  const [image, setImage] = useState(value);
+
+  useEffect(() => {
+    value && setService(externalURL);
+  }, []);
 
   const selectImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

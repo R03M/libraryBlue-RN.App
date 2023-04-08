@@ -22,6 +22,7 @@ import EditItem from './src/components/EditItem';
 import FullItem from './src/components/FullItem';
 import UploadJson from './src/components/UploadJson';
 import { useTheme } from './src/hooks/useTheme';
+import { principalColor } from './src/styles/global';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -61,9 +62,48 @@ const Item = () => {
           headerShown: false,
         }}
       />
-      <ItemStack.Screen name="Crear Item" component={CreateNewItem} />
-      <ItemStack.Screen name="Detalle" component={FullItem} />
-      <ItemStack.Screen name="Editar Item" component={EditItem} />
+      <ItemStack.Screen
+        name="CreateItem"
+        component={CreateNewItem}
+        options={{
+          title: 'Crear Item',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <ItemStack.Screen
+        name="Details"
+        component={FullItem}
+        options={{
+          title: 'Detalle',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <ItemStack.Screen
+        name="EditItem"
+        component={EditItem}
+        options={{
+          title: 'Editar Item',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
     </ItemStack.Navigator>
   );
 };
@@ -93,7 +133,7 @@ const MyTabs = () => {
         tabBarStyle: [
           {
             backgroundColor: colorBackground,
-            // borderTopColor: borderColor,
+            borderTopColor: borderColor,
             borderTopWidth: 0.3,
           },
         ],

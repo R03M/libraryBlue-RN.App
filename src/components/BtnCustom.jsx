@@ -29,7 +29,7 @@ const BtnCustom = ({
           backgroundColor: backgroundColor,
           borderColor: backgroundColor,
           padding: 8,
-          borderRadius: 4,
+          borderRadius: 2,
         },
         styles,
       ]}

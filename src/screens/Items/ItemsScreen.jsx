@@ -5,10 +5,13 @@ import NoCompany from '../../components/NoCompany';
 import ItemsList from '../../components/ItemsList';
 import { getAllItems } from '../../redux/actions';
 import NavBar from '../../components/NavBar';
+import { useTheme } from '../../hooks/useTheme';
 import styles from './items.Styles';
+import stylesGlobal from '../../styles/global';
 
 const ItemsScreen = () => {
   const dispatch = useDispatch();
+  const isDarkTheme = useTheme();
   const { dataUser, token } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.item);
 
@@ -23,16 +26,21 @@ const ItemsScreen = () => {
   }, []);
 
   return (
-    <>
+    <View
+      style={
+        isDarkTheme
+          ? [styles.container, stylesGlobal.backDark]
+          : [styles.container, stylesGlobal.backLight]
+      }>
       {!dataUser.company ? (
         <NoCompany />
       ) : (
-        <View style={{ flex: 1 }}>
+        <>
           <NavBar />
           <ItemsList data={items} idCompany={dataUser.company.id} />
-        </View>
+        </>
       )}
-    </>
+    </View>
   );
 };
 

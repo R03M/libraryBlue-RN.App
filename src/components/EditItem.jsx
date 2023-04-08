@@ -25,18 +25,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
 import AddImage from './AddImage';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, { pHTCGlobal, successColor } from '../styles/global';
 
 const EditItem = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const navigator = useNavigation();
   const { oldItem } = route.params;
+  const isDarkTheme = useTheme();
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
   const [modalImage, setModalImage] = useState(false);
-  
+
   const [isEnabled, setIsEnabled] = useState(oldItem.associatedCompany);
   const { dataUser, token } = useSelector((state) => state.user);
 
@@ -118,7 +124,7 @@ const EditItem = () => {
   };
 
   return (
-    <>
+    <View style={isDarkTheme ? stylesGlobal.backDark : stylesGlobal.backLight}>
       <ModalImage
         handleShowModalImage={handleShowModalImage}
         image={updateItem.image}
@@ -149,26 +155,29 @@ const EditItem = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.rows}>
-            <Text>Codigo</Text>
+            <Text style={styleText}>Codigo</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleCode}
               value={updateItem.code}
+              placeholderTextColor={pHTCGlobal}
             />
           </View>
           <View style={styles.rows}>
-            <Text>Titulo</Text>
+            <Text style={styleText}>Titulo</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleTitle}
               value={updateItem.title}
             />
           </View>
 
           <View style={styles.rows}>
-            <Text>Subtítulo</Text>
+            <Text style={styleText}>Subtítulo</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={(value) =>
                 handlerValue(setUpdateItem, 'subtitle', value)
               }
@@ -177,33 +186,37 @@ const EditItem = () => {
           </View>
 
           <View style={styles.rows}>
-            <Text>Stock Actual</Text>
+            <Text style={styleText}>Stock Actual</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleCurrentStock}
               value={updateItem.currentCount}
             />
           </View>
           <View style={styles.rows}>
-            <Text>Lenguaje</Text>
+            <Text style={styleText}>Lenguaje</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleLanguage}
               value={updateItem.language}
             />
           </View>
 
           <View style={styles.rows}>
-            <Text>Imagen</Text>
-            <AddImage
-              onChangeImage={(value) =>
-                handlerValue(setUpdateItem, 'image', value)
-              }
-              value={updateItem.image}
-            />
+            <Text style={styleText}>Imagen</Text>
+            <View style={{ width: '68%' }}>
+              <AddImage
+                onChangeImage={(value) =>
+                  handlerValue(setUpdateItem, 'image', value)
+                }
+                value={updateItem.image}
+              />
+            </View>
           </View>
           <View style={styles.rows}>
-            <Text>Categoria</Text>
+            <Text style={styleText}>Categoria</Text>
             <View>
               <SelectItem
                 value={updateItem.category}
@@ -216,7 +229,7 @@ const EditItem = () => {
           </View>
 
           <View style={styles.rows}>
-            <Text>Edicion de</Text>
+            <Text style={styleText}>Edicion de</Text>
             <View>
               <SelectItem
                 value={updateItem.edition}
@@ -229,7 +242,7 @@ const EditItem = () => {
           </View>
 
           <View style={styles.rows}>
-            <Text>Tipo de letra</Text>
+            <Text style={styleText}>Tipo de letra</Text>
             <View>
               <SelectItem
                 value={updateItem.letter}
@@ -241,17 +254,20 @@ const EditItem = () => {
             </View>
           </View>
 
-          <Text style={{ textAlign: 'center' }}>Ultimo conteo</Text>
+          <Text style={[styleText, { textAlign: 'center' }]}>
+            Ultimo conteo
+          </Text>
           <View style={styles.rows}>
-            <Text>Cantidad</Text>
+            <Text style={styleText}>Cantidad</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleLastCount}
               value={updateItem.lastCount}
             />
           </View>
           <View style={styles.rows}>
-            <Text>Fecha</Text>
+            <Text style={styleText}>Fecha</Text>
             <View>
               <SelectDate
                 value={updateItem.lastCountDate}
@@ -263,18 +279,21 @@ const EditItem = () => {
           </View>
           <View style={styles.rows}></View>
 
-          <Text style={{ textAlign: 'center' }}>Ultimo ingreso</Text>
+          <Text style={[styleText, { textAlign: 'center' }]}>
+            Ultimo ingreso
+          </Text>
 
           <View style={styles.rows}>
-            <Text>Cantidad</Text>
+            <Text style={styleText}>Cantidad</Text>
             <TextInput
-              style={[styles.textInput, { width: '60%' }]}
+              placeholderTextColor={pHTCGlobal}
+              style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleItemEntry}
               value={updateItem.lastCount}
             />
           </View>
           <View style={styles.rows}>
-            <Text>Fecha</Text>
+            <Text style={styleText}>Fecha</Text>
             <View>
               <SelectDate
                 value={updateItem.itemEntryDate}
@@ -285,7 +304,7 @@ const EditItem = () => {
             </View>
           </View>
           <View style={styles.rows}>
-            <Text>Compartido con compañia asociada</Text>
+            <Text style={styleText}>Compartido con compañia asociada</Text>
             <Switch
               trackColor={{ false: '#767577', true: '#3ccc15' }}
               thumbColor={isEnabled ? '#2296f3' : '#f4f3f4'}
@@ -301,13 +320,13 @@ const EditItem = () => {
             <BtnCustom
               title="Guardar"
               onPress={handleSave}
-              backgroundColor={'green'}
-              textColor={'white'}
+              backgroundColor={successColor}
+              textColor={'#fff'}
             />
           </View>
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 };
 
@@ -319,7 +338,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 4,
+    marginVertical: 4,
   },
   textInput: {
     borderBottomColor: 'grey',

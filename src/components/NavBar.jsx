@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { principalColor } from '../styles/global';
 
 const NavBar = () => {
   const navigation = useNavigation();
@@ -44,9 +45,9 @@ const NavBar = () => {
           <SearchBar />
           <BtnCustom
             title={'CREAR'}
-            onPress={() => navigation.navigate('Crear Item')}
-            backgroundColor={'black'}
-            textColor={'white'}
+            onPress={() => navigation.navigate('CreateItem')}
+            backgroundColor={principalColor}
+            textColor={'#fff'}
             styles={{ padding: 12, marginHorizontal: 8 }}
           />
         </View>

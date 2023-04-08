@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import es from 'date-fns/locale/es';
 import isEqual from 'lodash/isEqual';
+import { principalColor } from '../styles/global';
 
 const SelectDate = ({ handlerDate, value }) => {
   const [date, setDate] = useState(value ? new Date(value) : new Date());
@@ -35,7 +36,7 @@ const SelectDate = ({ handlerDate, value }) => {
           locale="es-ES"
         />
       )}
-      <Button title={dateCurrent} onPress={showMode} />
+      <Button title={dateCurrent} onPress={showMode} color={principalColor}/>
     </View>
   );
 };

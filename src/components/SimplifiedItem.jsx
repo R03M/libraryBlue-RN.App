@@ -18,19 +18,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateItem } from '../redux/actions';
 import { isEqual } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, {
+  errorColor,
+  pHTCGlobal,
+  successColor,
+} from '../styles/global';
 
 const SimplifiedItem = ({ item, idCompany }) => {
   const dispatch = useDispatch();
   const navigator = useNavigation();
+  const isDarkTheme = useTheme();
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.backLight;
+    
+  const [output, setOuput] = useState(false);
+  const user = useSelector((state) => state.user.dataUser);
+
   const INITIAL_ITEM_STATE = {
     id: item.id,
     idCompany: idCompany,
     currentCount: '',
     exitOnly: true,
   };
-  const [output, setOuput] = useState(false);
+
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
-  const user = useSelector((state) => state.user.dataUser);
 
   const handleUpdateCurrentItem = () => {
     if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
@@ -57,7 +70,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
     <>
       <TouchableOpacity
         onPress={() => {
-          navigator.navigate('Detalle', {
+          navigator.navigate('Details', {
             item,
           });
         }}>
@@ -69,21 +82,23 @@ const SimplifiedItem = ({ item, idCompany }) => {
             style={styles.img}
           />
           <View style={styles.textData}>
-            <Text>{item.code}</Text>
-            <Text>{item.title}</Text>
-            <Text>{item.subtitle}</Text>
-            <Text>{item.currentCount ? item.currentCount : 'N/A'}</Text>
-            <Text>{item.category}</Text>
-            <Text>{item.language}</Text>
-            <Text>{item.edition}</Text>
-            <Text>{item.letter}</Text>
+            <Text style={styleText}>{item.code}</Text>
+            <Text style={styleText}>{item.title}</Text>
+            <Text style={styleText}>{item.subtitle}</Text>
+            <Text style={styleText}>
+              {item.currentCount ? item.currentCount : 'N/A'}
+            </Text>
+            <Text style={styleText}>{item.category}</Text>
+            <Text style={styleText}>{item.language}</Text>
+            <Text style={styleText}>{item.edition}</Text>
+            <Text style={styleText}>{item.letter}</Text>
           </View>
           {user.position !== 'Observant' && (
             <View style={{ alignItems: 'center' }}>
               {output ? (
                 <View style={styles.output}>
                   <TextInput
-                    style={styles.textInputNro}
+                    style={styleText}
                     onChangeText={(value) =>
                       setUpdateItem((prevItem) => ({
                         ...prevItem,
@@ -97,7 +112,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
                     <BtnCustom
                       title={<Entypo name="save" size={22} />}
                       onPress={handleUpdateCurrentItem}
-                      textColor={'green'}
+                      textColor={successColor}
                     />
                   </View>
                   <View style={{ margin: 2 }}>
@@ -107,7 +122,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
                         setOuput(false);
                         setUpdateItem(null);
                       }}
-                      textColor={'red'}
+                      textColor={errorColor}
                     />
                   </View>
                 </View>
@@ -148,9 +163,9 @@ const styles = StyleSheet.create({
     borderColor: '#5998c0',
   },
   img: {
-    height: 110,
-    width: '20%',
-    borderRadius: 10,
+    height: 130,
+    width: '22%',
+    borderRadius: 4,
     marginVertical: 10,
   },
   output: {

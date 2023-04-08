@@ -4,7 +4,6 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  Modal,
   Button,
   TextInput,
   Switch,
@@ -21,6 +20,8 @@ import noBlankSpaces from '../utils/noBlankSpaces';
 import onlyNumbers from '../utils/onlyNumbers';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewItem } from '../redux/actions';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, { pHTCGlobal, successColor } from '../styles/global';
 
 const CreateNewItem = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,10 @@ const CreateNewItem = () => {
   const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
+  const isDarkTheme = useTheme();
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const { dataUser, token } = useSelector((state) => state.user);
 
@@ -117,7 +122,12 @@ const CreateNewItem = () => {
   };
 
   return (
-    <View style={styles.modalView}>
+    <View
+      style={
+        isDarkTheme
+          ? [styles.modalView, stylesGlobal.backDark]
+          : [styles.modalView, stylesGlobal.backLight]
+      }>
       {newItem.image && (
         <View style={styles.viewWithImg}>
           <View
@@ -140,13 +150,22 @@ const CreateNewItem = () => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Código <Asterisk />
           </Text>
           <TextInput
-            style={[styles.textInput, { width: '60%' }]}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '60%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '60%' }]
+            }
             onChangeText={handleCode}
             value={newItem.code}
+            placeholderTextColor={pHTCGlobal}
           />
         </View>
 
@@ -154,22 +173,40 @@ const CreateNewItem = () => {
           {errorCode !== 'idle' && errorCode}
         </Text>
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Titulo <Asterisk />
           </Text>
           <TextInput
-            style={[styles.textInput, { width: '60%' }]}
+            placeholderTextColor={pHTCGlobal}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '60%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '60%' }]
+            }
             onChangeText={handleTitle}
             value={newItem.title}
           />
         </View>
 
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Subtítulo <Asterisk />
           </Text>
           <TextInput
-            style={[styles.textInput, { width: '60%' }]}
+            placeholderTextColor={pHTCGlobal}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '60%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '60%' }]
+            }
             onChangeText={(value) =>
               handlerValue(setNewItem, 'subtitle', value)
             }
@@ -182,11 +219,20 @@ const CreateNewItem = () => {
         </Text>
 
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Lenguaje <Asterisk />
           </Text>
           <TextInput
-            style={[styles.textInput, { width: '60%' }]}
+            placeholderTextColor={pHTCGlobal}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '60%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '60%' }]
+            }
             onChangeText={handleLanguage}
             value={newItem.language}
           />
@@ -196,14 +242,18 @@ const CreateNewItem = () => {
         </Text>
 
         <View style={styles.rowsView}>
-          <Text>Imagen</Text>
-          <AddImage
-            onChangeImage={(value) => handlerValue(setNewItem, 'image', value)}
-          />
+          <Text style={styleText}>Imagen</Text>
+          <View style={{ width: '62%' }}>
+            <AddImage
+              onChangeImage={(value) =>
+                handlerValue(setNewItem, 'image', value)
+              }
+            />
+          </View>
         </View>
 
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Edición <Asterisk />
           </Text>
           <View>
@@ -217,7 +267,7 @@ const CreateNewItem = () => {
         </View>
 
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Letra <Asterisk />
           </Text>
           <View>
@@ -231,7 +281,7 @@ const CreateNewItem = () => {
         </View>
 
         <View style={styles.rowsView}>
-          <Text>
+          <Text style={styleText}>
             Categoria <Asterisk />
           </Text>
           <View>
@@ -244,23 +294,35 @@ const CreateNewItem = () => {
           </View>
         </View>
 
-        <View style={styles.line} />
+        <View style={[stylesGlobal.line, styles.line]} />
 
         <Text
-          style={{
-            textAlign: 'center',
-            textTransform: 'uppercase',
-            fontWeight: 'bold',
-            fontSize: 18,
-          }}>
+          style={[
+            {
+              textAlign: 'center',
+              textTransform: 'uppercase',
+              fontWeight: 'bold',
+              fontSize: 18,
+            },
+            styleText,
+          ]}>
           Ultimo conteo
         </Text>
 
         <View style={styles.rowsView}>
-          <Text>Cantidad</Text>
+          <Text style={styleText}>Cantidad</Text>
 
           <TextInput
-            style={[styles.textInput, { width: '40%' }]}
+            placeholderTextColor={pHTCGlobal}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '40%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '40%' }]
+            }
             onChangeText={handleLastCount}
             value={newItem.lastCount}
             keyboardType="numeric"
@@ -268,7 +330,7 @@ const CreateNewItem = () => {
         </View>
 
         <View style={styles.rowsView}>
-          <Text>Fecha</Text>
+          <Text style={styleText}>Fecha</Text>
           <View>
             <SelectDate
               handlerDate={(value) =>
@@ -278,20 +340,29 @@ const CreateNewItem = () => {
           </View>
         </View>
 
-        <View style={styles.line} />
+        <View style={[stylesGlobal.line, styles.line]} />
         <View style={styles.rowsView}>
-          <Text>Cantidad Actual</Text>
+          <Text style={styleText}>Cantidad Actual</Text>
           <TextInput
-            style={[styles.textInput, { width: '40%' }]}
+            placeholderTextColor={pHTCGlobal}
+            style={
+              isDarkTheme
+                ? [
+                    stylesGlobal.textInput,
+                    stylesGlobal.textDark,
+                    { width: '40%' },
+                  ]
+                : [stylesGlobal.textInput, { width: '40%' }]
+            }
             onChangeText={handleCurrentCount}
             value={newItem.currentCount}
             keyboardType="numeric"
           />
         </View>
-        <View style={styles.line} />
+        <View style={[stylesGlobal.line, styles.line]} />
 
         <View style={styles.rowsView}>
-          <Text>Compartir con Asociados</Text>
+          <Text style={styleText}>Compartir con Asociados</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#3ccc15' }}
             thumbColor={isEnabled ? '#2296f3' : '#f4f3f4'}
@@ -318,16 +389,18 @@ const CreateNewItem = () => {
         <View style={{ flexDirection: 'row' }}>
           <Asterisk />
           <Text
-            style={{
-              color: '#000',
-              marginHorizontal: 2,
-              fontWeight: 'bold',
-            }}>
+            style={[
+              {
+                marginHorizontal: 2,
+                fontWeight: 'bold',
+              },
+              styleText,
+            ]}>
             Obligatorio
           </Text>
         </View>
-        <View style={{ paddingVertical: 10 }}>
-          <Button title="crear" onPress={createItem} color={'green'} />
+        <View style={{ paddingTop: 30 }}>
+          <Button title="crear" onPress={createItem} color={successColor} />
         </View>
       </ScrollView>
     </View>
@@ -342,8 +415,6 @@ const styles = StyleSheet.create({
   modalView: {
     flex: 1,
     padding: 10,
-    backgroundColor: 'white',
-    borderRadius: 4,
   },
   title: {
     textAlign: 'center',
@@ -365,8 +436,7 @@ const styles = StyleSheet.create({
   },
   line: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginVertical: 20,
+    marginVertical: 30,
   },
   img: {
     height: 110,
