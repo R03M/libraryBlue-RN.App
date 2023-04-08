@@ -42,7 +42,12 @@ const useUserData = () => {
       try {
         const response = await axios.post(
           `${CORS_URL}/user/validate`,
-          userData
+          userData,
+          {
+            headers: {
+              Authorization: `Beaner ${JSON.parse(token)}`,
+            },
+          }
         );
         if (response.status === 200) {
           dispatch(setUser(userObject));
