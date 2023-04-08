@@ -21,7 +21,12 @@ import { Entypo } from '@expo/vector-icons';
 import IconStatus from '../../components/IconStatus';
 import styles from './loginS.Styles';
 import { useTheme } from '../../hooks/useTheme';
-import stylesGlobal from '../../styles/global';
+import stylesGlobal, {
+  errorColor,
+  pHTCGlobal,
+  placeholderColorGlobal,
+  principalColor,
+} from '../../styles/global';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -66,6 +71,18 @@ const LoginScreen = () => {
   const handlerPassW = (value) => {
     dispatch(cleanErrorLogin());
     dispatch(cleanStatusLogin());
+    if (thereIsEmail === 404) {
+      setPassword(''),
+        Alert.alert(
+          null,
+          'Sin un cuenta existente ¿que sentido tiene escribir una contraseña?',
+          [],
+          {
+            cancelable: true,
+          }
+        );
+      return;
+    }
     setPassword(value);
   };
 
@@ -101,18 +118,24 @@ const LoginScreen = () => {
         showsVerticalScrollIndicator={false}>
         <Text
           style={
-            isDarkTheme ? [styles.title, stylesGlobal.textDark] : styles.title
+            isDarkTheme
+              ? [stylesGlobal.title, stylesGlobal.textDark]
+              : stylesGlobal.title
           }>
           Iniciar Sesión
         </Text>
-        <View style={styles.line}></View>
+        <View style={stylesGlobal.line}></View>
         <View style={styles.subContainer}>
           <View style={styles.viewEmailandPass}>
             <TextInput
               style={
                 isDarkTheme
-                  ? [styles.textInput, stylesGlobal.textDark, { width: '90%' }]
-                  : [styles.textInput, { width: '90%' }]
+                  ? [
+                      stylesGlobal.textInput,
+                      stylesGlobal.textDark,
+                      { width: '90%' },
+                    ]
+                  : [stylesGlobal.textInput, { width: '90%' }]
               }
               placeholder="Email"
               keyboardType="email-address"
@@ -120,7 +143,7 @@ const LoginScreen = () => {
                 handlerChange(value);
                 setThereIsEmail('idle');
               }}
-              placeholderTextColor={'#565656'}
+              placeholderTextColor={pHTCGlobal}
               value={email}
               onBlur={handlerValidation}
             />
@@ -134,35 +157,31 @@ const LoginScreen = () => {
             <TextInput
               style={
                 isDarkTheme
-                  ? [styles.textInput, stylesGlobal.textDark, { width: '90%' }]
-                  : [styles.textInput, { width: '90%' }]
+                  ? [
+                      stylesGlobal.textInput,
+                      stylesGlobal.textDark,
+                      { width: '90%' },
+                    ]
+                  : [stylesGlobal.textInput, { width: '90%' }]
               }
-              onChangeText={(value) => {
-                thereIsEmail === 404
-                  ? (handlerPassW(''),
-                    Alert.alert(
-                      null,
-                      'Sin un cuenta existente ¿que sentido tiene escribir una contraseña?',
-                      [],
-                      {
-                        cancelable: true,
-                      }
-                    ))
-                  : handlerPassW(value);
-              }}
+              onChangeText={handlerPassW}
               value={password}
               placeholder="Password"
               secureTextEntry={!showPassword}
-              placeholderTextColor={'#565656'}
+              placeholderTextColor={pHTCGlobal}
             />
             <ShowPassW />
           </View>
           <View style={{ marginTop: 30 }}>
-            <Button title="Iniciar sesión" onPress={logIn} color={'#5998c0'} />
+            <Button
+              title="Iniciar sesión"
+              onPress={logIn}
+              color={principalColor}
+            />
           </View>
         </View>
         {thereIsEmail === 404 ? (
-          <View style={styles.viewError}>
+          <View style={[styles.viewError, { backgroundColor: errorColor }]}>
             <Text style={styles.textError}>
               No existe una cuenta con el email {email}
             </Text>
@@ -171,12 +190,12 @@ const LoginScreen = () => {
         {statusLogin === 'loading' && (
           <ActivityIndicator
             size="large"
-            color="#2296f3"
+            color={principalColor}
             style={{ marginVertical: '10%' }}
           />
         )}
         {errorLogin === 401 && (
-          <View style={styles.viewError}>
+          <View style={[styles.viewError, { backgroundColor: errorColor }]}>
             <Text style={styles.textError}>Contraseña incorrecta</Text>
           </View>
         )}

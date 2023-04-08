@@ -3,36 +3,17 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 4,
     padding: 20,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
   },
   subContainer: {
     flex: 1,
     justifyContent: 'space-between',
-  },
-  line: {
-    borderBottomWidth: 1.5,
-    marginBottom: 25,
-    borderBottomColor: '#5998c0',
-  },
-  textInput: {
-    height: 40,
-    borderBottomColor: '#5998c0',
-    borderBottomWidth: .5,
-    marginVertical: 20,
-    width: '100%',
   },
   viewEmailandPass: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   viewError: {
-    backgroundColor: 'red',
     marginTop: 20,
     borderRadius: 4,
     padding: 10,

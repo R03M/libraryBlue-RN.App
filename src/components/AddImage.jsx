@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import { uploadImage } from "../utils/cloudinary";
-import { AntDesign } from "@expo/vector-icons";
-import BtnCustom from "./BtnCustom";
-import validateUrlImage from "../utils/validateUrlImage";
-import noBlankSpaces from "../utils/noBlankSpaces";
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { uploadImage } from '../utils/cloudinary';
+import { AntDesign } from '@expo/vector-icons';
+import BtnCustom from './BtnCustom';
+import validateUrlImage from '../utils/validateUrlImage';
+import noBlankSpaces from '../utils/noBlankSpaces';
+import stylesGlobal, {
+  errorColor,
+  orangeColor,
+  pHTCGlobal,
+  principalColor,
+  whiteColor,
+} from '../styles/global';
+import { useTheme } from '../hooks/useTheme';
 
 const AddImage = ({ onChangeImage, value }) => {
-  const cloudinary = "cloudinary";
-  const externalURL = "externalURL";
+  const isDarkTheme = useTheme();
+  const cloudinary = 'cloudinary';
+  const externalURL = 'externalURL';
 
   const [image, setImage] = useState(value);
   const [service, setService] = useState(null);
@@ -17,7 +26,7 @@ const AddImage = ({ onChangeImage, value }) => {
 
   const selectImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === "granted") {
+    if (status === 'granted') {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -41,7 +50,7 @@ const AddImage = ({ onChangeImage, value }) => {
       setError(null);
     }
     if (isValid !== true) setError(isValid);
-    if (valueNoSpaces === "") setError(null);
+    if (valueNoSpaces === '') setError(null);
   };
 
   useEffect(() => {
@@ -58,41 +67,47 @@ const AddImage = ({ onChangeImage, value }) => {
       <View style={styles.rows}>
         {image && service === cloudinary ? null : (
           <TextInput
-            style={[styles.textInput, { width: "50%" }]}
+            style={
+              isDarkTheme
+                ? [styles.textInput, stylesGlobal.textDark]
+                : [styles.textInput, stylesGlobal.textLight]
+            }
             onChangeText={handlerUrlImage}
             value={image}
             placeholder="https://img.jpg"
+            placeholderTextColor={pHTCGlobal}
           />
         )}
         {image && service === externalURL ? null : (
           <View style={{ marginHorizontal: -10 }}>
             <BtnCustom
-              title={"Galeria"}
+              title={'Galeria'}
               onPress={selectImage}
-              backgroundColor={"purple"}
-              textColor={"black"}
+              backgroundColor={orangeColor}
+              textColor={'#fff'}
             />
           </View>
         )}
         {image ? (
           <BtnCustom
-            title={<AntDesign name="delete" size={20} color="white" />}
+            title={<AntDesign name="delete" size={20} />}
             onPress={() => {
               setService(null);
               setImage(null);
             }}
-            backgroundColor={"red"}
-            textColor={"black"}
+            backgroundColor={errorColor}
+            textColor={whiteColor}
           />
         ) : null}
       </View>
       <Text
         style={{
-          textAlign: "center",
-          color: "red",
+          textAlign: 'center',
+          color: errorColor,
           fontWeight: 700,
-        }}
-      >
+          width: '80%',
+          left: 15,
+        }}>
         {error}
       </Text>
     </View>
@@ -101,15 +116,15 @@ const AddImage = ({ onChangeImage, value }) => {
 
 const styles = StyleSheet.create({
   rows: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
     marginVertical: 20,
   },
   textInput: {
-    borderBottomColor: "grey",
+    borderBottomColor: principalColor,
     borderBottomWidth: 1,
-    width: "65%",
+    width: '65%',
   },
 });
 

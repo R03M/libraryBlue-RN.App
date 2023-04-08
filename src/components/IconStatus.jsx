@@ -1,6 +1,7 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { errorColor, pHTCGlobal, successColor } from '../styles/global';
 
 /**
  * IconStatus es un componente que muestra un icono que representa el estado de una operación.
@@ -32,24 +33,32 @@ const IconStatus = ({ value, typePositive }) => {
   function handlerName() {
     if (typePositive) {
       return value === 200
-        ? "checkcircle"
-        : value === "idle"
-        ? "disconnect"
-        : "closecircleo";
+        ? 'checkcircle'
+        : value === 'idle'
+        ? 'disconnect'
+        : 'closecircleo';
     } else {
       return value === 200
-        ? "closecircleo"
-        : value === "idle"
-        ? "disconnect"
-        : "checkcircle";
+        ? 'closecircleo'
+        : value === 'idle'
+        ? 'disconnect'
+        : 'checkcircle';
     }
   }
 
   function handlerColor() {
     if (typePositive) {
-      return value === 200 ? "green" : value === 404 ? "red" : "gray";
+      return value === 200
+        ? successColor
+        : value === 404
+        ? errorColor
+        : pHTCGlobal;
     } else {
-      return value === 200 ? "red" : value === 404 ? "green" : "gray";
+      return value === 200
+        ? errorColor
+        : value === 404
+        ? successColor
+        : pHTCGlobal;
     }
   }
 

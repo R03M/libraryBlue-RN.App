@@ -11,9 +11,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BtnCustom from '../../components/BtnCustom';
-// import * as ImagePicker from "expo-image-picker";
 import { positionInf } from '../../utils/positionInf';
-// import { uploadImage } from "../../utils/cloudinary";
 import { checkEmailToRegister, registerAccount } from '../../redux/actions';
 import { validateEmail } from '../../utils/validateEmail';
 import { cleanResponseEmailToRegister } from '../../redux/userSlice';
@@ -24,7 +22,13 @@ import handlerValue from '../../utils/handlerValue';
 import IconStatus from '../../components/IconStatus';
 import styles from './registerS.Styles';
 import AddImage from '../../components/AddImage';
-import stylesGlobal from '../../styles/global';
+import stylesGlobal, {
+  errorColor,
+  pHTCGlobal,
+  principalColor,
+  successColor,
+  whiteColor,
+} from '../../styles/global';
 import { useTheme } from '../../hooks/useTheme';
 
 const RegisterScreen = () => {
@@ -82,7 +86,7 @@ const RegisterScreen = () => {
         <Entypo
           name={showPassword ? 'eye-with-line' : 'eye'}
           size={24}
-          color="black"
+          color={isDarkTheme ? '#fff' : '#000'}
           style={{ marginLeft: 10 }}
         />
       </TouchableOpacity>
@@ -92,11 +96,27 @@ const RegisterScreen = () => {
   const descriptionTypeAccound = () => {
     if (userData.position === 'Observant') {
       return (
-        <Text style={styles.descripPosition}>{positionInf.Observant}</Text>
+        <Text
+          style={
+            isDarkTheme
+              ? [styles.descripPosition, { color: whiteColor }]
+              : styles.descripPosition
+          }>
+          {positionInf.Observant}
+        </Text>
       );
     }
     if (userData.position === 'Manager') {
-      return <Text style={styles.descripPosition}>{positionInf.Manager}</Text>;
+      return (
+        <Text
+          style={
+            isDarkTheme
+              ? [styles.descripPosition, { color: whiteColor }]
+              : styles.descripPosition
+          }>
+          {positionInf.Manager}
+        </Text>
+      );
     }
   };
 
@@ -137,29 +157,48 @@ const RegisterScreen = () => {
       <ScrollView
         contentContainerStyle={{}}
         showsVerticalScrollIndicator={false}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
-            Registro
-          </Text>
-          {!userData.image ? null : (
+        <Text
+          style={
+            isDarkTheme
+              ? [stylesGlobal.title, stylesGlobal.textDark]
+              : stylesGlobal.title
+          }>
+          Registro
+        </Text>
+        <View style={stylesGlobal.line}></View>
+
+        {!userData.image ? null : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 10,
+            }}>
             <Image
               source={{ uri: userData.image }}
               style={{
-                height: 60,
-                width: 60,
+                height: 130,
+                width: 130,
                 borderRadius: 10,
-                marginHorizontal: 10,
-                marginTop: -10,
               }}
             />
-          )}
-        </View>
+          </View>
+        )}
         <View style={styles.line}></View>
         {screen === 'auth' ? (
           <View style={styles.userAuth}>
             <View style={styles.viewEmailandPass}>
               <TextInput
-                style={[styles.textInputAuth, { width: '90%' }]}
+                style={
+                  isDarkTheme
+                    ? [
+                        stylesGlobal.textInput,
+                        stylesGlobal.textDark,
+                        { width: '90%' },
+                      ]
+                    : [stylesGlobal.textInput, { width: '90%' }]
+                }
                 onChangeText={(value) => {
                   handlerValue(setAuth, 'email', value);
                   dispatch(cleanResponseEmailToRegister());
@@ -167,6 +206,7 @@ const RegisterScreen = () => {
                 }}
                 value={auth.email}
                 placeholder="Email"
+                placeholderTextColor={pHTCGlobal}
                 onBlur={emailValidation}
               />
               <IconStatus value={thereIsEmail} typePositive={false} />
@@ -180,7 +220,15 @@ const RegisterScreen = () => {
 
             <View style={styles.viewEmailandPass}>
               <TextInput
-                style={[styles.textInputAuth, { width: '90%' }]}
+                style={
+                  isDarkTheme
+                    ? [
+                        stylesGlobal.textInput,
+                        stylesGlobal.textDark,
+                        { width: '90%' },
+                      ]
+                    : [stylesGlobal.textInput, { width: '90%' }]
+                }
                 onChangeText={(value) => {
                   thereIsEmail === 200
                     ? (handlerValue(setAuth, 'password', ''),
@@ -199,20 +247,25 @@ const RegisterScreen = () => {
                 value={auth.password}
                 placeholder="Password"
                 secureTextEntry={!showPassword}
+                placeholderTextColor={pHTCGlobal}
               />
               <ShowPassW />
             </View>
             {!errorPassword ? null : (
-              <Text style={{ color: 'red', fontWeight: 700 }}>
+              <Text style={{ color: errorColor, fontWeight: 700 }}>
                 {errorPassword}
               </Text>
             )}
-            <View style={{ marginTop: 20 }}>
-              <Button title="Continuar" onPress={nextScreen} />
+            <View style={{ marginTop: 30 }}>
+              <Button
+                title="Continuar"
+                onPress={nextScreen}
+                color={principalColor}
+              />
             </View>
             {thereIsEmail === 200 ? (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>
+              <View style={[styles.viewError, { backgroundColor: errorColor }]}>
+                <Text style={[styles.textError, { color: whiteColor }]}>
                   Ya existe una cuenta con ese correo electronico, si es tuya
                   puedes ingresar directamente en el apartado Login.
                 </Text>
@@ -222,7 +275,12 @@ const RegisterScreen = () => {
         ) : (
           <View style={styles.userData}>
             <View style={styles.rows}>
-              <Text>Nombre</Text>
+              <Text
+                style={
+                  isDarkTheme ? stylesGlobal.textDark : stylesGlobal.textLight
+                }>
+                Nombre
+              </Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) =>
@@ -230,10 +288,16 @@ const RegisterScreen = () => {
                 }
                 value={userData.firstName}
                 placeholder="Jhon"
+                placeholderTextColor={pHTCGlobal}
               />
             </View>
             <View style={styles.rows}>
-              <Text>Apellido</Text>
+              <Text
+                style={
+                  isDarkTheme ? stylesGlobal.textDark : stylesGlobal.textLight
+                }>
+                Apellido
+              </Text>
 
               <TextInput
                 style={styles.textInput}
@@ -242,13 +306,29 @@ const RegisterScreen = () => {
                 }
                 value={userData.lastName}
                 placeholder="Smith"
+                placeholderTextColor={pHTCGlobal}
               />
             </View>
 
-            <AddImage onChangeImage={handlerChangeImage} />
+            <View style={styles.rows}>
+              <Text
+                style={
+                  isDarkTheme ? stylesGlobal.textDark : stylesGlobal.textLight
+                }>
+                Imagen
+              </Text>
+              <View style={{ width: '68%' }}>
+                <AddImage onChangeImage={handlerChangeImage} />
+              </View>
+            </View>
 
             <View style={styles.rows}>
-              <Text>Cuenta</Text>
+              <Text
+                style={
+                  isDarkTheme ? stylesGlobal.textDark : stylesGlobal.textLight
+                }>
+                Cuenta
+              </Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -261,8 +341,8 @@ const RegisterScreen = () => {
                     onPress={() =>
                       handlerValue(setUserData, 'position', 'Manager')
                     }
-                    backgroundColor={'black'}
-                    textColor={'white'}
+                    backgroundColor={principalColor}
+                    textColor={'#fff'}
                   />
                 )}
                 {userData.position === 'Manager' ? null : (
@@ -271,17 +351,17 @@ const RegisterScreen = () => {
                     onPress={() =>
                       handlerValue(setUserData, 'position', 'Observant')
                     }
-                    backgroundColor={'black'}
-                    textColor={'white'}
+                    backgroundColor={principalColor}
+                    textColor={'#fff'}
                   />
                 )}
 
                 {userData.position ? (
                   <BtnCustom
-                    title={<AntDesign name="delete" size={20} color="white" />}
+                    title={<AntDesign name="delete" size={20} />}
                     onPress={() => handlerValue(setUserData, 'position', null)}
-                    backgroundColor={'red'}
-                    textColor={'black'}
+                    backgroundColor={errorColor}
+                    textColor={whiteColor}
                   />
                 ) : null}
               </View>
@@ -291,14 +371,14 @@ const RegisterScreen = () => {
               <BtnCustom
                 title={'Go Back'}
                 onPress={() => setScreen('auth')}
-                backgroundColor={'#cca120'}
-                textColor={'white'}
+                backgroundColor={'#000'}
+                textColor={'#fff'}
               />
               <BtnCustom
                 title={'Registrar'}
                 onPress={register}
-                backgroundColor={'#4caf50'}
-                textColor={'white'}
+                backgroundColor={successColor}
+                textColor={'#fff'}
               />
             </View>
           </View>
