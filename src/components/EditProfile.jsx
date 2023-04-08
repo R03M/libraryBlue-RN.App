@@ -16,8 +16,6 @@ const EditProfile = () => {
 
   const { dataUser, token } = useSelector((state) => state.user);
 
-  console.log(dataUser);
-
   const INITIAL_STATE_PROFILE = {
     id: dataUser.id,
     firstName: dataUser.firstName,
