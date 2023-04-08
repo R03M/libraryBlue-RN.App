@@ -87,16 +87,17 @@ const ProfileScreen = () => {
 
             {user.position === 'Manager' ? (
               <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '8%'
-                }}>
+                style={styles.btnsView}>
                 <BtnCustom
                   title={'Editar'}
                   backgroundColor={'#5998c0'}
                   onPress={() => navigation.navigate('Actualizar Compañia')}
+                  textColor={'white'}
+                />
+                <BtnCustom
+                  title={'Cargar Items'}
+                  backgroundColor={'#5998c0'}
+                  onPress={() => navigation.navigate('Cargar JSON')}
                   textColor={'white'}
                 />
                 <BtnCustom
