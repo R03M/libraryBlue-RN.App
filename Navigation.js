@@ -21,6 +21,7 @@ import CreateNewItem from './src/components/CreateNewItem';
 import EditItem from './src/components/EditItem';
 import FullItem from './src/components/FullItem';
 import UploadJson from './src/components/UploadJson';
+import { useTheme } from './src/hooks/useTheme';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -43,10 +44,7 @@ const Profile = () => {
         name="Actualizar Compañia"
         component={UpdateCompany}
       />
-      <ProfileStack.Screen
-        name="Cargar JSON"
-        component={UploadJson}
-      />
+      <ProfileStack.Screen name="Cargar JSON" component={UploadJson} />
     </ProfileStack.Navigator>
   );
 };
@@ -76,9 +74,33 @@ const MyTabs = () => {
   const userToken = useSelector((state) => state.user.token);
   const imageUser = useSelector((state) => state.user.dataUser.image);
   const { items } = useSelector((state) => state.item);
-  
+  const isDarkTheme = useTheme();
+  const colorBackground = isDarkTheme ? '#5998c0' : '#fff';
+  const borderColor = isDarkTheme ? '#fff' : '#000';
+
   return (
-    <Tab.Navigator initialRouteName="Login" screenOptions={{}}>
+    <Tab.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        // headerStyle: {
+        //   backgroundColor: colorBackground,
+        // },
+        // headerBackgroundContainerStyle: {
+        //   borderBottomColor: borderColor,
+        //   borderBottomWidth: 0.3,
+        // },
+        // headerTitleStyle: [{ color: isDarkTheme ? '#fff' : '#000' }],
+        tabBarStyle: [
+          {
+            backgroundColor: colorBackground,
+            // borderTopColor: borderColor,
+            borderTopWidth: 0.3,
+          },
+        ],
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: isDarkTheme ? '#fff' : '#5998c0',
+        tabBarInactiveTintColor: '#141414',
+      }}>
       {userToken === 'n/a' ? (
         <Tab.Screen
           name="Loading"
@@ -167,6 +189,17 @@ const MyTabs = () => {
               headerShown: false,
               tabBarIcon: ({ color, size }) => (
                 <FontAwesome name="sign-in" size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              tabBarShowLabel: false,
+              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <AntDesign name="setting" color={color} size={size} />
               ),
             }}
           />
