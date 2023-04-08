@@ -3,8 +3,6 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    margin: 18,
     borderRadius: 4,
     padding: 20,
   },

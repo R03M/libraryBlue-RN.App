@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
@@ -8,29 +8,32 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import BtnCustom from "../../components/BtnCustom";
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import BtnCustom from '../../components/BtnCustom';
 // import * as ImagePicker from "expo-image-picker";
-import { positionInf } from "../../utils/positionInf";
+import { positionInf } from '../../utils/positionInf';
 // import { uploadImage } from "../../utils/cloudinary";
-import { checkEmailToRegister, registerAccount } from "../../redux/actions";
-import { validateEmail } from "../../utils/validateEmail";
-import { cleanResponseEmailToRegister } from "../../redux/userSlice";
-import { validatePassword } from "../../utils/password";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import handlerValue from "../../utils/handlerValue";
-import IconStatus from "../../components/IconStatus";
-import styles from "./registerS.Styles";
-import AddImage from "../../components/AddImage";
+import { checkEmailToRegister, registerAccount } from '../../redux/actions';
+import { validateEmail } from '../../utils/validateEmail';
+import { cleanResponseEmailToRegister } from '../../redux/userSlice';
+import { validatePassword } from '../../utils/password';
+import { Entypo } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import handlerValue from '../../utils/handlerValue';
+import IconStatus from '../../components/IconStatus';
+import styles from './registerS.Styles';
+import AddImage from '../../components/AddImage';
+import stylesGlobal from '../../styles/global';
+import { useTheme } from '../../hooks/useTheme';
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();
-  const [screen, setScreen] = useState("auth");
+  const isDarkTheme = useTheme();
 
+  const [screen, setScreen] = useState('auth');
   const [errorEmail, setErrorEmail] = useState(null);
-  const [thereIsEmail, setThereIsEmail] = useState("idle");
+  const [thereIsEmail, setThereIsEmail] = useState('idle');
   const [showPassword, setShowPassword] = useState(false);
   const [errorPassword, setErrorPassword] = useState(null);
 
@@ -42,21 +45,21 @@ const RegisterScreen = () => {
   );
 
   const [auth, setAuth] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     isGoogle: false,
   });
   const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
+    firstName: '',
+    lastName: '',
     image: null,
     position: null,
-    status: "Active",
+    status: 'Active',
   });
 
   const nextScreen = () => {
     if (thereIsEmail === 404) {
-      setScreen("userData");
+      setScreen('userData');
     }
     if (thereIsEmail === 200) {
       Alert.alert(
@@ -77,7 +80,7 @@ const RegisterScreen = () => {
     return (
       <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
         <Entypo
-          name={showPassword ? "eye-with-line" : "eye"}
+          name={showPassword ? 'eye-with-line' : 'eye'}
           size={24}
           color="black"
           style={{ marginLeft: 10 }}
@@ -87,12 +90,12 @@ const RegisterScreen = () => {
   };
 
   const descriptionTypeAccound = () => {
-    if (userData.position === "Observant") {
+    if (userData.position === 'Observant') {
       return (
         <Text style={styles.descripPosition}>{positionInf.Observant}</Text>
       );
     }
-    if (userData.position === "Manager") {
+    if (userData.position === 'Manager') {
       return <Text style={styles.descripPosition}>{positionInf.Manager}</Text>;
     }
   };
@@ -121,14 +124,21 @@ const RegisterScreen = () => {
   }, [infEmail]);
 
   const handlerChangeImage = (value) => {
-    handlerValue(setUserData, "image", value);
+    handlerValue(setUserData, 'image', value);
   };
 
   return (
-    <ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ fontSize: 30, fontWeight: "bold", margin: 10 }}>
+    <View
+      style={
+        isDarkTheme
+          ? [styles.container, stylesGlobal.backDark]
+          : styles.container
+      }>
+      <ScrollView
+        contentContainerStyle={{}}
+        showsVerticalScrollIndicator={false}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
             Registro
           </Text>
           {!userData.image ? null : (
@@ -145,15 +155,15 @@ const RegisterScreen = () => {
           )}
         </View>
         <View style={styles.line}></View>
-        {screen === "auth" ? (
+        {screen === 'auth' ? (
           <View style={styles.userAuth}>
             <View style={styles.viewEmailandPass}>
               <TextInput
-                style={[styles.textInputAuth, { width: "90%" }]}
+                style={[styles.textInputAuth, { width: '90%' }]}
                 onChangeText={(value) => {
-                  handlerValue(setAuth, "email", value);
+                  handlerValue(setAuth, 'email', value);
                   dispatch(cleanResponseEmailToRegister());
-                  setThereIsEmail("idle");
+                  setThereIsEmail('idle');
                 }}
                 value={auth.email}
                 placeholder="Email"
@@ -163,26 +173,26 @@ const RegisterScreen = () => {
             </View>
 
             {errorEmail ? (
-              <Text style={{ color: "red", fontWeight: 700 }}>
+              <Text style={{ color: 'red', fontWeight: 700 }}>
                 {errorEmail}
               </Text>
             ) : null}
 
             <View style={styles.viewEmailandPass}>
               <TextInput
-                style={[styles.textInputAuth, { width: "90%" }]}
+                style={[styles.textInputAuth, { width: '90%' }]}
                 onChangeText={(value) => {
                   thereIsEmail === 200
-                    ? (handlerValue(setAuth, "password", ""),
+                    ? (handlerValue(setAuth, 'password', ''),
                       Alert.alert(
                         null,
-                        "Si la cuenta no es aceptada ¿que sentido tiene escribir una contraseña?",
+                        'Si la cuenta no es aceptada ¿que sentido tiene escribir una contraseña?',
                         [],
                         {
                           cancelable: true,
                         }
                       ))
-                    : handlerValue(setAuth, "password", value);
+                    : handlerValue(setAuth, 'password', value);
                   setErrorPassword(null);
                   passwordValidation(value);
                 }}
@@ -193,7 +203,7 @@ const RegisterScreen = () => {
               <ShowPassW />
             </View>
             {!errorPassword ? null : (
-              <Text style={{ color: "red", fontWeight: 700 }}>
+              <Text style={{ color: 'red', fontWeight: 700 }}>
                 {errorPassword}
               </Text>
             )}
@@ -216,7 +226,7 @@ const RegisterScreen = () => {
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) =>
-                  handlerValue(setUserData, "firstName", value)
+                  handlerValue(setUserData, 'firstName', value)
                 }
                 value={userData.firstName}
                 placeholder="Jhon"
@@ -228,7 +238,7 @@ const RegisterScreen = () => {
               <TextInput
                 style={styles.textInput}
                 onChangeText={(value) =>
-                  handlerValue(setUserData, "lastName", value)
+                  handlerValue(setUserData, 'lastName', value)
                 }
                 value={userData.lastName}
                 placeholder="Smith"
@@ -241,38 +251,37 @@ const RegisterScreen = () => {
               <Text>Cuenta</Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  width: "65%",
-                }}
-              >
-                {userData.position === "Observant" ? null : (
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  width: '65%',
+                }}>
+                {userData.position === 'Observant' ? null : (
                   <BtnCustom
-                    title={"Coordinador"}
+                    title={'Coordinador'}
                     onPress={() =>
-                      handlerValue(setUserData, "position", "Manager")
+                      handlerValue(setUserData, 'position', 'Manager')
                     }
-                    backgroundColor={"black"}
-                    textColor={"white"}
+                    backgroundColor={'black'}
+                    textColor={'white'}
                   />
                 )}
-                {userData.position === "Manager" ? null : (
+                {userData.position === 'Manager' ? null : (
                   <BtnCustom
-                    title={"Cooperador"}
+                    title={'Cooperador'}
                     onPress={() =>
-                      handlerValue(setUserData, "position", "Observant")
+                      handlerValue(setUserData, 'position', 'Observant')
                     }
-                    backgroundColor={"black"}
-                    textColor={"white"}
+                    backgroundColor={'black'}
+                    textColor={'white'}
                   />
                 )}
 
                 {userData.position ? (
                   <BtnCustom
                     title={<AntDesign name="delete" size={20} color="white" />}
-                    onPress={() => handlerValue(setUserData, "position", null)}
-                    backgroundColor={"red"}
-                    textColor={"black"}
+                    onPress={() => handlerValue(setUserData, 'position', null)}
+                    backgroundColor={'red'}
+                    textColor={'black'}
                   />
                 ) : null}
               </View>
@@ -280,22 +289,22 @@ const RegisterScreen = () => {
             {descriptionTypeAccound()}
             <View style={styles.rows}>
               <BtnCustom
-                title={"Go Back"}
-                onPress={() => setScreen("auth")}
-                backgroundColor={"#cca120"}
-                textColor={"white"}
+                title={'Go Back'}
+                onPress={() => setScreen('auth')}
+                backgroundColor={'#cca120'}
+                textColor={'white'}
               />
               <BtnCustom
-                title={"Registrar"}
+                title={'Registrar'}
                 onPress={register}
-                backgroundColor={"#4caf50"}
-                textColor={"white"}
+                backgroundColor={'#4caf50'}
+                textColor={'white'}
               />
             </View>
           </View>
         )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

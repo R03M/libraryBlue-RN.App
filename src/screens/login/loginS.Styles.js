@@ -1,47 +1,45 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    margin: 18,
     borderRadius: 4,
     padding: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
-  title: { 
-    fontSize: 30, 
-    fontWeight: "bold" 
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
   },
   subContainer: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   line: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: 1.5,
     marginBottom: 25,
-    borderBottomColor: "#000",
+    borderBottomColor: '#5998c0',
   },
   textInput: {
     height: 40,
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
+    borderBottomColor: '#5998c0',
+    borderBottomWidth: .5,
     marginVertical: 20,
-    width: "100%",
+    width: '100%',
   },
   viewEmailandPass: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   viewError: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
     marginTop: 20,
     borderRadius: 4,
     padding: 10,
   },
   textError: {
-    color: "white",
-    fontWeight: "600",
+    color: 'white',
+    fontWeight: '600',
     fontSize: 15,
   },
 });
