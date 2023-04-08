@@ -14,7 +14,7 @@ const EditProfile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const { dataUser } = useSelector((state) => state.user);
+  const { dataUser, token } = useSelector((state) => state.user);
 
   console.log(dataUser);
 
@@ -34,7 +34,7 @@ const EditProfile = () => {
       });
       return;
     }
-    dispatch(action_UpdateProfile({ updateProfile }));
+    dispatch(action_UpdateProfile({ updateProfile, token }));
   };
 
   return (

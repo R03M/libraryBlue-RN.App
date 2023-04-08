@@ -15,12 +15,12 @@ import ChangePermissions from './ChangePermissions';
 
 const PanelManager = () => {
   const dispatch = useDispatch();
-  const { dataUser } = useSelector((state) => state.user);
+  const { dataUser, token } = useSelector((state) => state.user);
   const { allUsers } = useSelector((state) => state.company);
 
   useEffect(() => {
     const companyName = dataUser.company.name;
-    dispatch(action_getAllCompanyUsers({ companyName }));
+    dispatch(action_getAllCompanyUsers({ companyName, token }));
   }, []);
   
   function handlerPosition() {}

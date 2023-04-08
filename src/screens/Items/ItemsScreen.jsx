@@ -9,14 +9,14 @@ import styles from './items.Styles';
 
 const ItemsScreen = () => {
   const dispatch = useDispatch();
-  const { dataUser } = useSelector((state) => state.user);
+  const { dataUser, token } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.item);
 
   useEffect(() => {
     if (dataUser.company) {
       const getItems = () => {
         let idCompany = dataUser.company.id;
-        dispatch(getAllItems({ idCompany }));
+        dispatch(getAllItems({ idCompany, idAssociated: null, token }));
       };
       getItems();
     }

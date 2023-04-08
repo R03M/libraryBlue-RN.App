@@ -14,10 +14,10 @@ const FullItem = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const navigator = useNavigation();
+
   const { item } = route.params;
   const [modalImage, setModalImage] = useState(false);
-  const [modeEdit, setModeEdit] = useState(false);
-  const user = useSelector((state) => state.user.dataUser);
+  const { dataUser, token } = useSelector((state) => state.user);
 
   const dateFormated = (value) => {
     const parseDate = new Date(value);
@@ -43,7 +43,7 @@ const FullItem = () => {
         {
           text: 'Eliminar',
           onPress: () => {
-            dispatch(deleteItem({ idItem: item.id }));
+            dispatch(deleteItem({ idItem: item.id, token }));
             navigator.goBack();
           },
           style: 'destructive',
@@ -80,7 +80,7 @@ const FullItem = () => {
             />
           </View>
         </TouchableOpacity>
-        {user.position !== 'Observant' && (
+        {dataUser.position !== 'Observant' && (
           <View
             style={{
               justifyContent: 'space-evenly',

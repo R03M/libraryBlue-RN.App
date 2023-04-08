@@ -25,7 +25,7 @@ const CreateOrSelectCompany = ({
 }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
-
+  const { token } = useSelector((state) => state.user);
   const [company, setCompany] = useState({
     name: '',
     image: '',
@@ -74,11 +74,11 @@ const CreateOrSelectCompany = ({
       return;
     }
 
-    dispatch(createNewCompany({ company }));
+    dispatch(createNewCompany({ company, token }));
   };
 
   const handlerSelectC = () => {
-    dispatch(newUserSelectCompany({ selectCompanyInf: selectCompany }));
+    dispatch(newUserSelectCompany({ selectCompanyInf: selectCompany, token }));
   };
 
   return (

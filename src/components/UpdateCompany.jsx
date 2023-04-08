@@ -16,12 +16,12 @@ import { getAllCompanies } from '../redux/actions';
 
 const UpdateCompany = () => {
   const dispatch = useDispatch();
-  const { dataUser } = useSelector((state) => state.user);
+  const { dataUser, token } = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.company);
 
   useEffect(() => {
     const idCompany = dataUser.company.id;
-    dispatch(getAllCompanies({ idCompany }));
+    dispatch(getAllCompanies({ idCompany, token }));
   }, []);
 
   const INITIAL_STATE_COMPANY = {

@@ -22,14 +22,14 @@ import onlyNumbers from '../utils/onlyNumbers';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewItem } from '../redux/actions';
 
-const CreateNewItem = ({ modalItem, setModalItem }) => {
+const CreateNewItem = () => {
   const dispatch = useDispatch();
   const [isEnabled, setIsEnabled] = useState(false);
   const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
 
-  const idCompany = useSelector((state) => state.user.dataUser.company.id);
+  const { dataUser, token } = useSelector((state) => state.user);
 
   const INITIAL_NEW_ITEM_STATE = {
     code: '',
@@ -109,8 +109,8 @@ const CreateNewItem = ({ modalItem, setModalItem }) => {
       );
       return;
     }
-    const item = { ...newItem, ...{ idCompany } };
-    dispatch(createNewItem({ item }));
+    const item = { ...newItem, ...{ idCompany: dataUser.company.id } };
+    dispatch(createNewItem({ item, token }));
     setNewItem({
       ...INITIAL_NEW_ITEM_STATE,
     });

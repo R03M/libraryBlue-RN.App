@@ -7,13 +7,13 @@ import { getAllCompanies } from '../redux/actions';
 const NoCompany = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const { dataUser } = useSelector((state) => state.user);
+  const { dataUser, token } = useSelector((state) => state.user);
   const { companies } = useSelector((state) => state.company);
 
   useEffect(() => {
-    dispatch(getAllCompanies());
+    dispatch(getAllCompanies({ token }));
   }, []);
-  
+
   return (
     <>
       <NotCompanyAlert

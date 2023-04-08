@@ -26,20 +26,22 @@ import { action_UpdateItem } from '../redux/actions';
 import AddImage from './AddImage';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const EditItem = ({ modeEdit, setModeEdit }) => {
+const EditItem = () => {
   const route = useRoute();
   const dispatch = useDispatch();
-  const navigator = useNavigation()
+  const navigator = useNavigation();
   const { oldItem } = route.params;
+
   const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
   const [errorLang, setErrorLang] = useState('idle');
   const [modalImage, setModalImage] = useState(false);
+  
   const [isEnabled, setIsEnabled] = useState(oldItem.associatedCompany);
-  const idCompany = useSelector((state) => state.user.dataUser.company.id);
+  const { dataUser, token } = useSelector((state) => state.user);
 
   const INITIAL_ITEM_STATE = {
-    idCompany: idCompany,
+    idCompany: dataUser.company.id,
     id: oldItem.id,
     code: oldItem.code,
     title: oldItem.title,
@@ -69,7 +71,7 @@ const EditItem = ({ modeEdit, setModeEdit }) => {
   function handleTitle(value) {
     const valueNoSpaces = noBlankSpaces(value);
     handlerValue(setUpdateItem, 'title', valueNoSpaces);
-    const error = validateString(valueNoSpaces, 'nombre');
+    const error = validateString(valueNoSpaces, 'título');
     error ? setErrorTitle(error) : setErrorTitle(false);
   }
   function handleLanguage(value) {
@@ -111,8 +113,8 @@ const EditItem = ({ modeEdit, setModeEdit }) => {
       });
       return;
     }
-    dispatch(action_UpdateItem({ updateItem }));
-    navigator.goBack()
+    dispatch(action_UpdateItem({ updateItem, token }));
+    navigator.goBack();
   };
 
   return (
@@ -295,7 +297,7 @@ const EditItem = ({ modeEdit, setModeEdit }) => {
               value={isEnabled}
             />
           </View>
-          <View style={{marginTop: 20}}>
+          <View style={{ marginTop: 20 }}>
             <BtnCustom
               title="Guardar"
               onPress={handleSave}
