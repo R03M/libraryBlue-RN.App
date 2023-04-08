@@ -20,6 +20,7 @@ import UpdateCompany from './src/components/UpdateCompany';
 import CreateNewItem from './src/components/CreateNewItem';
 import EditItem from './src/components/EditItem';
 import FullItem from './src/components/FullItem';
+import UploadJson from './src/components/UploadJson';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -41,6 +42,10 @@ const Profile = () => {
       <ProfileStack.Screen
         name="Actualizar Compañia"
         component={UpdateCompany}
+      />
+      <ProfileStack.Screen
+        name="Cargar JSON"
+        component={UploadJson}
       />
     </ProfileStack.Navigator>
   );
@@ -71,6 +76,7 @@ const MyTabs = () => {
   const userToken = useSelector((state) => state.user.token);
   const imageUser = useSelector((state) => state.user.dataUser.image);
   const { items } = useSelector((state) => state.item);
+  
   return (
     <Tab.Navigator initialRouteName="Login" screenOptions={{}}>
       {userToken === 'n/a' ? (
