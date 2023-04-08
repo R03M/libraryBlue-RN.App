@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewItem, deleteItem, getAllItems, action_UpdateItem } from './actions';
+import {
+  createNewItem,
+  deleteItem,
+  getAllItems,
+  action_UpdateItem,
+  action_CreateManyItems,
+} from './actions';
 import searchInItems from '../utils/searchInItems';
 
 const initialState = {
@@ -70,8 +76,10 @@ export const itemSlice = createSlice({
       .addCase(createNewItem.pending, (state) => {
         state.statusCreateItem = 'loading';
       })
-      .addCase(createNewItem.fulfilled, (state) => {
+      .addCase(createNewItem.fulfilled, (state, { payload: { newItem } }) => {
         state.statusCreateItem = 'succeeded';
+        state.items.push(newItem);
+        state.unalterableItems.push(newItem);
       })
       .addCase(createNewItem.rejected, (state, action) => {
         state.statusCreateItem = 'failed';
@@ -102,22 +110,43 @@ export const itemSlice = createSlice({
       .addCase(action_UpdateItem.pending, (state) => {
         state.statusUpdateItem = 'loading';
       })
-      .addCase(action_UpdateItem.fulfilled, (state, { payload: { itemUpdated } }) => {
-        state.statusUpdateItem = 'succeeded';
+      .addCase(
+        action_UpdateItem.fulfilled,
+        (state, { payload: { itemUpdated } }) => {
+          state.statusUpdateItem = 'succeeded';
 
-        let currentStateItems = state.items.filter(
-          (item) => item.id !== itemUpdated.id
-        );
-        let currentUnalterableItems = state.unalterableItems.filter(
-          (item) => item.i !== itemUpdated.id
-        );
-        currentStateItems.push(itemUpdated);
-        currentUnalterableItems.push(itemUpdated);
+          let currentStateItems = state.items.filter(
+            (item) => item.id !== itemUpdated.id
+          );
+          let currentUnalterableItems = state.unalterableItems.filter(
+            (item) => item.i !== itemUpdated.id
+          );
+          currentStateItems.push(itemUpdated);
+          currentUnalterableItems.push(itemUpdated);
 
-        state.items = currentStateItems;
-        state.unalterableItems = currentUnalterableItems;
-      })
+          state.items = currentStateItems;
+          state.unalterableItems = currentUnalterableItems;
+        }
+      )
       .addCase(action_UpdateItem.rejected, (state, action) => {
+        state.statusUpdateItem = 'failed';
+        state.errorUpdateItem = action.payload;
+      })
+
+      //? create many items
+
+      .addCase(action_CreateManyItems.pending, (state) => {
+        state.statusUpdateItem = 'loading';
+      })
+      .addCase(
+        action_CreateManyItems.fulfilled,
+        (state, { payload: { allItems } }) => {
+          state.statusUpdateItem = 'succeeded';
+          state.items.push(...allItems);
+          state.unalterableItems.push(...allItems);
+        }
+      )
+      .addCase(action_CreateManyItems.rejected, (state, action) => {
         state.statusUpdateItem = 'failed';
         state.errorUpdateItem = action.payload;
       });
