@@ -1,5 +1,5 @@
-import { CORS_URL } from "@env";
-import axios from "axios";
+import { CORS_URL } from '@env';
+import axios from 'axios';
 
 export const postInfEmail = async (email) => {
   const response = await axios.post(`${CORS_URL}/register/checkEmail`, {
@@ -31,15 +31,21 @@ export const postRegisterUser = async (data) => {
   }
 };
 
-export const updateUserProfile = async (data) => {
+export const updateUserProfile = async (data, token) => {
   try {
-    const response = await axios.put(`${CORS_URL}/user/update`, {
-      data,
-    });
+    const response = await axios.put(
+      `${CORS_URL}/user/update`,
+      {
+        data,
+      },
+      {
+        headers: {
+          Authorization: `Beaner ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-
