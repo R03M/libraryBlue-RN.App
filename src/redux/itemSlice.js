@@ -41,7 +41,7 @@ export const itemSlice = createSlice({
         state.errorSearch = 'Not found';
         state.items = [];
       } else {
-        state.errorSearch = '';
+        state.errorSearch = null;
         state.items = response;
       }
       return state;
@@ -115,17 +115,13 @@ export const itemSlice = createSlice({
         (state, { payload: { itemUpdated } }) => {
           state.statusUpdateItem = 'succeeded';
 
-          let currentStateItems = state.items.filter(
-            (item) => item.id !== itemUpdated.id
+          state.items = state.items.map((item) =>
+            item.id === itemUpdated.id ? itemUpdated : item
           );
-          let currentUnalterableItems = state.unalterableItems.filter(
-            (item) => item.i !== itemUpdated.id
-          );
-          currentStateItems.push(itemUpdated);
-          currentUnalterableItems.push(itemUpdated);
 
-          state.items = currentStateItems;
-          state.unalterableItems = currentUnalterableItems;
+          state.unalterableItems = state.unalterableItems.map((item) =>
+            item.id === itemUpdated.id ? itemUpdated : item
+          );
         }
       )
       .addCase(action_UpdateItem.rejected, (state, action) => {
