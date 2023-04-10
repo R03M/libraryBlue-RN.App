@@ -12,6 +12,9 @@ const stylesGlobal = StyleSheet.create({
   backLight: {
     backgroundColor: '#EAEAEA',
   },
+  backPrincipal: {
+    backgroundColor: '#5998c0',
+  },
   backDark: {
     backgroundColor: '#151515',
   },
@@ -34,6 +37,16 @@ const stylesGlobal = StyleSheet.create({
     borderBottomColor: '#5998c0',
     borderBottomWidth: 0.5,
     marginVertical: 20,
+  },
+  feedbackContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
 });
 

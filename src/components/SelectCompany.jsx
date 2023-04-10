@@ -130,7 +130,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
       {thereIsCompany === 404 && (
         <View style={{ backgroundColor: 'red', padding: 4 }}>
           <Text style={{ color: 'white' }}>
-            La compañia {associatedCompany.name} no existe
+            La compañia {associatedCompany.name} no existe.
           </Text>
         </View>
       )}
@@ -143,17 +143,7 @@ export default SelectCompany;
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    borderRadius: 4,
     marginVertical: 10,
-    backgroundColor: '#ff9e80',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 4,
   },
   textInput: {
     borderBottomColor: 'grey',
