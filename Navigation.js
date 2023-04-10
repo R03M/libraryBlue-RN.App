@@ -23,6 +23,10 @@ import FullItem from './src/components/FullItem';
 import UploadJson from './src/components/UploadJson';
 import { useTheme } from './src/hooks/useTheme';
 import { principalColor } from './src/styles/global';
+import useConfig from './src/hooks/useConfig';
+import MenuUser from './src/components/MenuUser';
+import MenuCompany from './src/components/MenuCompany';
+import ManageAssociatedCompany from './src/components/ManageAssociatedCompany';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -30,22 +34,61 @@ const Profile = () => {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen
-        name="Perfil"
+        name="ProfileScreen"
         component={ProfileScreen}
         options={{
           headerShown: false,
         }}
       />
-      <ProfileStack.Screen name="Editar Perfil" component={EditProfile} />
       <ProfileStack.Screen
-        name="Administrar Permisos"
+        name="EditProfile"
+        component={EditProfile}
+        options={{
+          title: 'Editar Perfil',
+        }}
+      />
+      <ProfileStack.Screen
+        name="PanelManager"
         component={PanelManager}
+        options={{
+          title: 'Administrar Permisos',
+        }}
       />
       <ProfileStack.Screen
-        name="Actualizar Compañia"
+        name="UpdateCompany"
         component={UpdateCompany}
+        options={{
+          title: 'Actualizar',
+        }}
       />
-      <ProfileStack.Screen name="Cargar JSON" component={UploadJson} />
+      <ProfileStack.Screen
+        name="UploadJson"
+        component={UploadJson}
+        options={{
+          title: 'Cargar JSON',
+        }}
+      />
+      <ProfileStack.Screen
+        name="MenuUser"
+        component={MenuUser}
+        options={{
+          title: 'Cuenta',
+        }}
+      />
+      <ProfileStack.Screen
+        name="MenuCompany"
+        component={MenuCompany}
+        options={{
+          title: 'Compañia',
+        }}
+      />
+      <ProfileStack.Screen
+        name="ManageAssociatedCompany"
+        component={ManageAssociatedCompany}
+        options={{
+          title: 'Compañia Asociada',
+        }}
+      />
     </ProfileStack.Navigator>
   );
 };
@@ -117,7 +160,6 @@ const MyTabs = () => {
   const isDarkTheme = useTheme();
   const colorBackground = isDarkTheme ? '#5998c0' : '#fff';
   const borderColor = isDarkTheme ? '#fff' : '#000';
-
   return (
     <Tab.Navigator
       initialRouteName="Login"
@@ -134,12 +176,13 @@ const MyTabs = () => {
           {
             backgroundColor: colorBackground,
             borderTopColor: borderColor,
-            borderTopWidth: 0.3,
+            borderTopWidth: 0.2,
           },
         ],
         tabBarShowLabel: false,
         tabBarActiveTintColor: isDarkTheme ? '#fff' : '#5998c0',
         tabBarInactiveTintColor: '#141414',
+        tabBarHideOnKeyboard: true,
       }}>
       {userToken === 'n/a' ? (
         <Tab.Screen
@@ -251,7 +294,7 @@ const MyTabs = () => {
 
 export default function Navigation() {
   useUserData();
-
+  useConfig();
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={'#5998c0'} barStyle="default" />
