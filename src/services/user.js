@@ -49,3 +49,22 @@ export const updateUserProfile = async (data, token) => {
     throw error;
   }
 };
+
+export const putPositionUser = async (data, token) => {
+  try {
+    const response = await axios.put(
+      `${CORS_URL}/user/changePosition`,
+      {
+        data,
+      },
+      {
+        headers: {
+          Authorization: `Beaner ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

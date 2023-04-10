@@ -3,9 +3,11 @@ import {
   postInfEmail,
   postLoginUser,
   postRegisterUser,
+  putPositionUser,
   updateUserProfile,
 } from '../services/user.js';
 import {
+  deleteUserOfCompany,
   getCompanies,
   postAllCompanyUser,
   postNewCompany,
@@ -175,9 +177,9 @@ export const createNewItem = createAsyncThunk(
 
 export const deleteItem = createAsyncThunk(
   'item/deleteItem',
-  async ({ idItem, token }) => {
+  async ({ idItem, idUser, token }) => {
     try {
-      const response = await deleteAItem(idItem, token);
+      const response = await deleteAItem(idItem, idUser, token);
       return response;
     } catch (error) {
       if (error.response) {
@@ -277,6 +279,44 @@ export const action_UpdateCompany = createAsyncThunk(
       const response = await postUpdateCompany(dataCompany, token);
       if (response.data) {
         dispatch(updateDataCompany(response.data));
+        return response.data;
+      }
+      return response.status;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_UpdatePositionUser = createAsyncThunk(
+  'user/updatePositionUser',
+  async ({ data, token }) => {
+    try {
+      const response = await putPositionUser(data, token);
+      if (response.data) {
+        return response.data;
+      }
+      return response.status;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_RemoveUserOfCompany = createAsyncThunk(
+  'company/removeUserOfCompany',
+  async ({ idUser, token }) => {
+    try {
+      const response = await deleteUserOfCompany(idUser, token);
+      if (response.data) {
         return response.data;
       }
       return response.status;

@@ -95,3 +95,20 @@ export const postUpdateCompany = async (dataCompany, token) => {
     throw error;
   }
 };
+
+export const deleteUserOfCompany = async (idUser, token) => {
+  try {
+    const response = await axios.delete(`${CORS_URL}/company/rmUserOfCompany`, {
+      data: {
+        idUser,
+      },
+      headers: {
+        Authorization: `Beaner ${token}`,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
