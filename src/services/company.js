@@ -75,3 +75,23 @@ export const postAllCompanyUser = async (companyName, token) => {
     throw error;
   }
 };
+
+export const postUpdateCompany = async (dataCompany, token) => {
+  try {
+    const response = await axios.put(
+      `${CORS_URL}/company/update`,
+      {
+        dataCompany,
+      },
+      {
+        headers: {
+          Authorization: `Beaner ${token}`,
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
