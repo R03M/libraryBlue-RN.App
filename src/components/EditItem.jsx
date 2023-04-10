@@ -48,6 +48,7 @@ const EditItem = () => {
   const fromMyCompany = dataUser.company.id === oldItem.companyId;
 
   const INITIAL_ITEM_STATE = {
+    idUser: dataUser.id,
     idCompany: oldItem.companyId,
     id: oldItem.id,
     code: oldItem.code,

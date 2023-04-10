@@ -24,7 +24,7 @@ const FullItem = () => {
   const [modalImage, setModalImage] = useState(false);
   const { dataUser, token } = useSelector((state) => state.user);
   const fromMyCompany = dataUser.company.id === item.companyId;
-  
+
   const dateFormated = (value) => {
     const parseDate = new Date(value);
     const date = format(parseDate, "dd 'de' MMMM 'de' yyyy", {
@@ -40,7 +40,7 @@ const FullItem = () => {
   const handledeleteItem = () => {
     Alert.alert(
       'Atención',
-      `Se eliminará el ítem ${item.name}, esta acción es irreversible`,
+      `Se eliminará ${item.title}, esta acción es irreversible`,
       [
         {
           text: 'Cancelar',
@@ -49,7 +49,9 @@ const FullItem = () => {
         {
           text: 'Eliminar',
           onPress: () => {
-            dispatch(deleteItem({ idItem: item.id, token }));
+            dispatch(
+              deleteItem({ idItem: item.id, idUser: dataUser.id, token })
+            );
             navigator.goBack();
           },
           style: 'destructive',
