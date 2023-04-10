@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { action_getAllCompanyUsers } from '../redux/actions';
+import {
+  action_RemoveUserOfCompany,
+  action_UpdatePositionUser,
+  action_getAllCompanyUsers,
+} from '../redux/actions';
 import ChangePermissions from './ChangePermissions';
 import { useTheme } from '../hooks/useTheme';
 import stylesGlobal from '../styles/global';
+import FeedbackOfAPI from './FeedbackOfAPI';
 
 const PanelManager = () => {
   const isDarkTheme = useTheme();
   const dispatch = useDispatch();
 
+  const [feedbackActive, setFeedbackActive] = useState(false);
+
   const { dataUser, token } = useSelector((state) => state.user);
-  const { allUsers } = useSelector((state) => state.company);
+  const { allUsers, statusUpdatePositionUser, errorUpdatePositionUser } =
+    useSelector((state) => state.company);
 
   const background = isDarkTheme
     ? stylesGlobal.backDark
@@ -27,21 +35,40 @@ const PanelManager = () => {
     dispatch(action_getAllCompanyUsers({ companyName, token }));
   }, []);
 
-  function handlerPosition() {}
+  useEffect(() => {
+    if (
+      statusUpdatePositionUser === 'succeeded' ||
+      statusUpdatePositionUser === 'failed'
+    ) {
+      setTimeout(() => {
+        setFeedbackActive(false);
+      }, 800);
+    }
+  }, [statusUpdatePositionUser]);
+
+  function handlerPosition(value) {
+    setFeedbackActive(true);
+    dispatch(
+      action_UpdatePositionUser({
+        data: { id: value.id, position: value.position },
+        token,
+      })
+    );
+  }
 
   function handleRemoveToCompany(id, fullName) {
     Alert.alert(
       'Espera',
-      `La eliminaras de la compañia a ${fullName}, esta accion no se puede deshacer.`,
+      `Eliminaras de la compañia a ${fullName}, esta accion no se puede deshacer.`,
       [
+        {
+          text: 'cancelar',
+        },
         {
           text: 'eliminar',
           onPress: () => {
-            console.log('delete user', id);
+            dispatch(action_RemoveUserOfCompany({ idUser: id, token }));
           },
-        },
-        {
-          text: 'cancelar',
         },
       ]
     );
@@ -49,6 +76,11 @@ const PanelManager = () => {
 
   return (
     <View style={[styles.card, background]}>
+      {feedbackActive && (
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusUpdatePositionUser} />
+        </View>
+      )}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

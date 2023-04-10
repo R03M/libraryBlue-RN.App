@@ -22,12 +22,12 @@ const ChangePermissions = ({
     return (
       <View key={id} style={styles.viewList}>
         <Text style={[styles.text, textStyle]}>{fullName}</Text>
-          <SelectItem
-            items={POSITION}
-            onValueChange={handlerPosition}
-            value={position}
-            notItemNA={true}
-          />
+        <SelectItem
+          items={POSITION}
+          onValueChange={(value) => handlerPosition({ id, position: value })}
+          value={position}
+          notItemNA={true}
+        />
         <BtnCustom
           title={
             <MaterialCommunityIcons
