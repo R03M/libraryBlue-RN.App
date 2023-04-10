@@ -37,6 +37,7 @@ const CreateNewItem = () => {
   const { dataUser, token } = useSelector((state) => state.user);
 
   const INITIAL_NEW_ITEM_STATE = {
+    idUser: dataUser.id,
     code: '',
     title: '',
     subtitle: '',
