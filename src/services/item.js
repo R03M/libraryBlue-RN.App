@@ -1,13 +1,13 @@
 import { CORS_URL } from '@env';
 import axios from 'axios';
 
-export const getItems = async (idCompany, idAssociated, token) => {
+export const getItems = async (idCompany, associatedCompany, token) => {
   try {
     const response = await axios.post(
       `${CORS_URL}/item`,
       {
         idCompany,
-        idAssociated,
+        associatedCompany,
       },
       {
         headers: {
