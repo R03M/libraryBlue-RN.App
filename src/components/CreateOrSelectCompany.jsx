@@ -38,7 +38,6 @@ const CreateOrSelectCompany = ({
   const [selectCompany, setSelectCompany] = useState({
     idUser,
     nameCompany: '',
-    codeCompany: '',
   });
 
   const handlerSelectCompany = (name, code) => {
@@ -139,23 +138,20 @@ const CreateOrSelectCompany = ({
                 </>
               ) : (
                 <View>
-                  <Text style={styles.modalText}>Seleccionar Compañia</Text>
                   <SelectCompany
                     companies={companies}
-                    associateCompany={({ name, code }) =>
-                      handlerSelectCompany(name, code)
-                    }
+                    associateCompany={(value) => handlerSelectCompany(value)}
                   />
                   <View style={styles.btonsView}>
-                    <Button
-                      title="Vincular"
-                      onPress={handlerSelectC}
-                      color={'green'}
-                    />
                     <Button
                       title="cancelar"
                       onPress={() => setModalVisible(!modalVisible)}
                       color={'red'}
+                    />
+                    <Button
+                      title="Vincular"
+                      onPress={handlerSelectC}
+                      color={'green'}
                     />
                   </View>
                 </View>
@@ -176,7 +172,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 8,
     padding: 25,
     alignItems: 'center',
     shadowColor: '#000',
