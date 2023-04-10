@@ -9,10 +9,20 @@ import { isEqual } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_UpdateProfile } from '../redux/actions';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, { pHTCGlobal } from '../styles/global';
 
 const EditProfile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const isDarkTheme = useTheme();
+  const background = isDarkTheme
+    ? stylesGlobal.backDark
+    : stylesGlobal.backLight;
+  const textStyle = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const { dataUser, token } = useSelector((state) => state.user);
 
@@ -36,7 +46,7 @@ const EditProfile = () => {
   };
 
   return (
-    <View style={styles.cardEdit}>
+    <View style={[styles.cardEdit, background]}>
       <View>
         <View
           style={{
@@ -56,27 +66,29 @@ const EditProfile = () => {
           />
         </View>
         <View style={styles.rowsBetween}>
-          <Text>Nombre</Text>
+          <Text style={textStyle}>Nombre</Text>
           <TextInput
-            style={styles.textInput}
+            style={[styles.textInput, textStyle]}
             value={updateProfile.firstName}
             onChangeText={(value) =>
               handlerValue(setUpdateProfile, 'firstName', value)
             }
+            placeholderTextColor={pHTCGlobal}
           />
         </View>
         <View style={styles.rowsBetween}>
-          <Text>Apellido</Text>
+          <Text style={textStyle}>Apellido</Text>
           <TextInput
-            style={styles.textInput}
+            style={[styles.textInput, textStyle]}
             value={updateProfile.lastName}
             onChangeText={(value) =>
               handlerValue(setUpdateProfile, 'lastName', value)
             }
+            placeholderTextColor={pHTCGlobal}
           />
         </View>
         <View style={styles.rowsBetween}>
-          <Text>Imagen</Text>
+          <Text style={textStyle}>Imagen</Text>
           <AddImage
             onChangeImage={(value) =>
               handlerValue(setUpdateProfile, 'image', value)

@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  ScrollView,
-} from 'react-native';
+import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import AddImage from './AddImage';
 import { useDispatch, useSelector } from 'react-redux';
 import handlerValue from '../utils/handlerValue';
 import BtnCustom from './BtnCustom';
 import { action_UpdateCompany } from '../redux/actions';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal from '../styles/global';
 
 const UpdateCompany = () => {
   const dispatch = useDispatch();
+  const isDarkTheme = useTheme();
+
   const { dataUser, token } = useSelector((state) => state.user);
+
+  const background = isDarkTheme
+    ? stylesGlobal.backDark
+    : stylesGlobal.backLight;
+  const textStyle = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const INITIAL_STATE_COMPANY = {
     id: dataUser.company.id,
@@ -28,51 +33,28 @@ const UpdateCompany = () => {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, background]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            fontSize: 24,
-            textAlign: 'center',
-            marginBottom: 20,
-          }}>
-          {dataUser.company.name}
-        </Text>
-        <View
-          style={{
-            height: 200,
-            width: '100%',
-            borderRadius: 4,
-            overflow: 'hidden',
-          }}>
-          <Image
-            source={{
-              uri: update.image,
-            }}
-            style={{
-              flex: 1,
-              resizeMode: 'stretch',
-            }}
-          />
+        <Text style={[styles.title, textStyle]}>{dataUser.company.name}</Text>
+        <View style={styles.viewImg}>
+          <Image source={{ uri: update.image }} style={styles.img} />
         </View>
 
         <View style={styles.rows}>
-          <Text>Imagen</Text>
+          <Text style={textStyle}>Imagen</Text>
           <AddImage
             onChangeImage={(value) => handlerValue(setUpdate, 'image', value)}
             value={update.image}
           />
         </View>
-
-        <View style={{ marginTop: 10 }}>
-          <BtnCustom
-            title={'Guardar'}
-            backgroundColor={'green'}
-            onPress={handleSave}
-          />
-        </View>
       </ScrollView>
+      <View style={{ marginTop: 10 }}>
+        <BtnCustom
+          title={'Guardar'}
+          backgroundColor={'green'}
+          onPress={handleSave}
+        />
+      </View>
     </View>
   );
 };
@@ -94,6 +76,22 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 120,
     justifyContent: 'center',
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  viewImg: {
+    height: 200,
+    width: '100%',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  img: {
+    flex: 1,
+    resizeMode: 'stretch',
   },
 });
 

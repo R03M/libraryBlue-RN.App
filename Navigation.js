@@ -5,15 +5,21 @@ import { useSelector } from 'react-redux';
 import { ActivityIndicator, Image, StatusBar, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo, AntDesign } from '@expo/vector-icons';
+import { useTheme } from './src/hooks/useTheme';
+import { principalColor } from './src/styles/global';
+import useConfig from './src/hooks/useConfig';
+import useUserData from './src/hooks/useUserData';
+import ConsoleLoading from './src/components/ConsoleLoading';
 
-//? Screens
+//? Screens of tab
 import ItemsScreen from './src/screens/Items/ItemsScreen';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import SettingsScreen from './src/screens/settings/SettingsScreen';
 import RegisterScreen from './src/screens/register/RegisterScreen';
 import LoginScreen from './src/screens/login/LoginScreen';
-import useUserData from './src/hooks/useUserData';
-import ConsoleLoading from './src/components/ConsoleLoading';
+
+
+//? Stack 
 import EditProfile from './src/components/EditProfile';
 import PanelManager from './src/components/PanelManager';
 import UpdateCompany from './src/components/UpdateCompany';
@@ -21,9 +27,6 @@ import CreateNewItem from './src/components/CreateNewItem';
 import EditItem from './src/components/EditItem';
 import FullItem from './src/components/FullItem';
 import UploadJson from './src/components/UploadJson';
-import { useTheme } from './src/hooks/useTheme';
-import { principalColor } from './src/styles/global';
-import useConfig from './src/hooks/useConfig';
 import MenuUser from './src/components/MenuUser';
 import MenuCompany from './src/components/MenuCompany';
 import ManageAssociatedCompany from './src/components/ManageAssociatedCompany';
@@ -45,6 +48,13 @@ const Profile = () => {
         component={EditProfile}
         options={{
           title: 'Editar Perfil',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -52,6 +62,13 @@ const Profile = () => {
         component={PanelManager}
         options={{
           title: 'Administrar Permisos',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -59,6 +76,13 @@ const Profile = () => {
         component={UpdateCompany}
         options={{
           title: 'Actualizar',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -66,6 +90,13 @@ const Profile = () => {
         component={UploadJson}
         options={{
           title: 'Cargar JSON',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -73,6 +104,13 @@ const Profile = () => {
         component={MenuUser}
         options={{
           title: 'Cuenta',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -80,6 +118,13 @@ const Profile = () => {
         component={MenuCompany}
         options={{
           title: 'Compañia',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
       <ProfileStack.Screen
@@ -87,6 +132,13 @@ const Profile = () => {
         component={ManageAssociatedCompany}
         options={{
           title: 'Compañia Asociada',
+          headerStyle: {
+            backgroundColor: principalColor,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
     </ProfileStack.Navigator>

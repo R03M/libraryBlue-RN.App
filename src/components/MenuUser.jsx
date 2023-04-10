@@ -8,16 +8,23 @@ import {
   LS_USERDATA,
   lsRemoveItems,
 } from '../utils/localStorage';
-import BtnCustom from './BtnCustom';
 import { AntDesign } from '@expo/vector-icons';
 import stylesGlobal, { errorColor, successColor } from '../styles/global';
+import { useTheme } from '../hooks/useTheme';
 
 const MenuUser = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
-
+  const isDarkTheme = useTheme();
   const { user } = route.params;
+  
+  const background = isDarkTheme
+    ? stylesGlobal.backDark
+    : stylesGlobal.backLight;
+  const textStyle = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const closeSession = async () => {
     Alert.alert(
@@ -72,46 +79,38 @@ const MenuUser = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={[background, styles.container]}>
       <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
         <View style={styles.viewRow}>
-          <View style={{ paddingHorizontal: 10 }}>
+          <View style={styles.icon}>
             <AntDesign name="edit" size={30} color={successColor} />
           </View>
-          <View style={{ alignItems: 'flex-start', paddingLeft: 20 }}>
-            <Text style={{ fontWeight: 'bold' }}>Editar mis datos</Text>
+          <View style={styles.viewText}>
+            <Text style={[styles.textStyle, textStyle]}>Editar mis datos</Text>
           </View>
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={closeSession}>
         <View style={styles.viewRow}>
-          <View style={{ paddingHorizontal: 10 }}>
+          <View style={styles.icon}>
             <AntDesign name="logout" size={30} color={errorColor} />
           </View>
-          <View style={{ alignItems: 'flex-start', paddingLeft: 20 }}>
-            <Text style={{ fontWeight: 'bold' }}>Cerrar Sesion</Text>
+          <View style={styles.viewText}>
+            <Text style={[styles.textStyle, textStyle]}>Cerrar Sesion</Text>
           </View>
         </View>
       </TouchableOpacity>
-      <View
-        style={[
-          stylesGlobal.line,
-          {
-            borderBottomColor: errorColor,
-            marginTop: 30,
-            marginHorizontal: 10,
-          },
-        ]}>
-        <Text style={{ fontSize: 16, fontWeight: 700 }}>Zona Peligrosa</Text>
+      <View style={[stylesGlobal.line, styles.lineDangerZ]}>
+        <Text style={[styles.titleDangeZ, textStyle]}>Zona Peligrosa</Text>
       </View>
       <TouchableOpacity onPress={deleteAccount}>
         <View style={styles.viewRow}>
-          <View style={{ paddingHorizontal: 10 }}>
-            <AntDesign name="delete" size={30} color="black" />
+          <View style={styles.icon}>
+            <AntDesign name="delete" size={30} color={'orange'} />
           </View>
-          <View style={{ alignItems: 'flex-start', paddingLeft: 20 }}>
-            <Text style={{ fontWeight: 'bold' }}>Eliminar Cuenta</Text>
+          <View style={styles.viewText}>
+            <Text style={[styles.textStyle, textStyle]}>Eliminar Cuenta</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -120,11 +119,33 @@ const MenuUser = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   viewRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 20,
     paddingLeft: 10,
+  },
+  textStyle: {
+    fontWeight: 'bold',
+  },
+  titleDangeZ: {
+    fontSize: 16,
+    fontWeight: 700,
+  },
+  icon: {
+    paddingHorizontal: 10,
+  },
+  viewText: {
+    alignItems: 'flex-start',
+    paddingLeft: 20,
+  },
+  lineDangerZ: {
+    borderBottomColor: errorColor,
+    marginTop: 30,
+    marginHorizontal: 10,
   },
 });
 

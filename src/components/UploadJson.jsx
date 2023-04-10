@@ -4,12 +4,22 @@ import BtnCustom from './BtnCustom';
 import ModalExampleJSON from './ModalExampleJSON';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_CreateManyItems } from '../redux/actions';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal, { pHTCGlobal } from '../styles/global';
 
 const UploadJson = () => {
   const dispatch = useDispatch();
+  const isDarkTheme = useTheme();
   const [items, setItems] = useState('');
   const [modalExample, setModalExample] = useState(false);
   const { token, dataUser } = useSelector((state) => state.user);
+
+  const background = isDarkTheme
+    ? stylesGlobal.backDark
+    : stylesGlobal.backLight;
+  const textStyle = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const handleCreate = () => {
     dispatch(
@@ -22,7 +32,7 @@ const UploadJson = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, background]}>
       <ModalExampleJSON
         modalExample={modalExample}
         setModalExample={setModalExample}
@@ -36,7 +46,7 @@ const UploadJson = () => {
           flexDirection: 'row',
         }}>
         <View style={{ width: '60%' }}>
-          <Text>
+          <Text style={textStyle}>
             Puedes subir un archivo JSON con items, para crear muchos items en
             un momento.
           </Text>
@@ -52,16 +62,20 @@ const UploadJson = () => {
       </View>
       <View style={{ flex: 1, width: '90%' }}>
         <TextInput
-          style={{
-            marginTop: 20,
-            borderColor: 'gray',
-            borderWidth: 1,
-          }}
+          style={[
+            {
+              marginTop: 20,
+              borderColor: 'gray',
+              borderWidth: 1,
+            },
+            textStyle,
+          ]}
           multiline={true}
           numberOfLines={8}
           value={items}
           onChangeText={setItems}
-          placeholder="pega aqui el JSON"
+          placeholder=" pega aqui el JSON"
+          placeholderTextColor={pHTCGlobal}
         />
       </View>
 
@@ -81,7 +95,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 10,
+    paddingTop: 10,
   },
 });
 
