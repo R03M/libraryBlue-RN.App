@@ -38,6 +38,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
   const { dataUser, token } = useSelector((state) => state.user);
 
   const INITIAL_ITEM_STATE = {
+    idUser: dataUser.id,
     id: item.id,
     idCompany: idCompany,
     currentCount: '',
