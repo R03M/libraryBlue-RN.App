@@ -45,9 +45,10 @@ const EditItem = () => {
 
   const [isEnabled, setIsEnabled] = useState(oldItem.associatedCompany);
   const { dataUser, token } = useSelector((state) => state.user);
+  const fromMyCompany = dataUser.company.id === oldItem.companyId;
 
   const INITIAL_ITEM_STATE = {
-    idCompany: dataUser.company.id,
+    idCompany: oldItem.companyId,
     id: oldItem.id,
     code: oldItem.code,
     title: oldItem.title,
@@ -62,7 +63,7 @@ const EditItem = () => {
     currentCount: oldItem.currentCount ? oldItem.currentCount.toString() : '',
     itemEntry: oldItem.itemEntry ? oldItem.itemEntry.toString() : '',
     itemEntryDate: oldItem.itemEntryDate,
-    associatedCompany: isEnabled,
+    associatedCompany: oldItem.associatedCompany,
     exitOnly: false,
   };
 
@@ -117,10 +118,11 @@ const EditItem = () => {
       Alert.alert('No hay cambios', 'El item no se actualizará', [], {
         cancelable: true,
       });
+      navigator.goBack();
       return;
     }
     dispatch(action_UpdateItem({ updateItem, token }));
-    navigator.goBack();
+    navigator.navigate('ItemsScreen');
   };
 
   return (
@@ -303,19 +305,21 @@ const EditItem = () => {
               />
             </View>
           </View>
-          <View style={styles.rows}>
-            <Text style={styleText}>Compartido con compañia asociada</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#3ccc15' }}
-              thumbColor={isEnabled ? '#2296f3' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={() => {
-                setIsEnabled(!isEnabled);
-                handlerValue(setUpdateItem, 'associatedCompany', !isEnabled);
-              }}
-              value={isEnabled}
-            />
-          </View>
+          {fromMyCompany && (
+            <View style={styles.rows}>
+              <Text style={styleText}>Compartido con compañia asociada</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#3ccc15' }}
+                thumbColor={isEnabled ? '#2296f3' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => {
+                  setIsEnabled(!isEnabled);
+                  handlerValue(setUpdateItem, 'associatedCompany', !isEnabled);
+                }}
+                value={isEnabled}
+              />
+            </View>
+          )}
           <View style={{ marginTop: 20 }}>
             <BtnCustom
               title="Guardar"
