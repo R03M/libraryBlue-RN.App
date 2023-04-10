@@ -10,6 +10,7 @@ import {
   postAllCompanyUser,
   postNewCompany,
   postSelectCompany,
+  postUpdateCompany,
 } from '../services/company.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -249,6 +250,33 @@ export const action_CreateManyItems = createAsyncThunk(
     try {
       const response = await postCreateManyItems(idCompany, data, token);
       if (response.data) {
+        return response.data;
+      }
+      return response.status;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const updateDataCompany = createAsyncThunk(
+  'user/updateDataCompany',
+  async (response) => {
+    return response;
+  }
+);
+
+export const action_UpdateCompany = createAsyncThunk(
+  'company/update',
+  async ({ dataCompany, token }) => {
+    try {
+      const response = await postUpdateCompany(dataCompany, token);
+      if (response.data) {
+        dispatch(updateDataCompany(response.data));
         return response.data;
       }
       return response.status;

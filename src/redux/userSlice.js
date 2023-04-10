@@ -6,6 +6,7 @@ import {
   registerAccount,
   updateDataUser,
   action_UpdateProfile,
+  updateDataCompany,
 } from './actions';
 
 const initialState = {
@@ -167,6 +168,24 @@ export const userSlice = createSlice({
         }
       )
       .addCase(action_UpdateProfile.rejected, (state, action) => {
+        state.statusUpdateP = 'failed';
+        state.errorUpdateP = action.payload;
+      })
+
+      //? Update data company
+
+      .addCase(updateDataCompany.pending, (state) => {
+        state.statusUpdateP = 'loading';
+      })
+      .addCase(
+        updateDataCompany.fulfilled,
+        (state, { payload: { updated } }) => {
+          state.statusUpdateP = 'succeeded';
+          console.log(updated)
+          // state.dataUser.company = updated;
+        }
+      )
+      .addCase(updateDataCompany.rejected, (state, action) => {
         state.statusUpdateP = 'failed';
         state.errorUpdateP = action.payload;
       });

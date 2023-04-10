@@ -4,6 +4,7 @@ import {
   createNewCompany,
   getAllCompanies,
   newUserSelectCompany,
+  action_UpdateCompany
 } from './actions';
 
 const initialState = {
@@ -24,6 +25,11 @@ const initialState = {
   allUsers: [],
   statusGetAllUsers: 'idle',
   errorGetAllUsers: null,
+
+  //? update company 
+  statusUpdateCompany: 'idle',
+  errorUpdateCompany: null,
+
 };
 
 export const companySlice = createSlice({
@@ -93,6 +99,20 @@ export const companySlice = createSlice({
       .addCase(action_getAllCompanyUsers.rejected, (state, action) => {
         state.statusGetAllUsers = 'failed';
         state.errorGetAllUsers = action.payload;
+      })
+
+      //? update company 
+
+      .addCase(action_UpdateCompany.pending, (state) => {
+        state.statusUpdateCompany = 'loading';
+      })
+      .addCase(action_UpdateCompany.fulfilled, (state, action) => {
+        state.statusUpdateCompany = 'succeeded';
+        // state.allUsers = action.payload;
+      })
+      .addCase(action_UpdateCompany.rejected, (state, action) => {
+        state.statusUpdateCompany = 'failed';
+        state.errorUpdateCompany = action.payload;
       });
   },
 });
