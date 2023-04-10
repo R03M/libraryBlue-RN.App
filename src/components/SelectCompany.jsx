@@ -59,10 +59,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
       const codeIsTrue = company.code === associatedCompany.code;
       if (company && codeIsTrue) {
         const associate = () => {
-          associateCompany({
-            name: associatedCompany.name,
-            code: associateCompany.code,
-          });
+          associateCompany(associatedCompany.name);
         };
         associate();
       }
@@ -78,7 +75,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
           fontWeight: 'bold',
           textTransform: 'uppercase',
         }}>
-        compañia asociada
+        selecciona la compañia
       </Text>
 
       <View
@@ -137,10 +134,6 @@ const SelectCompany = ({ companies, associateCompany }) => {
           </Text>
         </View>
       )}
-
-      <Text style={{ fontStyle: 'italic' }}>
-        La compañia asociada es opcional y se puede agregar y/o cambiar luego.
-      </Text>
     </View>
   );
 };

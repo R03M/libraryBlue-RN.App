@@ -22,6 +22,7 @@ import { useTheme } from '../hooks/useTheme';
 import stylesGlobal, {
   errorColor,
   pHTCGlobal,
+  principalColor,
   successColor,
 } from '../styles/global';
 
@@ -32,9 +33,9 @@ const SimplifiedItem = ({ item, idCompany }) => {
   const styleText = isDarkTheme
     ? stylesGlobal.textDark
     : stylesGlobal.backLight;
-    
+
   const [output, setOuput] = useState(false);
-  const user = useSelector((state) => state.user.dataUser);
+  const { dataUser, token } = useSelector((state) => state.user);
 
   const INITIAL_ITEM_STATE = {
     id: item.id,
@@ -63,7 +64,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
       );
       return;
     }
-    dispatch(action_UpdateItem({ updateItem }));
+    dispatch(action_UpdateItem({ updateItem, token }));
   };
 
   return (
@@ -93,12 +94,12 @@ const SimplifiedItem = ({ item, idCompany }) => {
             <Text style={styleText}>{item.edition}</Text>
             <Text style={styleText}>{item.letter}</Text>
           </View>
-          {user.position !== 'Observant' && (
+          {dataUser.position !== 'Observant' && (
             <View style={{ alignItems: 'center' }}>
               {output ? (
                 <View style={styles.output}>
                   <TextInput
-                    style={styleText}
+                    style={[styleText, styles.textInputNro]}
                     onChangeText={(value) =>
                       setUpdateItem((prevItem) => ({
                         ...prevItem,
@@ -107,6 +108,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
                     }
                     value={updateItem.currentCount}
                     keyboardType="numeric"
+                    onSubmitEditing={handleUpdateCurrentItem}
                   />
                   <View style={{ margin: 2 }}>
                     <BtnCustom
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
   },
   textInputNro: {
     margin: 2,
-    borderRadius: 2,
+    borderRadius: 4,
     borderWidth: 1,
     width: 40,
     textAlign: 'center',

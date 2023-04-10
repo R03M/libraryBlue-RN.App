@@ -6,14 +6,17 @@ import {
   updateThemeReducer,
   updateUDSReducer,
 } from '../../redux/settingsSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../../hooks/useTheme';
 import styles from './settings.Styles';
 import stylesGlobal from '../../styles/global';
+import { LS_CONFIG, lsSetItems } from '../../utils/localStorage.js';
 
 const SettingsScreen = () => {
   const dispatch = useDispatch();
+  const isDarkTheme = useTheme();
+
   const themeSelected = useSelector((state) => state.settings.settings.theme);
+
   const isUseDevice = useSelector(
     (state) => state.settings.settings.useDeviceSettings
   );
@@ -23,20 +26,11 @@ const SettingsScreen = () => {
     isUseDevice === null ? false : isUseDevice
   );
 
-  const isDarkTheme = useTheme();
-
   useEffect(() => {
-    const updateSettings = async () => {
-      try {
-        dispatch(updateThemeReducer(theme));
-        dispatch(updateUDSReducer(useDeviceSettings));
-        AsyncStorage.setItem(
-          '@SettingsLibraryBlue',
-          JSON.stringify({ theme, useDeviceSettings })
-        );
-      } catch (error) {
-        console.log(error);
-      }
+    const updateSettings = () => {
+      lsSetItems(LS_CONFIG, { theme, useDeviceSettings });
+      dispatch(updateThemeReducer(theme));
+      dispatch(updateUDSReducer(useDeviceSettings));
     };
     updateSettings();
   }, [theme, useDeviceSettings]);

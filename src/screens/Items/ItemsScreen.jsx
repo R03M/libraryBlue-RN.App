@@ -19,7 +19,15 @@ const ItemsScreen = () => {
     if (dataUser.company) {
       const getItems = () => {
         let idCompany = dataUser.company.id;
-        dispatch(getAllItems({ idCompany, idAssociated: null, token }));
+        dispatch(
+          getAllItems({
+            idCompany,
+            idAssociated: dataUser.company.associatedCompany
+              ? dataUser.company.associatedCompany
+              : null,
+            token,
+          })
+        );
       };
       getItems();
     }

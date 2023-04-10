@@ -23,7 +23,8 @@ const FullItem = () => {
   const { item } = route.params;
   const [modalImage, setModalImage] = useState(false);
   const { dataUser, token } = useSelector((state) => state.user);
-
+  const fromMyCompany = dataUser.company.id === item.companyId;
+  
   const dateFormated = (value) => {
     const parseDate = new Date(value);
     const date = format(parseDate, "dd 'de' MMMM 'de' yyyy", {
@@ -183,12 +184,21 @@ const FullItem = () => {
               {item.itemEntryDate ? dateFormated(item.itemEntryDate) : 'n/a'}
             </Text>
           </View>
-          <View style={styles.rows}>
-            <Text style={stylesText}>Compartido con compañia asociada</Text>
-            <Text style={stylesText}>
-              {item.associatedCompany ? ' Si' : ' No'}
-            </Text>
-          </View>
+          {fromMyCompany ? (
+            <View style={styles.rows}>
+              <Text style={stylesText}>Compartido con compañia asociada</Text>
+              <Text style={stylesText}>
+                {item.associatedCompany ? ' Si' : ' No'}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.rows}>
+              <Text style={stylesText}>Item de </Text>
+              <Text style={stylesText}>
+                {dataUser.company.associatedCompany}
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
