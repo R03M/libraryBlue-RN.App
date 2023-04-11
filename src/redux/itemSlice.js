@@ -5,6 +5,7 @@ import {
   getAllItems,
   action_UpdateItem,
   action_CreateManyItems,
+  action_DisconnectOfCompany,
 } from './actions';
 import searchInItems from '../utils/searchInItems';
 
@@ -149,9 +150,17 @@ export const itemSlice = createSlice({
         state.statusUpdateItem = 'failed';
         state.errorUpdateItem = action.payload;
       });
+
+    //? delete data items when user disconnect of the company
+
+    builder.addCase(action_DisconnectOfCompany.fulfilled, (state) => {
+      state.items = [];
+      state.unalterableItems = [];
+    });
   },
 });
 
-export const { searchItem, cleanErrorSearch, setItems, cleanStatusCreateItem } = itemSlice.actions;
+export const { searchItem, cleanErrorSearch, setItems, cleanStatusCreateItem } =
+  itemSlice.actions;
 
 export default itemSlice.reducer;

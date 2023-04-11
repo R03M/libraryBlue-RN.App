@@ -328,3 +328,38 @@ export const action_RemoveUserOfCompany = createAsyncThunk(
     }
   }
 );
+
+export const action_DisconnectOfCompany = createAsyncThunk(
+  'user/disconnectOfCompany',
+  async ({ idUser, token }) => {
+    try {
+      const response = await deleteUserOfCompany(idUser, token);
+      if (response.data) {
+        return response.data;
+      }
+      return response.status;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_ChangeTypeAccount = createAsyncThunk(
+  'user/changeTypeAccount',
+  async ({ data, token }) => {
+    try {
+      const response = await putPositionUser(data, token);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);

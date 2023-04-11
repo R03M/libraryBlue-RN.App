@@ -8,6 +8,8 @@ import {
   action_UpdateProfile,
   updateDataCompany,
   newUserSelectCompany,
+  action_DisconnectOfCompany,
+  action_ChangeTypeAccount,
 } from './actions';
 
 const initialState = {
@@ -40,6 +42,10 @@ const initialState = {
   //? Select Company(New user[Observant])
   selectCompanyStatus: 'idle',
   selectCompanyError: null,
+
+  //? Change Type Account
+  statusChangeTypeAccount: 'idle',
+  errorChangeTypeAccount: null,
 };
 
 export const userSlice = createSlice({
@@ -209,6 +215,37 @@ export const userSlice = createSlice({
       .addCase(newUserSelectCompany.rejected, (state, action) => {
         state.selectCompanyStatus = 'failed';
         state.selectCompanyError = action.payload;
+      })
+
+      //? Disconnect of Company
+
+      .addCase(action_DisconnectOfCompany.pending, (state) => {
+        state.selectCompanyStatus = 'loading';
+      })
+      .addCase(action_DisconnectOfCompany.fulfilled, (state) => {
+        state.selectCompanyStatus = 'succeeded';
+        state.dataUser.company = null;
+      })
+      .addCase(action_DisconnectOfCompany.rejected, (state, action) => {
+        state.selectCompanyStatus = 'failed';
+        state.selectCompanyError = action.payload;
+      })
+
+      //? Change Type Account
+
+      .addCase(action_ChangeTypeAccount.pending, (state) => {
+        state.statusChangeTypeAccount = 'loading';
+      })
+      .addCase(
+        action_ChangeTypeAccount.fulfilled,
+        (state, { payload: { userData } }) => {
+          state.statusChangeTypeAccount = 'succeeded';
+          state.dataUser = userData;
+        }
+      )
+      .addCase(action_ChangeTypeAccount.rejected, (state, action) => {
+        state.statusChangeTypeAccount = 'failed';
+        state.errorChangeTypeAccount = action.payload;
       });
   },
 });
