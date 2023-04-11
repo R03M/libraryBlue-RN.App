@@ -1,15 +1,20 @@
-import React from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { principalColor } from '../styles/global';
+import BtnCustom from './BtnCustom';
 
 const NotCompanyAlert = ({ position, setModalVisible }) => {
-  return position === "Manager" ? (
+  return position === 'Manager' ? (
     <View style={styles.cardView}>
-      <Text>
+      <Text style={textStyle}>
         Aun no creas una compañia, cuando lo hagas podras empezar a añadir
         items, editarlos y visualizarlos.
       </Text>
       <View style={styles.btn}>
-        <Button title="crear compañia" onPress={() => setModalVisible(true)} />
+        <BtnCustom
+          title="crear compañia"
+          onPress={() => setModalVisible(true)}
+        />
       </View>
     </View>
   ) : (
@@ -19,9 +24,11 @@ const NotCompanyAlert = ({ position, setModalVisible }) => {
         empezar a añadir items, editarlos y visualizarlos.
       </Text>
       <View style={styles.btn}>
-        <Button
-          title="unirse a una compañia"
+        <BtnCustom
+          title="UNIRSE A UNA COMPAÑIA"
           onPress={() => setModalVisible(true)}
+          backgroundColor={principalColor}
+          textColor={'#fff'}
         />
       </View>
     </View>
@@ -30,12 +37,12 @@ const NotCompanyAlert = ({ position, setModalVisible }) => {
 
 const styles = StyleSheet.create({
   cardView: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     margin: 20,
     padding: 20,
     borderRadius: 4,
     elevation: 4, // of Android
-    shadowColor: "#000000", // of iOS
+    shadowColor: '#000000', // of iOS
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
