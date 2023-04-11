@@ -131,8 +131,7 @@ export const newUserSelectCompany = createAsyncThunk(
   async ({ selectCompanyInf, token }) => {
     try {
       const response = await postSelectCompany(selectCompanyInf, token);
-      dispatch(updateDataUser(response.user));
-      return response.message;
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);

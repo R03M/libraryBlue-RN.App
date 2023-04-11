@@ -3,7 +3,6 @@ import {
   action_getAllCompanyUsers,
   createNewCompany,
   getAllCompanies,
-  newUserSelectCompany,
   action_UpdateCompany,
   action_UpdatePositionUser,
   action_RemoveUserOfCompany,
@@ -19,10 +18,6 @@ const initialState = {
   createCompanyStatus: 'idle',
   createCompanyError: null,
 
-  //? Select Company(New user[Observant])
-  selectCompanyStatus: 'idle',
-  selectCompanyError: null,
-
   //? company users
   allUsers: [],
   statusGetAllUsers: 'idle',
@@ -35,7 +30,7 @@ const initialState = {
   //? update position user
   statusUpdatePositionUser: 'idle',
   errorUpdatePositionUser: null,
-  
+
   //? remove user of company
   statusRemoveUserOfC: 'idle',
   errorRemoveUserOfC: null,
@@ -81,19 +76,6 @@ export const companySlice = createSlice({
       .addCase(createNewCompany.rejected, (state, action) => {
         state.createCompanyStatus = 'failed';
         state.createCompanyError = action.payload;
-      })
-
-      //? Select Company(New user[Observant])
-
-      .addCase(newUserSelectCompany.pending, (state) => {
-        state.selectCompanyStatus = 'loading';
-      })
-      .addCase(newUserSelectCompany.fulfilled, (state) => {
-        state.selectCompanyStatus = 'succeeded';
-      })
-      .addCase(newUserSelectCompany.rejected, (state, action) => {
-        state.selectCompanyStatus = 'failed';
-        state.selectCompanyError = action.payload;
       })
 
       //? get all company users
@@ -142,10 +124,13 @@ export const companySlice = createSlice({
       .addCase(action_RemoveUserOfCompany.pending, (state) => {
         state.statusRemoveUserOfC = 'loading';
       })
-      .addCase(action_RemoveUserOfCompany.fulfilled, (state, {payload: {userDeleted}}) => {
-        state.statusRemoveUserOfC = 'succeeded';
-        state.allUsers.filter(user => user.id !== userDeleted)
-      })
+      .addCase(
+        action_RemoveUserOfCompany.fulfilled,
+        (state, { payload: { userDeleted } }) => {
+          state.statusRemoveUserOfC = 'succeeded';
+          state.allUsers.filter((user) => user.id !== userDeleted);
+        }
+      )
       .addCase(action_RemoveUserOfCompany.rejected, (state, action) => {
         state.statusRemoveUserOfC = 'failed';
         state.errorRemoveUserOfC = action.payload;

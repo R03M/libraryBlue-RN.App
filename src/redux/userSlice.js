@@ -7,6 +7,7 @@ import {
   updateDataUser,
   action_UpdateProfile,
   updateDataCompany,
+  newUserSelectCompany,
 } from './actions';
 
 const initialState = {
@@ -35,6 +36,10 @@ const initialState = {
   //? update profile
   statusUpdateP: 'idle',
   errorUpdateP: null,
+
+  //? Select Company(New user[Observant])
+  selectCompanyStatus: 'idle',
+  selectCompanyError: null,
 };
 
 export const userSlice = createSlice({
@@ -181,13 +186,29 @@ export const userSlice = createSlice({
         updateDataCompany.fulfilled,
         (state, { payload: { updated } }) => {
           state.statusUpdateP = 'succeeded';
-          console.log(updated)
           // state.dataUser.company = updated;
         }
       )
       .addCase(updateDataCompany.rejected, (state, action) => {
         state.statusUpdateP = 'failed';
         state.errorUpdateP = action.payload;
+      })
+
+      //? Select Company(New user[Observant])
+
+      .addCase(newUserSelectCompany.pending, (state) => {
+        state.selectCompanyStatus = 'loading';
+      })
+      .addCase(
+        newUserSelectCompany.fulfilled,
+        (state, { payload: { userData } }) => {
+          state.selectCompanyStatus = 'succeeded';
+          state.dataUser = userData;
+        }
+      )
+      .addCase(newUserSelectCompany.rejected, (state, action) => {
+        state.selectCompanyStatus = 'failed';
+        state.selectCompanyError = action.payload;
       });
   },
 });
