@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  ScrollView,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import BtnCustom from './BtnCustom';
@@ -19,12 +18,7 @@ import { action_UpdateItem } from '../redux/actions';
 import { isEqual } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
-import stylesGlobal, {
-  errorColor,
-  pHTCGlobal,
-  principalColor,
-  successColor,
-} from '../styles/global';
+import stylesGlobal, { errorColor, successColor } from '../styles/global';
 
 const SimplifiedItem = ({ item, idCompany }) => {
   const dispatch = useDispatch();

@@ -9,11 +9,11 @@ export const blackColor = '#151515';
 export const orangeColor = '#eca641';
 
 const stylesGlobal = StyleSheet.create({
-  backLight: {
-    backgroundColor: '#EAEAEA',
-  },
   backPrincipal: {
     backgroundColor: '#5998c0',
+  },
+  backLight: {
+    backgroundColor: '#EAEAEA',
   },
   backDark: {
     backgroundColor: '#151515',

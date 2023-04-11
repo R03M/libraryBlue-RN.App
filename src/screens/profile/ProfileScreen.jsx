@@ -1,27 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  View,
-  Text,
-  ScrollView,
-  Alert,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import { deleteDataUser, deleteUserToken } from '../../redux/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import BtnCustom from '../../components/BtnCustom';
 import { useTheme } from '../../hooks/useTheme';
-import stylesGlobal, {
-  errorColor,
-  orangeColor,
-  principalColor,
-  successColor,
-} from '../../styles/global';
+import stylesGlobal from '../../styles/global';
 import styles from './profile.Styles';
 
 const ProfileScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   const isDarkTheme = useTheme();
   const styleText = isDarkTheme

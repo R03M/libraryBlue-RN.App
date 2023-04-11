@@ -2,11 +2,7 @@ import React from 'react';
 import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import stylesGlobal, {
-  principalColor,
-  successColor,
-  whiteColor,
-} from '../styles/global';
+import stylesGlobal, { successColor } from '../styles/global';
 import { useTheme } from '../hooks/useTheme';
 
 const FeedbackOfAPI = ({ value }) => {

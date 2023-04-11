@@ -20,7 +20,6 @@ const NoCompany = () => {
         position={dataUser.position}
         setModalVisible={setModalVisible}
       />
-
       <CreateOrSelectCompany
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
