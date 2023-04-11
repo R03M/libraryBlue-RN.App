@@ -43,6 +43,7 @@ const EditProfile = () => {
       return;
     }
     dispatch(action_UpdateProfile({ updateProfile, token }));
+    navigation.navigate('ProfileScreen')
   };
 
   return (
