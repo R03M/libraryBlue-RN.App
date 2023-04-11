@@ -15,25 +15,31 @@ const SettingsScreen = () => {
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
 
-  const themeSelected = useSelector((state) => state.settings.settings.theme);
-
-  const isUseDevice = useSelector(
-    (state) => state.settings.settings.useDeviceSettings
+  const { theme, useDeviceSettings } = useSelector(
+    (state) => state.settings.settings
   );
 
-  const [theme, setTheme] = useState(themeSelected);
-  const [useDeviceSettings, setUseDeviceSettings] = useState(
-    isUseDevice === null ? false : isUseDevice
-  );
+  const [settings, setSettings] = useState({ theme, useDeviceSettings });
 
   useEffect(() => {
     const updateSettings = () => {
-      lsSetItems(LS_CONFIG, { theme, useDeviceSettings });
-      dispatch(updateThemeReducer(theme));
-      dispatch(updateUDSReducer(useDeviceSettings));
+      lsSetItems(LS_CONFIG, settings);
+      dispatch(updateThemeReducer(settings.theme));
+      dispatch(updateUDSReducer(settings.useDeviceSettings));
     };
     updateSettings();
-  }, [theme, useDeviceSettings]);
+  }, [settings]);
+
+  const handleThemeChange = (newTheme) => {
+    setSettings((prevSettings) => ({ ...prevSettings, theme: newTheme }));
+  };
+
+  const handleDeviceSettingsChange = () => {
+    setSettings((prevSettings) => ({
+      ...prevSettings,
+      useDeviceSettings: !prevSettings.useDeviceSettings,
+    }));
+  };
 
   return (
     <View
@@ -53,12 +59,12 @@ const SettingsScreen = () => {
         <View style={styles.inputContainer}>
           <Button
             title={'Claro'}
-            onPress={() => setTheme('light')}
+            onPress={() => handleThemeChange('light')}
             color={theme === 'light' ? '#5998c0' : 'grey'}
           />
           <Button
             title={'Oscuro'}
-            onPress={() => setTheme('dark')}
+            onPress={() => handleThemeChange('dark')}
             color={theme === 'dark' ? '#5998c0' : 'grey'}
           />
         </View>
@@ -72,9 +78,7 @@ const SettingsScreen = () => {
           trackColor={{ false: 'red', true: '#1ed760' }}
           thumbColor={useDeviceSettings ? '#fff' : 'grey'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={() =>
-            setUseDeviceSettings((previousState) => !previousState)
-          }
+          onValueChange={handleDeviceSettingsChange}
           value={useDeviceSettings}
         />
       </View>
