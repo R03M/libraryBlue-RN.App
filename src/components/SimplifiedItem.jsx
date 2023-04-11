@@ -41,6 +41,16 @@ const SimplifiedItem = ({ item, idCompany }) => {
 
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
 
+  const activeUpdate = () => {
+    if (item.currentCount === 0 || !item.currentCount) {
+      Alert.alert(null, 'Item sin stock.', [], {
+        cancelable: true,
+      });
+      return;
+    }
+    setOuput(true);
+  };
+
   const handleUpdateCurrentItem = () => {
     if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
       Alert.alert('No hay cambios', `No se actualizará`, [], {
@@ -59,6 +69,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
       );
       return;
     }
+    setOuput(false);
     dispatch(action_UpdateItem({ updateItem, token }));
   };
 
@@ -127,7 +138,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
                 <BtnCustom
                   title={<MaterialCommunityIcons name="exit-run" size={24} />}
                   textColor={'#5998c0'}
-                  onPress={() => setOuput(true)}
+                  onPress={activeUpdate}
                 />
               )}
             </View>
