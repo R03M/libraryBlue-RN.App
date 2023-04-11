@@ -17,9 +17,10 @@ const ItemsScreen = () => {
 
   const { dataUser, token } = useSelector((state) => state.user);
   const { items, unalterableItems } = useSelector((state) => state.item);
-  const { statusUpdateItem } = useSelector((state) => state.item);
+  const { statusUpdateItem, statusDeleteItem } = useSelector((state) => state.item);
 
-  const feedbackOn = useFeedback(statusUpdateItem);
+  const feedbackOnUpdate = useFeedback(statusUpdateItem);
+  const feedbackOnDelete = useFeedback(statusDeleteItem);
 
   useEffect(() => {
     if (dataUser.company) {
@@ -54,9 +55,14 @@ const ItemsScreen = () => {
         <View style={{ flex: 1, width: '100%' }}>
           <NavBar />
           <ItemsList data={items} idCompany={dataUser.company.id} />
-          {feedbackOn && (
+          {feedbackOnUpdate && (
             <View style={stylesGlobal.feedbackContainer}>
               <FeedbackOfAPI value={statusUpdateItem} type={'update'} />
+            </View>
+          )}
+          {feedbackOnDelete && (
+            <View style={stylesGlobal.feedbackContainer}>
+              <FeedbackOfAPI value={statusDeleteItem} type={'delete'} />
             </View>
           )}
         </View>

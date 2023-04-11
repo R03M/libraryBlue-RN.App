@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../hooks/useTheme';
 import stylesGlobal from '../../styles/global';
 import styles from './profile.Styles';
+import useFeedback from '../../hooks/useFeedback';
+import FeedbackOfAPI from '../../components/FeedbackOfAPI';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -13,6 +15,13 @@ const ProfileScreen = () => {
     : stylesGlobal.textLight;
 
   const user = useSelector((state) => state.user.dataUser);
+  const { selectCompanyStatus, statusChangeTypeAccount, statusUpdateP } = useSelector(
+    (state) => state.user
+  );
+
+  const feedbackDisscCompany = useFeedback(selectCompanyStatus);
+  const feedbackChangeTypeAcc = useFeedback(statusChangeTypeAccount);
+  const feedbackUpdateProfile = useFeedback(statusUpdateP);
 
   return (
     <View
@@ -21,13 +30,26 @@ const ProfileScreen = () => {
           ? [styles.container, stylesGlobal.backDark]
           : [styles.container, stylesGlobal.backLight]
       }>
+      {feedbackDisscCompany && ( // alert disconnect of current company
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={selectCompanyStatus} type={'update'} />
+        </View>
+      )} 
+
+      {feedbackChangeTypeAcc && ( // alert change type account
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusChangeTypeAccount} type={'update'} />
+        </View>
+      )}
+
+      {feedbackUpdateProfile && ( // alert update profile
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusUpdateP} type={'update'} />
+        </View>
+      )}
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('MenuUser', {
-              user: user,
-            })
-          }>
+        <TouchableOpacity onPress={() => navigation.navigate('MenuUser')}>
           <View style={styles.cards}>
             <Text style={styles.nameUser}>{user.fullName}</Text>
             <View style={styles.viewImg}>
@@ -37,6 +59,12 @@ const ProfileScreen = () => {
               <View style={styles.rowsBetween}>
                 <Text style={[styles.text, styleText]}>Inicio</Text>
                 <Text style={styleText}>{user.accountCreation}</Text>
+              </View>
+              <View style={styles.rowsBetween}>
+                <Text style={[styles.text, styleText]}>Tipo de Cuenta</Text>
+                <Text style={styleText}>
+                  {user.position === 'Manager' ? 'Coordinador' : 'Cooperador'}
+                </Text>
               </View>
               <View style={styles.rowsBetween}>
                 <Text style={[styles.text, styleText]}>Email</Text>
