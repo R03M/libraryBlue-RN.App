@@ -12,6 +12,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
     code: '',
   });
 
+
   const validateCompany = (value) => {
     if (typeof companies !== 'string') {
       const thereIsCompany = companies.find((e) => e.name === value);
@@ -63,6 +64,11 @@ const SelectCompany = ({ companies, associateCompany }) => {
         };
         associate();
       }
+      return;
+    }
+
+    if (thereIsCompany !== 200 || isCode !== 200) {
+      associateCompany('');
     }
   }, [associatedCompany]);
 
