@@ -52,6 +52,9 @@ export const itemSlice = createSlice({
     cleanErrorSearch: (state) => {
       state.errorSearch = null;
     },
+    cleanStatusCreateItem: (state) => {
+      state.statusCreateItem = 'idle';
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -149,6 +152,6 @@ export const itemSlice = createSlice({
   },
 });
 
-export const { searchItem, cleanErrorSearch, setItems } = itemSlice.actions;
+export const { searchItem, cleanErrorSearch, setItems, cleanStatusCreateItem } = itemSlice.actions;
 
 export default itemSlice.reducer;
