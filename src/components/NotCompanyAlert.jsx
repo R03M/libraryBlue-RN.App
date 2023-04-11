@@ -6,14 +6,16 @@ import BtnCustom from './BtnCustom';
 const NotCompanyAlert = ({ position, setModalVisible }) => {
   return position === 'Manager' ? (
     <View style={styles.cardView}>
-      <Text style={textStyle}>
-        Aun no creas una compañia, cuando lo hagas podras empezar a añadir
+      <Text>
+        Aún no creas una compañia, cuando lo hagas podras empezar a añadir
         items, editarlos y visualizarlos.
       </Text>
       <View style={styles.btn}>
         <BtnCustom
-          title="crear compañia"
+          title="CREAR COMPAÑIA"
           onPress={() => setModalVisible(true)}
+          backgroundColor={principalColor}
+          textColor={'#fff'}
         />
       </View>
     </View>
