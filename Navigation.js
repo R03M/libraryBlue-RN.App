@@ -23,7 +23,7 @@ import LoginScreen from './src/screens/login/LoginScreen';
 import EditProfile from './src/components/EditProfile';
 import PanelManager from './src/components/PanelManager';
 import UpdateCompany from './src/components/UpdateCompany';
-import CreateNewItem from './src/components/CreateNewItem';
+import CreateItem from './src/components/CreateItem';
 import EditItem from './src/components/EditItem';
 import FullItem from './src/components/FullItem';
 import UploadJson from './src/components/UploadJson';
@@ -159,7 +159,7 @@ const Item = () => {
       />
       <ItemStack.Screen
         name="CreateItem"
-        component={CreateNewItem}
+        component={CreateItem}
         options={{
           title: 'Crear Item',
           headerStyle: {
