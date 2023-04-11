@@ -31,6 +31,7 @@ import MenuUser from './src/components/MenuUser';
 import MenuCompany from './src/components/MenuCompany';
 import ManageAssociatedCompany from './src/components/ManageAssociatedCompany';
 
+
 const ProfileStack = createNativeStackNavigator();
 
 const Profile = () => {
