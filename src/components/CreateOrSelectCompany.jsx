@@ -26,6 +26,7 @@ const CreateOrSelectCompany = ({
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const { token } = useSelector((state) => state.user);
+
   const [company, setCompany] = useState({
     name: '',
     image: '',
@@ -40,9 +41,8 @@ const CreateOrSelectCompany = ({
     nameCompany: '',
   });
 
-  const handlerSelectCompany = (name, code) => {
+  const handlerSelectCompany = (name) => {
     handlerValue(setSelectCompany, 'nameCompany', name);
-    handlerValue(setSelectCompany, 'codeCompany', code);
   };
 
   const handlerChangeImage = (value) => {
@@ -75,8 +75,18 @@ const CreateOrSelectCompany = ({
 
     dispatch(createNewCompany({ company, token }));
   };
-
   const handlerSelectC = () => {
+    if (!selectCompany.nameCompany) {
+      Alert.alert(
+        null,
+        'Se requiere que el nombre y código de la compañia sean válidos.',
+        [],
+        {
+          cancelable: true,
+        }
+      );
+      return;
+    }
     dispatch(newUserSelectCompany({ selectCompanyInf: selectCompany, token }));
   };
 
