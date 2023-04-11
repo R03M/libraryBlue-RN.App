@@ -97,7 +97,7 @@ const AddImage = ({ onChangeImage, value }) => {
             title={<AntDesign name="delete" size={20} />}
             onPress={() => {
               setService(null);
-              setImage(null);
+              setImage('');
             }}
             backgroundColor={errorColor}
             textColor={whiteColor}
