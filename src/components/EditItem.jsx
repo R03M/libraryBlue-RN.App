@@ -69,23 +69,20 @@ const EditItem = () => {
   };
 
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
-
+  
   function handleCode(value) {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setUpdateItem, 'code', valueNoSpaces);
-    const error = validateString(valueNoSpaces, 'código');
+    handlerValue(setUpdateItem, 'code', value);
+    const error = validateString(value, 'código');
     error ? setErrorCode(error) : setErrorCode(false);
   }
   function handleTitle(value) {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setUpdateItem, 'title', valueNoSpaces);
-    const error = validateString(valueNoSpaces, 'título');
+    handlerValue(setUpdateItem, 'title', value);
+    const error = validateString(value, 'título');
     error ? setErrorTitle(error) : setErrorTitle(false);
   }
   function handleLanguage(value) {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setUpdateItem, 'language', valueNoSpaces);
-    const error = validateString(valueNoSpaces, 'lenguaje');
+    handlerValue(setUpdateItem, 'language', value);
+    const error = validateString(value, 'lenguaje');
     error ? setErrorLang(error) : setErrorLang(false);
   }
   function handleCurrentStock(value) {
