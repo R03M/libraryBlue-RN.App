@@ -1,30 +1,96 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
 import { View, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteDataUser, deleteUserToken } from '../redux/userSlice';
 import {
   LS_TOKENACCESS,
   LS_USERDATA,
   lsRemoveItems,
 } from '../utils/localStorage';
-import { AntDesign } from '@expo/vector-icons';
-import stylesGlobal, { errorColor, successColor } from '../styles/global';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import stylesGlobal, {
+  errorColor,
+  orangeColor,
+  successColor,
+} from '../styles/global';
 import { useTheme } from '../hooks/useTheme';
+import {
+  action_ChangeTypeAccount,
+  action_DisconnectOfCompany,
+} from '../redux/actions';
 
 const MenuUser = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const route = useRoute();
   const isDarkTheme = useTheme();
-  const { user } = route.params;
-  
+
+  const { dataUser, token } = useSelector((state) => state.user);
+
   const background = isDarkTheme
     ? stylesGlobal.backDark
     : stylesGlobal.backLight;
   const textStyle = isDarkTheme
     ? stylesGlobal.textDark
     : stylesGlobal.textLight;
+
+  const handleDisconnectCompany = () => {
+    if (dataUser.company !== null && dataUser.position !== 'Manager') {
+      Alert.alert(
+        'Confimacion',
+        'Estas seguro de querer desvincularte de tu actual compañia.',
+        [
+          { text: 'cancelar' },
+          {
+            text: 'desvincular',
+            onPress: () => {
+              dispatch(
+                action_DisconnectOfCompany({ idUser: dataUser.id, token })
+              );
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+      return;
+    }
+    Alert.alert(null, 'No estas vinculado a ninguna compañia.', [], {
+      cancelable: true,
+    });
+  };
+
+  const handleChangePosition = () => {
+    const msgToManager =
+      'al cambiar obtendras una cuenta tipo Cooperador y podras unirte a otra compañia bajo ese rol.';
+    const msgToHelper =
+      'al cambiar obtendras una cuenta tipo Coordinador y podras crear una compañia.';
+
+    Alert.alert(
+      'Confimacion',
+      `¿Estas seguro de cambiar tu tipo de cuenta?\nActualmente tienes una cuenta tipo ${
+        dataUser.position === 'Manager'
+          ? `Coordinador, ${msgToManager}`
+          : `Cooperador, ${msgToHelper}`
+      }`,
+      [
+        {
+          text: 'cancelar',
+        },
+        {
+          text: 'cambiar',
+          onPress: () => {
+            const position =
+              dataUser.position === 'Manager' ? 'Observant' : 'Manager';
+            const id = dataUser.id;
+            dispatch(
+              action_ChangeTypeAccount({ data: { position, id }, token })
+            );
+            navigation.goBack();
+          },
+        },
+      ]
+    );
+  };
 
   const closeSession = async () => {
     Alert.alert(
@@ -56,11 +122,13 @@ const MenuUser = () => {
 
   const deleteAccount = () => {
     const msg = 'Eliminar tu cuenta es un cambio irreversible';
+    const msgWithCompany = `, ademas al ser una cuenta de Coordinador tambien se eliminará la compañia ${dataUser.company?.name} junto con todos los items, tus colaboradores serán desligados de la misma.`;
+
     Alert.alert(
       'Alerta',
-      user.position !== 'Manager'
-        ? msg
-        : `${msg}, ademas al ser una cuenta de Administrador tambien se eliminará la compañia ${user.company.name} junto con todos los items, tus colaboradores serán desligados de la misma.`,
+      dataUser.company && dataUser.position === 'Manager'
+        ? msg + msgWithCompany
+        : msg,
       [
         {
           text: 'Cancelar',
@@ -90,6 +158,37 @@ const MenuUser = () => {
           </View>
         </View>
       </TouchableOpacity>
+      {dataUser.company ? (
+        <TouchableOpacity onPress={handleDisconnectCompany}>
+          <View style={styles.viewRow}>
+            <View style={styles.icon}>
+              <AntDesign name="disconnect" size={30} color={orangeColor} />
+            </View>
+            <View style={styles.viewText}>
+              <Text style={[styles.textStyle, textStyle]}>
+                Desvincularme de la compañia
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={handleChangePosition}>
+          <View style={styles.viewRow}>
+            <View style={styles.icon}>
+              <MaterialCommunityIcons
+                name="account-arrow-right-outline"
+                size={30}
+                color={orangeColor}
+              />
+            </View>
+            <View style={styles.viewText}>
+              <Text style={[styles.textStyle, textStyle]}>
+                Cambiar tipo de cuenta
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity onPress={closeSession}>
         <View style={styles.viewRow}>
@@ -107,10 +206,12 @@ const MenuUser = () => {
       <TouchableOpacity onPress={deleteAccount}>
         <View style={styles.viewRow}>
           <View style={styles.icon}>
-            <AntDesign name="delete" size={30} color={'orange'} />
+            <AntDesign name="delete" size={30} color={errorColor} />
           </View>
           <View style={styles.viewText}>
-            <Text style={[styles.textStyle, textStyle]}>Eliminar Cuenta</Text>
+            <Text style={[styles.textStyle, { color: errorColor }]}>
+              Eliminar Cuenta
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
