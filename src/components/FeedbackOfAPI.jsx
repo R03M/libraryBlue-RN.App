@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import stylesGlobal, { successColor } from '../styles/global';
 import { useTheme } from '../hooks/useTheme';
 
-const FeedbackOfAPI = ({ value }) => {
+const FeedbackOfAPI = ({ value, type }) => {
   const isDarkTheme = useTheme();
   const background = isDarkTheme
     ? stylesGlobal.backLight
@@ -14,9 +14,26 @@ const FeedbackOfAPI = ({ value }) => {
   const textStyle = isDarkTheme ? null : stylesGlobal.textDark;
 
   const msg = {
-    loading: 'Actualizando',
-    succeeded: 'Listo',
-    failed: 'Falló al actualizar',
+    create: {
+      loading: 'Creando',
+      succeeded: 'Creado',
+      failed: 'Falló al crear',
+    },
+    read: {
+      loading: 'Buscando',
+      succeeded: 'Encontrado',
+      failed: 'Falló al buscar',
+    },
+    update: {
+      loading: 'Actualizando',
+      succeeded: 'Actualizado',
+      failed: 'Falló al actualizar',
+    },
+    delete: {
+      loading: 'Eliminando',
+      succeeded: 'Eliminado',
+      failed: 'Falló al eliminar',
+    },
   };
 
   if (value === 'loading') {
@@ -26,7 +43,7 @@ const FeedbackOfAPI = ({ value }) => {
           size="large"
           color={isDarkTheme ? '#999999' : '#B3D7FF'}
         />
-        <Text style={[styles.text, textStyle]}>{msg[value]}</Text>
+        <Text style={[styles.text, textStyle]}>{msg[type][value]}</Text>
       </View>
     );
   } else if (value === 'succeeded') {
@@ -35,7 +52,7 @@ const FeedbackOfAPI = ({ value }) => {
         <View style={[styles.viewIcon, { backgroundColor: successColor }]}>
           <FontAwesome5 name="check" size={24} color="#fff" />
         </View>
-        <Text style={[styles.text, textStyle]}>{msg[value]}</Text>
+        <Text style={[styles.text, textStyle]}>{msg[type][value]}</Text>
       </View>
     );
   } else if (value === 'failed') {
@@ -44,7 +61,7 @@ const FeedbackOfAPI = ({ value }) => {
         <View style={[styles.viewIcon, { backgroundColor: 'red' }]}>
           <FontAwesome name="times" size={24} color="#fff" />
         </View>
-        <Text style={[styles.text, textStyle]}>{msg[value]}</Text>
+        <Text style={[styles.text, textStyle]}>{msg[type][value]}</Text>
       </View>
     );
   } else {
