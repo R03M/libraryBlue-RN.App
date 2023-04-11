@@ -9,16 +9,17 @@ import { useTheme } from '../../hooks/useTheme';
 import styles from './items.Styles';
 import stylesGlobal from '../../styles/global';
 import FeedbackOfAPI from '../../components/FeedbackOfAPI';
+import useFeedback from '../../hooks/useFeedback';
 
 const ItemsScreen = () => {
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
-  
-  const [feedbackActive, setFeedbackActive] = useState(false);
 
   const { dataUser, token } = useSelector((state) => state.user);
   const { items, unalterableItems } = useSelector((state) => state.item);
   const { statusUpdateItem } = useSelector((state) => state.item);
+
+  const feedbackOn = useFeedback(statusUpdateItem);
 
   useEffect(() => {
     if (dataUser.company) {
@@ -40,20 +41,6 @@ const ItemsScreen = () => {
     }
   }, [dataUser]);
 
-  useEffect(() => {
-    if(statusUpdateItem === 'loading'){
-      setFeedbackActive(true)
-    }
-    if (
-      statusUpdateItem === 'succeeded' ||
-      statusUpdateItem === 'failed'
-    ) {
-      setTimeout(() => {
-        setFeedbackActive(false);
-      }, 800);
-    }
-  }, [statusUpdateItem]);
-
   return (
     <View
       style={
@@ -67,9 +54,9 @@ const ItemsScreen = () => {
         <View style={{ flex: 1, width: '100%' }}>
           <NavBar />
           <ItemsList data={items} idCompany={dataUser.company.id} />
-          {feedbackActive && (
+          {feedbackOn && (
             <View style={stylesGlobal.feedbackContainer}>
-              <FeedbackOfAPI value={statusUpdateItem} />
+              <FeedbackOfAPI value={statusUpdateItem} type={'update'} />
             </View>
           )}
         </View>

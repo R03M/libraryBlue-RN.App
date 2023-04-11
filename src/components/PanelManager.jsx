@@ -11,16 +11,17 @@ import ChangePermissions from './ChangePermissions';
 import { useTheme } from '../hooks/useTheme';
 import stylesGlobal from '../styles/global';
 import FeedbackOfAPI from './FeedbackOfAPI';
+import useFeedback from '../hooks/useFeedback';
 
 const PanelManager = () => {
   const isDarkTheme = useTheme();
   const dispatch = useDispatch();
 
-  const [feedbackActive, setFeedbackActive] = useState(false);
-
   const { dataUser, token } = useSelector((state) => state.user);
   const { allUsers, statusUpdatePositionUser, errorUpdatePositionUser } =
     useSelector((state) => state.company);
+
+  const feedbackOn = useFeedback(statusUpdatePositionUser);
 
   const background = isDarkTheme
     ? stylesGlobal.backDark
@@ -35,19 +36,7 @@ const PanelManager = () => {
     dispatch(action_getAllCompanyUsers({ companyName, token }));
   }, []);
 
-  useEffect(() => {
-    if (
-      statusUpdatePositionUser === 'succeeded' ||
-      statusUpdatePositionUser === 'failed'
-    ) {
-      setTimeout(() => {
-        setFeedbackActive(false);
-      }, 800);
-    }
-  }, [statusUpdatePositionUser]);
-
   function handlerPosition(value) {
-    setFeedbackActive(true);
     dispatch(
       action_UpdatePositionUser({
         data: { id: value.id, position: value.position },
@@ -76,9 +65,9 @@ const PanelManager = () => {
 
   return (
     <View style={[styles.card, background]}>
-      {feedbackActive && (
+      {feedbackOn && (
         <View style={stylesGlobal.feedbackContainer}>
-          <FeedbackOfAPI value={statusUpdatePositionUser} />
+          <FeedbackOfAPI value={statusUpdatePositionUser} type={'update'} />
         </View>
       )}
       <ScrollView

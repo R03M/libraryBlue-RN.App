@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -22,9 +22,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createNewItem } from '../redux/actions';
 import { useTheme } from '../hooks/useTheme';
 import stylesGlobal, { pHTCGlobal, successColor } from '../styles/global';
+import useFeedback from '../hooks/useFeedback';
+import FeedbackOfAPI from './FeedbackOfAPI';
+import { useNavigation } from '@react-navigation/native';
+import { cleanStatusCreateItem } from '../redux/itemSlice';
 
 const CreateItem = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
   const [errorTitle, setErrorTitle] = useState('idle');
   const [errorCode, setErrorCode] = useState('idle');
@@ -35,6 +40,9 @@ const CreateItem = () => {
     : stylesGlobal.textLight;
 
   const { dataUser, token } = useSelector((state) => state.user);
+  const { statusCreateItem } = useSelector((state) => state.item);
+
+  const feedbackOn = useFeedback(statusCreateItem);
 
   const INITIAL_NEW_ITEM_STATE = {
     idUser: dataUser.id,
@@ -68,22 +76,19 @@ const CreateItem = () => {
   };
 
   const handleCode = (value) => {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setNewItem, 'code', valueNoSpaces);
-    const error = validateName(valueNoSpaces, 'código');
+    handlerValue(setNewItem, 'code', value);
+    const error = validateName(value, 'código');
     error ? setErrorCode(error) : setErrorCode(false);
   };
 
   const handleTitle = (value) => {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setNewItem, 'title', valueNoSpaces);
-    const error = validateName(valueNoSpaces, 'título');
+    handlerValue(setNewItem, 'title', value);
+    const error = validateName(value, 'título');
     error ? setErrorTitle(error) : setErrorTitle(false);
   };
   const handleLanguage = (value) => {
-    const valueNoSpaces = noBlankSpaces(value);
-    handlerValue(setNewItem, 'language', valueNoSpaces);
-    const error = validateName(valueNoSpaces, 'lenguaje');
+    handlerValue(setNewItem, 'language', value);
+    const error = validateName(value, 'lenguaje');
     error ? setErrorLang(error) : setErrorLang(false);
   };
 
@@ -122,6 +127,15 @@ const CreateItem = () => {
     });
   };
 
+  useEffect(() => {
+    if (statusCreateItem === 'succeeded' || statusCreateItem === 'failed') {
+      setTimeout(() => {
+        navigation.navigate('ItemsScreen');
+        dispatch(cleanStatusCreateItem());
+      }, 500);
+    }
+  }, [statusCreateItem]);
+
   return (
     <View
       style={
@@ -129,6 +143,11 @@ const CreateItem = () => {
           ? [styles.modalView, stylesGlobal.backDark]
           : [styles.modalView, stylesGlobal.backLight]
       }>
+      {feedbackOn && (
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusCreateItem} type={'create'} />
+        </View>
+      )}
       {newItem.image && (
         <View style={styles.viewWithImg}>
           <View
