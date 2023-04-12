@@ -12,14 +12,13 @@ import useUserData from './src/hooks/useUserData';
 import ConsoleLoading from './src/components/ConsoleLoading';
 
 //? Screens of tab
+import LoginScreen from './src/screens/login/LoginScreen';
+import RegisterScreen from './src/screens/register/RegisterScreen';
 import ItemsScreen from './src/screens/Items/ItemsScreen';
 import ProfileScreen from './src/screens/profile/ProfileScreen';
 import SettingsScreen from './src/screens/settings/SettingsScreen';
-import RegisterScreen from './src/screens/register/RegisterScreen';
-import LoginScreen from './src/screens/login/LoginScreen';
 
-
-//? Stack 
+//? Stack
 import EditProfile from './src/components/EditProfile';
 import PanelManager from './src/components/PanelManager';
 import UpdateCompany from './src/components/UpdateCompany';
@@ -30,7 +29,6 @@ import UploadJson from './src/components/UploadJson';
 import MenuUser from './src/components/MenuUser';
 import MenuCompany from './src/components/MenuCompany';
 import ManageAssociatedCompany from './src/components/ManageAssociatedCompany';
-
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -210,6 +208,7 @@ const MyTabs = () => {
   const userToken = useSelector((state) => state.user.token);
   const imageUser = useSelector((state) => state.user.dataUser.image);
   const { items } = useSelector((state) => state.item);
+  const itemsLength = items.length > 0 ? items.length : null;
   const isDarkTheme = useTheme();
   const colorBackground = isDarkTheme ? '#5998c0' : '#fff';
   const borderColor = isDarkTheme ? '#fff' : '#000';
@@ -217,14 +216,6 @@ const MyTabs = () => {
     <Tab.Navigator
       initialRouteName="Login"
       screenOptions={{
-        // headerStyle: {
-        //   backgroundColor: colorBackground,
-        // },
-        // headerBackgroundContainerStyle: {
-        //   borderBottomColor: borderColor,
-        //   borderBottomWidth: 0.3,
-        // },
-        // headerTitleStyle: [{ color: isDarkTheme ? '#fff' : '#000' }],
         tabBarStyle: [
           {
             backgroundColor: colorBackground,
@@ -261,7 +252,7 @@ const MyTabs = () => {
               tabBarIcon: ({ color, size }) => (
                 <Entypo name="list" color={color} size={size} />
               ),
-              tabBarBadge: items.length,
+              tabBarBadge: itemsLength,
               tabBarBadgeStyle: { backgroundColor: '#5998c0', color: 'white' },
             }}
           />
