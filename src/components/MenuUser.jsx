@@ -158,7 +158,8 @@ const MenuUser = () => {
           </View>
         </View>
       </TouchableOpacity>
-      {dataUser.company ? (
+      
+      {dataUser.company && dataUser.position !== 'Manager' && (
         <TouchableOpacity onPress={handleDisconnectCompany}>
           <View style={styles.viewRow}>
             <View style={styles.icon}>
@@ -171,7 +172,9 @@ const MenuUser = () => {
             </View>
           </View>
         </TouchableOpacity>
-      ) : (
+      )}
+
+      {!dataUser.company && (
         <TouchableOpacity onPress={handleChangePosition}>
           <View style={styles.viewRow}>
             <View style={styles.icon}>
