@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import stylesGlobal, { errorColor, successColor } from '../styles/global';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCompanies } from '../redux/actions';
+import { action_DeleteCompany, getAllCompanies } from '../redux/actions';
 import { useTheme } from '../hooks/useTheme';
 
 const MenuCompany = () => {
@@ -28,7 +28,29 @@ const MenuCompany = () => {
     dispatch(getAllCompanies({ idCompany, token }));
   }, []);
 
-  const handlerDeleteC = () => {};
+  const handlerDeleteC = () => {
+    Alert.alert(
+      'Alerta',
+      'Eliminar compañia es un cambio irreversible, se eliminaran los items y tus cooperadores seran desligados de la compañia.',
+      [
+        {
+          text: 'cancelar',
+        },
+        {
+          text: 'eliminar',
+          onPress: () => {
+            dispatch(
+              action_DeleteCompany({ idCompany: dataUser.company.id, token })
+            );
+            navigation.navigate('ProfileScreen');
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
 
   return (
     <View style={[styles.container, background]}>
