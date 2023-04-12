@@ -14,14 +14,21 @@ const ProfileScreen = () => {
     ? stylesGlobal.textDark
     : stylesGlobal.textLight;
 
-  const user = useSelector((state) => state.user.dataUser);
-  const { selectCompanyStatus, statusChangeTypeAccount, statusUpdateP } = useSelector(
-    (state) => state.user
-  );
+  const { dataUser } = useSelector((state) => state.user);
+
+  const {
+    selectCompanyStatus,
+    statusChangeTypeAccount,
+    statusUpdateProfile,
+    statusDiscOfCompany,
+    statusUpdateCompany,
+  } = useSelector((state) => state.user);
 
   const feedbackDisscCompany = useFeedback(selectCompanyStatus);
   const feedbackChangeTypeAcc = useFeedback(statusChangeTypeAccount);
-  const feedbackUpdateProfile = useFeedback(statusUpdateP);
+  const feedbackUpdateProfile = useFeedback(statusUpdateProfile);
+  const feedbackDisconnectCompany = useFeedback(statusDiscOfCompany);
+  const feedbackUpdateCompany = useFeedback(statusUpdateCompany);
 
   return (
     <View
@@ -34,7 +41,7 @@ const ProfileScreen = () => {
         <View style={stylesGlobal.feedbackContainer}>
           <FeedbackOfAPI value={selectCompanyStatus} type={'update'} />
         </View>
-      )} 
+      )}
 
       {feedbackChangeTypeAcc && ( // alert change type account
         <View style={stylesGlobal.feedbackContainer}>
@@ -44,49 +51,64 @@ const ProfileScreen = () => {
 
       {feedbackUpdateProfile && ( // alert update profile
         <View style={stylesGlobal.feedbackContainer}>
-          <FeedbackOfAPI value={statusUpdateP} type={'update'} />
+          <FeedbackOfAPI value={statusUpdateProfile} type={'update'} />
+        </View>
+      )}
+
+      {feedbackDisconnectCompany && ( // alert disconnect of company
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusDiscOfCompany} type={'update'} />
+        </View>
+      )}
+    
+      {feedbackUpdateCompany && ( // alert update company
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusUpdateCompany} type={'update'} />
         </View>
       )}
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => navigation.navigate('MenuUser')}>
           <View style={styles.cards}>
-            <Text style={styles.nameUser}>{user.fullName}</Text>
+            <Text style={styles.nameUser}>{dataUser.fullName}</Text>
             <View style={styles.viewImg}>
-              <Image source={{ uri: user.image }} style={styles.img} />
+              <Image source={{ uri: dataUser.image }} style={styles.img} />
             </View>
             <View style={styles.viewData}>
               <View style={styles.rowsBetween}>
                 <Text style={[styles.text, styleText]}>Inicio</Text>
-                <Text style={styleText}>{user.accountCreation}</Text>
+                <Text style={styleText}>{dataUser.accountCreation}</Text>
               </View>
               <View style={styles.rowsBetween}>
                 <Text style={[styles.text, styleText]}>Tipo de Cuenta</Text>
                 <Text style={styleText}>
-                  {user.position === 'Manager' ? 'Coordinador' : 'Cooperador'}
+                  {dataUser.position === 'Manager'
+                    ? 'Coordinador'
+                    : 'Cooperador'}
                 </Text>
               </View>
               <View style={styles.rowsBetween}>
                 <Text style={[styles.text, styleText]}>Email</Text>
-                <Text style={styleText}>{user.auth.email}</Text>
+                <Text style={styleText}>{dataUser.auth?.email}</Text>
               </View>
             </View>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() =>
-            user.position === 'Manager' && navigation.navigate('MenuCompany')
-          }>
-          <View style={[stylesGlobal.line, styles.line]}></View>
-          {user.company ? (
+        {dataUser.company ? (
+          <TouchableOpacity
+            onPress={() =>
+              dataUser.position === 'Manager' &&
+              navigation.navigate('MenuCompany')
+            }>
+            <View style={[stylesGlobal.line, styles.line]}></View>
             <View style={styles.cards}>
               <Text style={[styles.companyTitle, styleText]}>
-                {user.company.name}
+                {dataUser.company.name}
               </Text>
               <View style={styles.viewImgCompany}>
                 <Image
-                  source={{ uri: user.company.image }}
+                  source={{ uri: dataUser.company && dataUser.company.image }}
                   style={styles.img}
                 />
               </View>
@@ -94,22 +116,22 @@ const ProfileScreen = () => {
               <View style={styles.viewData}>
                 <View style={styles.rowsBetween}>
                   <Text style={[styles.text, styleText]}>Cargo</Text>
-                  <Text style={styleText}>{user.position}</Text>
+                  <Text style={styleText}>{dataUser.position}</Text>
                 </View>
                 <View style={styles.rowsBetween}>
                   <Text style={[styles.text, styleText]}>
                     Compañia Associada
                   </Text>
                   <Text style={styleText}>
-                    {user.company.associatedCompany
-                      ? user.company.associatedCompany
+                    {dataUser.company.associatedCompany
+                      ? dataUser.company.associatedCompany
                       : 'N/A'}
                   </Text>
                 </View>
               </View>
             </View>
-          ) : null}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : null}
       </ScrollView>
     </View>
   );

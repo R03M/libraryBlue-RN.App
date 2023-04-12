@@ -17,10 +17,18 @@ const ItemsScreen = () => {
 
   const { dataUser, token } = useSelector((state) => state.user);
   const { items, unalterableItems } = useSelector((state) => state.item);
-  const { statusUpdateItem, statusDeleteItem } = useSelector((state) => state.item);
+
+  const { statusUpdateItem, statusDeleteItem } = useSelector(
+    (state) => state.item
+  );
+  const { selectCompanyStatus, statusCreateCompany } = useSelector(
+    (state) => state.user
+  );
 
   const feedbackOnUpdate = useFeedback(statusUpdateItem);
   const feedbackOnDelete = useFeedback(statusDeleteItem);
+  const feedbackOnCreateCompany = useFeedback(statusCreateCompany);
+  const feedbackOnSelectCompany = useFeedback(selectCompanyStatus);
 
   useEffect(() => {
     if (dataUser.company) {
@@ -63,6 +71,22 @@ const ItemsScreen = () => {
           {feedbackOnDelete && (
             <View style={stylesGlobal.feedbackContainer}>
               <FeedbackOfAPI value={statusDeleteItem} type={'delete'} />
+            </View>
+          )}
+
+          {feedbackOnDelete && (
+            <View style={stylesGlobal.feedbackContainer}>
+              <FeedbackOfAPI value={statusDeleteItem} type={'delete'} />
+            </View>
+          )}
+          {feedbackOnCreateCompany && (
+            <View style={stylesGlobal.feedbackContainer}>
+              <FeedbackOfAPI value={statusCreateCompany} type={'create'} />
+            </View>
+          )}
+          {feedbackOnSelectCompany && (
+            <View style={stylesGlobal.feedbackContainer}>
+              <FeedbackOfAPI value={selectCompanyStatus} type={'update'} />
             </View>
           )}
         </View>
