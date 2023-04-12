@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import {
   deleteDataUser,
@@ -8,16 +7,21 @@ import {
   setUser,
   setUserToken,
 } from '../redux/userSlice';
-import axios from 'axios';
-import { CORS_URL } from '@env';
+import {
+  LS_TOKENACCESS,
+  LS_USERDATA,
+  lsGetItems,
+  lsRemoveItems,
+} from '../utils/localStorage';
+import { validateUser } from '../services/user';
 
 const useUserData = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getDataUser = async () => {
-      const token = await AsyncStorage.getItem('@TokenAccess');
-      const user = await AsyncStorage.getItem('@UserData');
+      const token = await lsGetItems(LS_TOKENACCESS);
+      const user = await lsGetItems(LS_USERDATA);
 
       if (!user && !token) {
         dispatch(deleteUserToken());
@@ -25,40 +29,31 @@ const useUserData = () => {
         return;
       }
 
-      const userObject = JSON.parse(user);
       const userData = {
-        id: userObject.id,
-        firstName: userObject.firstName,
-        lastName: userObject.lastName,
-        fullName: userObject.fullName,
-        image: userObject.image,
-        position: userObject.position,
-        status: userObject.status,
-        accountCreation: userObject.accountCreation,
-        authId: userObject.authId,
-        companyId: userObject.companyId,
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: user.fullName,
+        image: user.image,
+        position: user.position,
+        status: user.status,
+        accountCreation: user.accountCreation,
+        authId: user.authId,
+        companyId: user.companyId,
       };
 
       try {
-        const response = await axios.post(
-          `${CORS_URL}/user/validate`,
-          userData,
-          {
-            headers: {
-              Authorization: `Beaner ${JSON.parse(token)}`,
-            },
-          }
-        );
+        const response = await validateUser(userData, token);
         if (response.status === 200) {
-          dispatch(setUser(userObject));
-          dispatch(setUserToken(JSON.parse(token)));
+          dispatch(setUser(user));
+          dispatch(setUserToken(token));
         }
       } catch (error) {
         if (error.response.status === 406) {
           dispatch(setErrorCheck());
           setTimeout(() => {
-            AsyncStorage.removeItem('@TokenAccess');
-            AsyncStorage.removeItem('@UserData');
+            lsRemoveItems(LS_TOKENACCESS);
+            lsRemoveItems(LS_USERDATA);
             dispatch(deleteUserToken());
             dispatch(deleteDataUser());
           }, 3000);

@@ -1,6 +1,15 @@
 import { CORS_URL } from '@env';
 import axios from 'axios';
 
+export const validateUser = async (userData, token) => {
+  const response = await axios.post(`${CORS_URL}/user/validate`, userData, {
+    headers: {
+      Authorization: `Beaner ${token}`,
+    },
+  });
+  return response;
+};
+
 export const postInfEmail = async (email) => {
   const response = await axios.post(`${CORS_URL}/register/checkEmail`, {
     email,

@@ -7,6 +7,7 @@ import {
   updateUserProfile,
 } from '../services/user.js';
 import {
+  deleteCompany,
   deleteUserOfCompany,
   getCompanies,
   postAllCompanyUser,
@@ -14,7 +15,6 @@ import {
   postSelectCompany,
   postUpdateCompany,
 } from '../services/company.js';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   deleteAItem,
   getItems,
@@ -22,6 +22,7 @@ import {
   postNewItem,
   postUpdateItem,
 } from '../services/item.js';
+import { LS_TOKENACCESS, LS_USERDATA, lsSetItems } from '../utils/localStorage.js';
 
 export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
   const response = await postInfEmail(email);
@@ -33,14 +34,8 @@ export const loginAccount = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await postLoginUser(email, password);
-      await AsyncStorage.setItem(
-        '@UserData',
-        JSON.stringify(response.userData)
-      );
-      await AsyncStorage.setItem(
-        '@TokenAccess',
-        JSON.stringify(response.token)
-      );
+      await lsSetItems(LS_USERDATA, response.userData) 
+      await lsSetItems(LS_TOKENACCESS, response.token) 
       return response;
     } catch (error) {
       if (error.response) {
@@ -65,14 +60,8 @@ export const registerAccount = createAsyncThunk(
   async ({ data }, { rejectWithValue }) => {
     try {
       const response = await postRegisterUser(data);
-      await AsyncStorage.setItem(
-        '@UserData',
-        JSON.stringify(response.userData)
-      );
-      await AsyncStorage.setItem(
-        '@TokenAccess',
-        JSON.stringify(response.token)
-      );
+      await lsSetItems(LS_USERDATA, response.userData);
+      await lsSetItems(LS_TOKENACCESS, response.token);
       return response;
     } catch (error) {
       if (error.response) {
@@ -102,20 +91,13 @@ export const getAllCompanies = createAsyncThunk(
     }
   }
 );
-export const updateDataUser = createAsyncThunk(
-  'user/updateDataUser',
-  async (response) => {
-    return response;
-  }
-);
 
 export const createNewCompany = createAsyncThunk(
-  'company/createNewCompany',
+  'user/createNewCompany',
   async ({ company, token }) => {
     try {
       const response = await postNewCompany(company, token);
-      dispatch(updateDataUser(response.user));
-      return response.company;
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);
@@ -211,10 +193,7 @@ export const action_UpdateProfile = createAsyncThunk(
   async ({ updateProfile, token }) => {
     try {
       const response = await updateUserProfile(updateProfile, token);
-      await AsyncStorage.setItem(
-        '@UserData',
-        JSON.stringify(response.userData)
-      );
+      await lsSetItems(LS_USERDATA, response.userData);
       return response;
     } catch (error) {
       if (error.response) {
@@ -264,23 +243,13 @@ export const action_CreateManyItems = createAsyncThunk(
   }
 );
 
-export const updateDataCompany = createAsyncThunk(
-  'user/updateDataCompany',
-  async (response) => {
-    return response;
-  }
-);
-
 export const action_UpdateCompany = createAsyncThunk(
   'company/update',
   async ({ dataCompany, token }) => {
     try {
       const response = await postUpdateCompany(dataCompany, token);
-      if (response.data) {
-        dispatch(updateDataCompany(response.data));
-        return response.data;
-      }
-      return response.status;
+
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);
@@ -353,6 +322,22 @@ export const action_ChangeTypeAccount = createAsyncThunk(
   async ({ data, token }) => {
     try {
       const response = await putPositionUser(data, token);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_DeleteCompany = createAsyncThunk(
+  'user/deleteCompany',
+  async ({ idCompany, token }) => {
+    try {
+      const response = await deleteCompany(idCompany, token);
       return response;
     } catch (error) {
       if (error.response) {
