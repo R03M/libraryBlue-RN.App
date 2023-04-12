@@ -4,13 +4,16 @@ import {
   loginAccount,
   checkEmailToRegister,
   registerAccount,
-  updateDataUser,
   action_UpdateProfile,
   updateDataCompany,
   newUserSelectCompany,
-  action_DisconnectOfCompany,
   action_ChangeTypeAccount,
+  createNewCompany,
+  action_DeleteCompany,
+  action_DisconnectOfCompany,
+  action_UpdateCompany,
 } from './actions';
+import { LS_USERDATA, lsSetItems } from '../utils/localStorage';
 
 const initialState = {
   dataUser: [],
@@ -35,9 +38,13 @@ const initialState = {
   //? check dataUser
   errorResCheck: null,
 
+  //? Create New Company
+  statusCreateCompany: 'idle',
+  errorCreateCompany: null,
+
   //? update profile
-  statusUpdateP: 'idle',
-  errorUpdateP: null,
+  statusUpdateProfile: 'idle',
+  errorUpdateProfile: null,
 
   //? Select Company(New user[Observant])
   selectCompanyStatus: 'idle',
@@ -46,6 +53,18 @@ const initialState = {
   //? Change Type Account
   statusChangeTypeAccount: 'idle',
   errorChangeTypeAccount: null,
+
+  //? delete company
+  statusDeleteCompany: 'idle',
+  errorDeleteCompany: null,
+
+  // ? disconnect of the company
+  statusDiscOfCompany: 'idle',
+  errorDiscOfCompany: null,
+
+  // ? update company
+  statusUpdateCompany: 'idle',
+  errorUpdateCompany: null,
 };
 
 export const userSlice = createSlice({
@@ -148,56 +167,57 @@ export const userSlice = createSlice({
         state.errorCreateAccount = action.payload;
       })
 
-      //? Update dataUser after Create Company
+      //? Create New Company
 
-      .addCase(updateDataUser.pending, (state) => {
-        state.statusLogin = 'loading';
+      .addCase(createNewCompany.pending, (state) => {
+        state.statusCreateCompany = 'loading';
       })
       .addCase(
-        updateDataUser.fulfilled,
-        (state, { payload: { userData, token } }) => {
-          state.statusLogin = 'succeeded';
+        createNewCompany.fulfilled,
+        (state, { payload: { userData } }) => {
+          state.statusCreateCompany = 'succeeded';
           state.dataUser = userData;
-          state.token = token;
         }
       )
-      .addCase(updateDataUser.rejected, (state, action) => {
-        state.statusLogin = 'failed';
-        state.errorLogin = action.payload;
+      .addCase(createNewCompany.rejected, (state, action) => {
+        state.statusCreateCompany = 'failed';
+        state.errorCreateCompany = action.payload;
       })
 
       //? Update userProfile
 
       .addCase(action_UpdateProfile.pending, (state) => {
-        state.statusUpdateP = 'loading';
+        state.statusUpdateProfile = 'loading';
       })
       .addCase(
         action_UpdateProfile.fulfilled,
         (state, { payload: { userData } }) => {
-          state.statusUpdateP = 'succeeded';
+          state.statusUpdateProfile = 'succeeded';
           state.dataUser = userData;
         }
       )
       .addCase(action_UpdateProfile.rejected, (state, action) => {
-        state.statusUpdateP = 'failed';
-        state.errorUpdateP = action.payload;
+        state.statusUpdateProfile = 'failed';
+        state.errorUpdateProfile = action.payload;
       })
 
       //? Update data company
 
-      .addCase(updateDataCompany.pending, (state) => {
-        state.statusUpdateP = 'loading';
+      .addCase(action_UpdateCompany.pending, (state) => {
+        state.statusUpdateCompany = 'loading';
       })
       .addCase(
-        updateDataCompany.fulfilled,
-        (state, { payload: { updated } }) => {
-          state.statusUpdateP = 'succeeded';
-          // state.dataUser.company = updated;
+        action_UpdateCompany.fulfilled,
+        (state, { payload: { company } }) => {
+          state.statusUpdateCompany = 'succeeded';
+          state.dataUser.company = company;
+          const userData = state.dataUser
+          lsSetItems(LS_USERDATA, userData);
         }
       )
-      .addCase(updateDataCompany.rejected, (state, action) => {
-        state.statusUpdateP = 'failed';
-        state.errorUpdateP = action.payload;
+      .addCase(action_UpdateCompany.rejected, (state, action) => {
+        state.statusUpdateCompany = 'failed';
+        state.errorUpdateCompany = action.payload;
       })
 
       //? Select Company(New user[Observant])
@@ -217,20 +237,6 @@ export const userSlice = createSlice({
         state.selectCompanyError = action.payload;
       })
 
-      //? Disconnect of Company
-
-      .addCase(action_DisconnectOfCompany.pending, (state) => {
-        state.selectCompanyStatus = 'loading';
-      })
-      .addCase(action_DisconnectOfCompany.fulfilled, (state) => {
-        state.selectCompanyStatus = 'succeeded';
-        state.dataUser.company = null;
-      })
-      .addCase(action_DisconnectOfCompany.rejected, (state, action) => {
-        state.selectCompanyStatus = 'failed';
-        state.selectCompanyError = action.payload;
-      })
-
       //? Change Type Account
 
       .addCase(action_ChangeTypeAccount.pending, (state) => {
@@ -246,6 +252,36 @@ export const userSlice = createSlice({
       .addCase(action_ChangeTypeAccount.rejected, (state, action) => {
         state.statusChangeTypeAccount = 'failed';
         state.errorChangeTypeAccount = action.payload;
+      })
+
+      // ? delete company
+
+      .addCase(action_DeleteCompany.pending, (state) => {
+        state.statusDeleteCompany = 'loading';
+      })
+      .addCase(action_DeleteCompany.fulfilled, (state) => {
+        state.statusDeleteCompany = 'succeeded';
+        state.dataUser.company = null;
+        state.dataUser.companyId = null;
+      })
+      .addCase(action_DeleteCompany.rejected, (state, action) => {
+        state.statusDeleteCompany = 'failed';
+        state.errorDeleteCompany = action.payload;
+      })
+
+      // ? disconnect of the company
+
+      .addCase(action_DisconnectOfCompany.pending, (state) => {
+        state.statusDiscOfCompany = 'loading';
+      })
+      .addCase(action_DisconnectOfCompany.fulfilled, (state) => {
+        state.statusDiscOfCompany = 'succeeded';
+        state.dataUser.company = null;
+        state.dataUser.companyId = null;
+      })
+      .addCase(action_DisconnectOfCompany.rejected, (state, action) => {
+        state.statusDiscOfCompany = 'failed';
+        state.errorDiscOfCompany = action.payload;
       });
   },
 });
