@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { encryptedData, decryptData } from './crypto';
 
 export const LS_ITEM = '@Items-lB';
 export const LS_USERDATA = '@UserData-lB';

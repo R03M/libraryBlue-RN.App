@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   action_getAllCompanyUsers,
-  createNewCompany,
   getAllCompanies,
   action_UpdateCompany,
   action_UpdatePositionUser,
@@ -13,10 +12,6 @@ const initialState = {
   companies: [],
   getCompaniesStatus: 'idle',
   getCompaniesError: null,
-
-  //? Create New Company
-  createCompanyStatus: 'idle',
-  createCompanyError: null,
 
   //? company users
   allUsers: [],
@@ -62,20 +57,6 @@ export const companySlice = createSlice({
       .addCase(getAllCompanies.rejected, (state, action) => {
         state.getCompaniesStatus = 'failed';
         state.getCompaniesError = action.payload;
-      })
-
-      //? Create New Company
-
-      .addCase(createNewCompany.pending, (state) => {
-        state.createCompanyStatus = 'loading';
-      })
-      .addCase(createNewCompany.fulfilled, (state, action) => {
-        state.createCompanyStatus = 'succeeded';
-        // state.companies = action.payload;
-      })
-      .addCase(createNewCompany.rejected, (state, action) => {
-        state.createCompanyStatus = 'failed';
-        state.createCompanyError = action.payload;
       })
 
       //? get all company users

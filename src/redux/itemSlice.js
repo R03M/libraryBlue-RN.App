@@ -149,14 +149,14 @@ export const itemSlice = createSlice({
       .addCase(action_CreateManyItems.rejected, (state, action) => {
         state.statusUpdateItem = 'failed';
         state.errorUpdateItem = action.payload;
+      })
+
+      //? delete data items when user disconnect of the company
+
+      .addCase(action_DisconnectOfCompany.fulfilled, (state) => {
+        state.items = [];
+        state.unalterableItems = [];
       });
-
-    //? delete data items when user disconnect of the company
-
-    builder.addCase(action_DisconnectOfCompany.fulfilled, (state) => {
-      state.items = [];
-      state.unalterableItems = [];
-    });
   },
 });
 
