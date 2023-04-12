@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TextInput,
+} from 'react-native';
 import AddImage from './AddImage';
 import { useDispatch, useSelector } from 'react-redux';
 import handlerValue from '../utils/handlerValue';
 import BtnCustom from './BtnCustom';
 import { action_UpdateCompany } from '../redux/actions';
 import { useTheme } from '../hooks/useTheme';
-import stylesGlobal from '../styles/global';
+import stylesGlobal, { principalColor } from '../styles/global';
+import { useNavigation } from '@react-navigation/native';
+import noBlankSpaces from '../utils/noBlankSpaces';
 
 const UpdateCompany = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
+
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
 
   const { dataUser, token } = useSelector((state) => state.user);
 
@@ -24,12 +38,19 @@ const UpdateCompany = () => {
   const INITIAL_STATE_COMPANY = {
     id: dataUser.company.id,
     image: dataUser.company.image,
+    code: dataUser.company.code,
   };
 
   const [update, setUpdate] = useState(INITIAL_STATE_COMPANY);
 
+  const handleCode = (value) => {
+    const valueNoSpaces = noBlankSpaces(value);
+    handlerValue(setUpdate, 'code', valueNoSpaces);
+  };
+
   const handleSave = () => {
     dispatch(action_UpdateCompany({ dataCompany: update, token }));
+    navigation.navigate('ProfileScreen');
   };
 
   return (
@@ -47,10 +68,20 @@ const UpdateCompany = () => {
             value={update.image}
           />
         </View>
+
+        <View style={styles.rows}>
+          <Text style={textStyle}>Código</Text>
+          <TextInput
+            style={[styles.textInput, styleText]}
+            onChangeText={handleCode}
+            value={update.code}
+          />
+        </View>
       </ScrollView>
+
       <View style={{ marginTop: 10 }}>
         <BtnCustom
-          title={'Guardar'}
+          title={'GUARDAR'}
           backgroundColor={'green'}
           onPress={handleSave}
         />
@@ -92,6 +123,12 @@ const styles = StyleSheet.create({
   img: {
     flex: 1,
     resizeMode: 'stretch',
+  },
+  textInput: {
+    borderBottomColor: principalColor,
+    borderBottomWidth: 1,
+    marginVertical: 20,
+    width: '70%',
   },
 });
 
