@@ -1,13 +1,7 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteDataUser, deleteUserToken } from '../redux/userSlice';
-import {
-  LS_TOKENACCESS,
-  LS_USERDATA,
-  lsRemoveItems,
-} from '../utils/localStorage';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import stylesGlobal, {
   errorColor,
@@ -104,11 +98,10 @@ const MenuUser = () => {
         {
           text: 'si',
           onPress: () => {
-            logOut_CS(dataUser.id);
+            logOut_CS(dispatch, dataUser.id);
             Alert.alert(null, 'Sesión cerrada', [], {
               cancelable: true,
             });
-            navigation.navigate('Login');
           },
         },
       ],

@@ -60,7 +60,7 @@ const useUserData = () => {
           );
         }
         setTimeout(() => {
-          logOut_CS(user.id);
+          logOut_CS(dispatch, user.id);
         }, 3000);
       }
     };
