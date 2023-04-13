@@ -24,7 +24,7 @@ import {
 } from '../utils/localStorage.js';
 
 export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
-  const response = await postInfEmail(email);
+  const response = await postCheckEmail(email);
   return response;
 });
 

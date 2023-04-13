@@ -33,7 +33,7 @@ export const postLogIn = async (email, password) => {
 
 export const postLogOut = async (idUser) => {
   try {
-    const response = await axios.post(`${CORS_URL}/auth/logIn`, {
+    const response = await axios.post(`${CORS_URL}/auth/logOut`, {
       idUser,
     });
     return response.data;
