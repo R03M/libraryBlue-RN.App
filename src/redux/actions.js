@@ -1,11 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  postInfEmail,
-  postLoginUser,
-  postRegisterUser,
-  putPositionUser,
-  updateUserProfile,
-} from '../services/user.js';
+import { putPositionUser, updateUserProfile } from '../services/user.js';
 import {
   deleteCompany,
   deleteUserOfCompany,
@@ -22,7 +16,12 @@ import {
   postNewItem,
   postUpdateItem,
 } from '../services/item.js';
-import { LS_TOKENACCESS, LS_USERDATA, lsSetItems } from '../utils/localStorage.js';
+import { postCheckEmail, postLogIn } from '../services/auth.js';
+import {
+  LS_TOKENACCESS,
+  LS_USERDATA,
+  lsSetItems,
+} from '../utils/localStorage.js';
 
 export const checkEmail = createAsyncThunk('user/checkEmail', async (email) => {
   const response = await postInfEmail(email);
@@ -33,9 +32,9 @@ export const loginAccount = createAsyncThunk(
   'user/loginAccount',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await postLoginUser(email, password);
-      await lsSetItems(LS_USERDATA, response.userData) 
-      await lsSetItems(LS_TOKENACCESS, response.token) 
+      const response = await postLogIn(email, password);
+      await lsSetItems(LS_USERDATA, response.userData);
+      await lsSetItems(LS_TOKENACCESS, response.token);
       return response;
     } catch (error) {
       if (error.response) {
@@ -50,7 +49,7 @@ export const loginAccount = createAsyncThunk(
 export const checkEmailToRegister = createAsyncThunk(
   'user/checkEmailToRegister',
   async (email) => {
-    const response = await postInfEmail(email);
+    const response = await postCheckEmail(email);
     return response;
   }
 );
@@ -226,13 +225,15 @@ export const action_getAllCompanyUsers = createAsyncThunk(
 
 export const action_CreateManyItems = createAsyncThunk(
   'items/createManyItems',
-  async ({ idCompany, data, token }) => {
+  async ({ idCompany, associatedCompany, data, token }) => {
     try {
-      const response = await postCreateManyItems(idCompany, data, token);
-      if (response.data) {
-        return response.data;
-      }
-      return response.status;
+      const response = await postCreateManyItems(
+        idCompany,
+        associatedCompany,
+        data,
+        token
+      );
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);

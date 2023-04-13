@@ -31,7 +31,7 @@ const MenuCompany = () => {
   const handlerDeleteC = () => {
     Alert.alert(
       'Alerta',
-      'Eliminar compañia es un cambio irreversible, se eliminaran los items y tus cooperadores seran desligados de la compañia.',
+      'Eliminar compañia es un cambio irreversible, se eliminaran los items y tus colaboradores seran desligados de la compañia.',
       [
         {
           text: 'cancelar',

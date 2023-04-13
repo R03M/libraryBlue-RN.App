@@ -95,9 +95,8 @@ export const userSlice = createSlice({
     cleanResponseEmailToRegister: (state) => {
       state.responseCheckEmailToRegister = [];
     },
-    setErrorCheck: (state) => {
-      state.errorResCheck =
-        'Credenciales caducadas, se requiere un nuevo ingreso de sesión.';
+    setErrorCheck: (state, { payload: { errorMessage } }) => {
+      state.errorResCheck = `Credenciales caducadas, se requiere un nuevo ingreso de sesión.\n\n(> ${errorMessage} <)`;
     },
   },
   extraReducers: (builder) => {
@@ -211,7 +210,7 @@ export const userSlice = createSlice({
         (state, { payload: { company } }) => {
           state.statusUpdateCompany = 'succeeded';
           state.dataUser.company = company;
-          const userData = state.dataUser
+          const userData = state.dataUser;
           lsSetItems(LS_USERDATA, userData);
         }
       )

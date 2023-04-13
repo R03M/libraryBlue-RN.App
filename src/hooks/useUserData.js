@@ -7,13 +7,9 @@ import {
   setUser,
   setUserToken,
 } from '../redux/userSlice';
-import {
-  LS_TOKENACCESS,
-  LS_USERDATA,
-  lsGetItems,
-  lsRemoveItems,
-} from '../utils/localStorage';
+import { LS_TOKENACCESS, LS_USERDATA, lsGetItems } from '../utils/localStorage';
 import { validateUser } from '../services/user';
+import logOut_CS from '../utils/logOut_CS';
 
 const useUserData = () => {
   const dispatch = useDispatch();
@@ -49,15 +45,23 @@ const useUserData = () => {
           dispatch(setUserToken(token));
         }
       } catch (error) {
-        if (error.response.status === 406) {
-          dispatch(setErrorCheck());
-          setTimeout(() => {
-            lsRemoveItems(LS_TOKENACCESS);
-            lsRemoveItems(LS_USERDATA);
-            dispatch(deleteUserToken());
-            dispatch(deleteDataUser());
-          }, 3000);
+        if (error.message === 'SERVER OFFLINE') {
+          dispatch(
+            setErrorCheck({
+              errorMessage: error.message,
+            })
+          );
         }
+        if (error.response.status === 406 || error.response.status === 401) {
+          dispatch(
+            setErrorCheck({
+              errorMessage: error.response.data.message,
+            })
+          );
+        }
+        setTimeout(() => {
+          logOut_CS(user.id);
+        }, 3000);
       }
     };
     getDataUser();

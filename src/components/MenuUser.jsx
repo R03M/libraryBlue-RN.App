@@ -19,6 +19,7 @@ import {
   action_ChangeTypeAccount,
   action_DisconnectOfCompany,
 } from '../redux/actions';
+import logOut_CS from '../utils/logOut_CS';
 
 const MenuUser = () => {
   const dispatch = useDispatch();
@@ -103,10 +104,7 @@ const MenuUser = () => {
         {
           text: 'si',
           onPress: () => {
-            lsRemoveItems(LS_TOKENACCESS);
-            lsRemoveItems(LS_USERDATA);
-            dispatch(deleteUserToken());
-            dispatch(deleteDataUser());
+            logOut_CS(dataUser.id);
             Alert.alert(null, 'Sesión cerrada', [], {
               cancelable: true,
             });
@@ -158,7 +156,7 @@ const MenuUser = () => {
           </View>
         </View>
       </TouchableOpacity>
-      
+
       {dataUser.company && dataUser.position !== 'Manager' && (
         <TouchableOpacity onPress={handleDisconnectCompany}>
           <View style={styles.viewRow}>

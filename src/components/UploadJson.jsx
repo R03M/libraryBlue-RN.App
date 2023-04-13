@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { action_CreateManyItems } from '../redux/actions';
 import { useTheme } from '../hooks/useTheme';
 import stylesGlobal, { pHTCGlobal } from '../styles/global';
+import { useNavigation } from '@react-navigation/native';
 
 const UploadJson = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
   const [items, setItems] = useState('');
@@ -25,10 +27,13 @@ const UploadJson = () => {
     dispatch(
       action_CreateManyItems({
         idCompany: dataUser.company.id,
+        associatedCompany: dataUser.company?.associatedCompany,
         data: JSON.parse(items),
         token,
       })
     );
+    navigation.goBack();
+    navigation.navigate('ItemsScreen');
   };
 
   return (
@@ -37,7 +42,6 @@ const UploadJson = () => {
         modalExample={modalExample}
         setModalExample={setModalExample}
       />
-
       <View
         style={{
           width: '90%',

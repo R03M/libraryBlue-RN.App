@@ -30,6 +30,10 @@ const initialState = {
   //? update item
   statusUpdateItem: 'idle',
   errorUpdateItem: null,
+
+  //? create many item
+  statusCreateManyItems: 'idle',
+  errorCreateManyItems: null,
 };
 
 export const itemSlice = createSlice({
@@ -136,19 +140,19 @@ export const itemSlice = createSlice({
       //? create many items
 
       .addCase(action_CreateManyItems.pending, (state) => {
-        state.statusUpdateItem = 'loading';
+        state.statusCreateManyItems = 'loading';
       })
       .addCase(
         action_CreateManyItems.fulfilled,
         (state, { payload: { allItems } }) => {
-          state.statusUpdateItem = 'succeeded';
-          state.items.push(...allItems);
-          state.unalterableItems.push(...allItems);
+          state.statusCreateManyItems = 'succeeded';
+          state.items = allItems;
+          state.unalterableItems = allItems;
         }
       )
       .addCase(action_CreateManyItems.rejected, (state, action) => {
-        state.statusUpdateItem = 'failed';
-        state.errorUpdateItem = action.payload;
+        state.statusCreateManyItems = 'failed';
+        state.errorCreateManyItems = action.payload;
       })
 
       //? delete data items when user disconnect of the company

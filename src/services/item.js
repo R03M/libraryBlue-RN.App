@@ -73,12 +73,18 @@ export const postUpdateItem = async (item, token) => {
   }
 };
 
-export const postCreateManyItems = async (idCompany, data, token) => {
+export const postCreateManyItems = async (
+  idCompany,
+  associatedCompany,
+  data,
+  token
+) => {
   try {
     const response = await axios.post(
       `${CORS_URL}/item/createManyI`,
       {
         idCompany,
+        associatedCompany,
         data,
       },
       {
