@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -31,13 +31,16 @@ const SimplifiedItem = ({ item, idCompany }) => {
   const [output, setOuput] = useState(false);
   const { dataUser, token } = useSelector((state) => state.user);
 
-  const INITIAL_ITEM_STATE = {
-    idUser: dataUser.id,
-    id: item.id,
-    idCompany: idCompany,
-    currentCount: '',
-    exitOnly: true,
-  };
+  const INITIAL_ITEM_STATE = useMemo(
+    () => ({
+      idUser: dataUser.id,
+      id: item.id,
+      idCompany: idCompany,
+      currentCount: '',
+      exitOnly: true,
+    }),
+    [dataUser.id, idCompany, item]
+  );
 
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
 
@@ -51,7 +54,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
     setOuput(true);
   };
 
-  const handleUpdateCurrentItem = () => {
+  const handleUpdateCurrentItem = useCallback(() => {
     if (isEqual(INITIAL_ITEM_STATE, updateItem)) {
       Alert.alert('No hay cambios', `No se actualizará`, [], {
         cancelable: true,
@@ -71,7 +74,7 @@ const SimplifiedItem = ({ item, idCompany }) => {
     }
     setOuput(false);
     dispatch(action_UpdateItem({ updateItem, token }));
-  };
+  }, [updateItem]);
 
   return (
     <>
@@ -208,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimplifiedItem;
+export default memo(SimplifiedItem);
