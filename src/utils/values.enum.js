@@ -1,18 +1,18 @@
 export const editions = [
   {
     label: 'Público',
-    value: 'Public',
+    value: 'Público',
   },
   {
     label: 'Estudio',
-    value: 'Study',
+    value: 'Estudio',
   },
 ];
 
 export const letters = [
   {
     label: 'Grande',
-    value: 'Big',
+    value: 'Grande',
   },
   {
     label: 'Normal',
@@ -23,35 +23,35 @@ export const letters = [
 export const categories = [
   {
     label: 'Revistas',
-    value: 'Magazines',
+    value: 'Revistas',
   },
   {
     label: 'Libros',
-    value: 'Books',
+    value: 'Libros',
   },
   {
     label: 'Folletos',
-    value: 'Brochures',
+    value: 'Folletos',
   },
   {
     label: 'Guia de Actividades',
-    value: 'Activity Guide',
+    value: 'Guia de Actividades',
   },
   {
     label: 'Tratados',
-    value: 'Treaties',
+    value: 'Tratados',
   },
   {
     label: 'Tarjetas',
-    value: 'Cards',
+    value: 'Tarjetas',
   },
   {
     label: 'Otros',
-    value: 'Others',
+    value: 'Otros',
   },
 ];
 
 export const POSITION = [
-  { label: 'Colaborador', value: 'Helper' },
+  { label: 'Ayudante', value: 'Helper' },
   { label: 'Observante', value: 'Observant' },
 ];

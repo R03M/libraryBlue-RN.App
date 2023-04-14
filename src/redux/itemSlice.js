@@ -6,6 +6,7 @@ import {
   action_UpdateItem,
   action_CreateManyItems,
   action_DisconnectOfCompany,
+  action_DisassociatedCompany,
 } from './actions';
 import searchInItems from '../utils/searchInItems';
 
@@ -21,7 +22,7 @@ const initialState = {
   errorCreateItem: null,
 
   //? search item
-  errorSearch: null,
+  errorSearch: false,
 
   //? delete item
   statusDeleteItem: 'idle',
@@ -43,10 +44,10 @@ export const itemSlice = createSlice({
     searchItem: (state, action) => {
       let response = searchInItems(action.payload, state.unalterableItems);
       if (!response) {
-        state.errorSearch = 'Not found';
+        state.errorSearch = true;
         state.items = [];
       } else {
-        state.errorSearch = null;
+        state.errorSearch = false;
         state.items = response;
       }
       return state;
@@ -55,7 +56,7 @@ export const itemSlice = createSlice({
       state.items = state.unalterableItems;
     },
     cleanErrorSearch: (state) => {
-      state.errorSearch = null;
+      state.errorSearch = false;
     },
     cleanStatusCreateItem: (state) => {
       state.statusCreateItem = 'idle';
@@ -101,12 +102,10 @@ export const itemSlice = createSlice({
       })
       .addCase(deleteItem.fulfilled, (state, { payload: { id } }) => {
         state.statusDeleteItem = 'succeeded';
-        const currentStateItems = state.items.filter((item) => item.id !== id);
-        const currentUnalterableItems = state.unalterableItems.filter(
+        state.items = state.items.filter((item) => item.id !== id);
+        state.unalterableItems = state.unalterableItems.filter(
           (item) => item.id !== id
         );
-        state.items = currentStateItems;
-        state.unalterableItems = currentUnalterableItems;
       })
       .addCase(deleteItem.rejected, (state, action) => {
         state.statusDeleteItem = 'failed';
@@ -160,7 +159,21 @@ export const itemSlice = createSlice({
       .addCase(action_DisconnectOfCompany.fulfilled, (state) => {
         state.items = [];
         state.unalterableItems = [];
-      });
+      })
+
+      // ? disassociated company
+      .addCase(
+        action_DisassociatedCompany.fulfilled,
+        (state, { payload: { idCompany } }) => {
+          state.statusDisassociatedComp = 'succeeded';
+          state.items = state.items.filter(
+            (item) => item.companyId === idCompany
+          );
+          state.unalterableItems = state.unalterableItems.filter(
+            (item) => item.companyId === idCompany
+          );
+        }
+      );
   },
 });
 

@@ -1,8 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { putPositionUser, updateUserProfile } from '../services/user.js';
+import {
+  deleteUser,
+  putPositionUser,
+  updateUserProfile,
+} from '../services/user.js';
 import {
   deleteCompany,
   deleteUserOfCompany,
+  disconnectCompanyAssoc,
   getCompanies,
   postAllCompanyUser,
   postNewCompany,
@@ -16,7 +21,7 @@ import {
   postNewItem,
   postUpdateItem,
 } from '../services/item.js';
-import { postCheckEmail, postLogIn } from '../services/auth.js';
+import { postCheckEmail, postLogIn, postSignIn } from '../services/auth.js';
 import {
   LS_TOKENACCESS,
   LS_USERDATA,
@@ -58,7 +63,7 @@ export const registerAccount = createAsyncThunk(
   'user/registerAccount',
   async ({ data }, { rejectWithValue }) => {
     try {
-      const response = await postRegisterUser(data);
+      const response = await postSignIn(data);
       await lsSetItems(LS_USERDATA, response.userData);
       await lsSetItems(LS_TOKENACCESS, response.token);
       return response;
@@ -339,6 +344,22 @@ export const action_DeleteCompany = createAsyncThunk(
   async ({ idCompany, token }) => {
     try {
       const response = await deleteCompany(idCompany, token);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_DisassociatedCompany = createAsyncThunk(
+  'user/disassociatedCompany',
+  async ({ idCompany, token }) => {
+    try {
+      const response = await disconnectCompanyAssoc(idCompany, token);
       return response;
     } catch (error) {
       if (error.response) {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Image, Modal, Text, TextInput } from 'react-native';
+import { Alert, Image, Modal, ScrollView, Text, TextInput } from 'react-native';
 import { View, StyleSheet } from 'react-native';
 import AddImage from './AddImage';
 import handlerValue from '../utils/handlerValue';
@@ -43,28 +43,32 @@ const EditProfile = () => {
       return;
     }
     dispatch(action_UpdateProfile({ updateProfile, token }));
-    navigation.navigate('ProfileScreen')
+    navigation.navigate('ProfileScreen');
   };
 
   return (
     <View style={[styles.cardEdit, background]}>
-      <View>
-        <View
-          style={{
-            height: 200,
-            width: '100%',
-            borderRadius: 6,
-            overflow: 'hidden',
-          }}>
-          <Image
-            source={{
-              uri: updateProfile.image ? updateProfile.image : naImg,
-            }}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ alignItems: 'center' }}>
+          <View
             style={{
-              flex: 1,
-              resizeMode: 'stretch',
-            }}
-          />
+              height: 200,
+              width: 200,
+              borderRadius: 100,
+              overflow: 'hidden',
+            }}>
+            <Image
+              source={{
+                uri: updateProfile.image ? updateProfile.image : naImg,
+              }}
+              style={{
+                flex: 1,
+                resizeMode: 'cover',
+              }}
+            />
+          </View>
         </View>
         <View style={styles.rowsBetween}>
           <Text style={textStyle}>Nombre</Text>
@@ -97,13 +101,13 @@ const EditProfile = () => {
             value={updateProfile.image}
           />
         </View>
-      </View>
-      <BtnCustom
-        title="Guardar"
-        backgroundColor={'green'}
-        textColor={'white'}
-        onPress={handleSave}
-      />
+        <BtnCustom
+          title="Guardar"
+          backgroundColor={'green'}
+          textColor={'white'}
+          onPress={handleSave}
+        />
+      </ScrollView>
     </View>
   );
 };

@@ -11,9 +11,12 @@ import stylesGlobal, {
 import { useTheme } from '../hooks/useTheme';
 import {
   action_ChangeTypeAccount,
+  action_DeleteUser,
   action_DisconnectOfCompany,
 } from '../redux/actions';
 import logOut_CS from '../utils/logOut_CS';
+import { postLogOut } from '../services/auth';
+import { deleteUser } from '../services/user';
 
 const MenuUser = () => {
   const dispatch = useDispatch();
@@ -127,7 +130,24 @@ const MenuUser = () => {
         {
           text: 'Continuar',
           onPress: () => {
-            console.log('eliminado');
+            Alert.alert('ULTIMA ADVERTENCIA', '¿Desea eliminar su cuenta?', [
+              {
+                text: 'cancelar',
+              },
+              {
+                text: 'eliminar',
+                onPress: () => {
+                  deleteUser(dataUser.id, token);
+                  logOut_CS(dispatch, dataUser.id);
+                  Alert.alert(
+                    null,
+                    'Cuenta eliminada, que tenga buen dia.',
+                    [],
+                    { cancelable: true }
+                  );
+                },
+              },
+            ]);
           },
         },
       ],

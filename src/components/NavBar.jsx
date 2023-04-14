@@ -3,14 +3,27 @@ import { View, StyleSheet } from 'react-native';
 import BtnCustom from './BtnCustom';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from './SearchBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { principalColor } from '../styles/global';
+import { cleanErrorSearch, searchItem, setItems } from '../redux/itemSlice';
 
 const NavBar = () => {
+  const dispatch = useDispatch()
   const navigation = useNavigation();
   const [status, setStatus] = useState('idle');
   const { dataUser } = useSelector((state) => state.user);
+  const [search, setSearch] = useState('');
+
+  const handlerSearch = (value) => {
+    setSearch(value);
+    if (!value) {
+      dispatch(setItems());
+    } else {
+      dispatch(searchItem(value));
+    }
+    // dispatch(cleanErrorSearch());
+  };
 
   const Show = () => {
     return (
@@ -42,7 +55,7 @@ const NavBar = () => {
     <>
       {status === 'active' && (
         <View style={styles.container}>
-          <SearchBar />
+          <SearchBar search={search} handlerSearch={handlerSearch} />
           <BtnCustom
             title={'CREAR'}
             onPress={() => navigation.navigate('CreateItem')}

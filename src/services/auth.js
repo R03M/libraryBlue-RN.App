@@ -10,7 +10,7 @@ export const postCheckEmail = async (email) => {
 
 export const postSignIn = async (data) => {
   try {
-    const response = await axios.post(`${CORS_URL}/auth/singIn`, {
+    const response = await axios.post(`${CORS_URL}/auth/signIn`, {
       data,
     });
     return response.data;

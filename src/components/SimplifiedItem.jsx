@@ -91,14 +91,32 @@ const SimplifiedItem = ({ item, idCompany }) => {
           <View style={styles.textData}>
             <Text style={styleText}>{item.code}</Text>
             <Text style={styleText}>{item.title}</Text>
-            <Text style={styleText}>{item.subtitle}</Text>
-            <Text style={styleText}>
-              {item.currentCount ? item.currentCount : 'N/A'}
-            </Text>
-            <Text style={styleText}>{item.category}</Text>
-            <Text style={styleText}>{item.language}</Text>
-            <Text style={styleText}>{item.edition}</Text>
-            <Text style={styleText}>{item.letter}</Text>
+            {item.subtitle !== 'N/A' && (
+              <Text style={styleText}>{item.subtitle}</Text>
+            )}
+
+            <View style={styles.rowAround}>
+              <Text style={styleText}>Cantidad Actual: </Text>
+              <Text style={[styles.bold, styleText]}>
+                {item.currentCount ? item.currentCount : '0'}
+              </Text>
+            </View>
+            <View style={styles.rowAround}>
+              <Text style={styleText}>Categoria: </Text>
+              <Text style={[styles.bold, styleText]}>{item.category}</Text>
+            </View>
+            <View style={styles.rowAround}>
+              <Text style={styleText}>Idioma: </Text>
+              <Text style={[styles.bold, styleText]}>{item.language}</Text>
+            </View>
+            <View style={styles.rowAround}>
+              <Text style={styleText}>Edición: </Text>
+              <Text style={[styles.bold, styleText]}>{item.edition}</Text>
+            </View>
+            <View style={styles.rowAround}>
+              <Text style={styleText}>Letra: </Text>
+              <Text style={[styles.bold, styleText]}>{item.letter}</Text>
+            </View>
           </View>
           {dataUser.position !== 'Observant' && (
             <View style={{ alignItems: 'center' }}>
@@ -179,6 +197,14 @@ const styles = StyleSheet.create({
   output: {
     marginVertical: 2,
     alignItems: 'stretch',
+  },
+  rowAround: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  bold: {
+    fontWeight: 'bold',
   },
 });
 

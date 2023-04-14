@@ -9,13 +9,18 @@ import stylesGlobal, {
 } from '../styles/global';
 import SelectCompany from './SelectCompany';
 import { Entypo } from '@expo/vector-icons';
-import { action_UpdateCompany } from '../redux/actions';
+import {
+  action_DisassociatedCompany,
+  action_UpdateCompany,
+} from '../redux/actions';
 import handlerValue from '../utils/handlerValue';
 import { useTheme } from '../hooks/useTheme';
+import { useNavigation } from '@react-navigation/native';
 
 const ManageAssociatedCompany = () => {
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
+  const navigation = useNavigation();
 
   const { companies } = useSelector((state) => state.company);
   const { dataUser, token } = useSelector((state) => state.user);
@@ -33,7 +38,30 @@ const ManageAssociatedCompany = () => {
     ? stylesGlobal.textDark
     : stylesGlobal.textLight;
 
-  const disconnectCompanies = () => {};
+  const disconnectCompanies = () => {
+    Alert.alert(
+      'Confirmar',
+      '¿Está seguro que desea desvincularse de la compañia asociada?',
+      [
+        { text: 'cancelar' },
+        {
+          text: 'desvincular',
+          onPress: () => {
+            dispatch(
+              action_DisassociatedCompany({
+                idCompany: dataUser.company.id,
+                token,
+              })
+            );
+            navigation.navigate('ProfileScreen');
+          },
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  };
 
   const connectCompanies = () => {
     if (updateCompany.associatedCompany !== '') {
@@ -49,7 +77,7 @@ const ManageAssociatedCompany = () => {
     <View style={[styles.container, background]}>
       {dataUser.company.associatedCompany ? (
         <View style={styles.cardAssociated}>
-          <Text style={styles.textName}>
+          <Text style={[styles.textName, textStyle]}>
             {dataUser.company.associatedCompany}
           </Text>
           <TouchableOpacity onPress={disconnectCompanies}>
@@ -92,13 +120,12 @@ const styles = StyleSheet.create({
   viewRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: 20,
-    paddingLeft: 10,
   },
   cardAssociated: {
     width: '100%',
     padding: 10,
-    backgroundColor: principalColor,
     borderRadius: 8,
   },
   textName: {
@@ -109,7 +136,7 @@ const styles = StyleSheet.create({
   },
   viewText: {
     alignItems: 'flex-start',
-    paddingLeft: 20,
+    paddingLeft: 2,
   },
   text: {
     fontWeight: 'bold',

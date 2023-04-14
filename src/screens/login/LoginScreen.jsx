@@ -24,7 +24,6 @@ import { useTheme } from '../../hooks/useTheme';
 import stylesGlobal, {
   errorColor,
   pHTCGlobal,
-  placeholderColorGlobal,
   principalColor,
 } from '../../styles/global';
 
@@ -106,6 +105,12 @@ const LoginScreen = () => {
     handlerStatusCheckEmail();
   }, [infEmail]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(cleanResponseEmail());
+    };
+  }, []);
+
   return (
     <View
       style={
@@ -169,6 +174,7 @@ const LoginScreen = () => {
               placeholder="Password"
               secureTextEntry={!showPassword}
               placeholderTextColor={pHTCGlobal}
+              onSubmitEditing={logIn}
             />
             <ShowPassW />
           </View>

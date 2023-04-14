@@ -12,7 +12,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import BtnCustom from '../../components/BtnCustom';
 import { positionInf } from '../../utils/positionInf';
-import { checkEmailToRegister, registerAccount } from '../../redux/actions';
+import {
+  checkEmailToRegister,
+  registerAccount,
+  cleanStatusRegisterC,
+} from '../../redux/actions';
 import { validateEmail } from '../../utils/validateEmail';
 import { cleanResponseEmailToRegister } from '../../redux/userSlice';
 import { validatePassword } from '../../utils/password';
@@ -35,15 +39,16 @@ const RegisterScreen = () => {
   const dispatch = useDispatch();
   const isDarkTheme = useTheme();
 
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
+
   const [screen, setScreen] = useState('auth');
   const [errorEmail, setErrorEmail] = useState(null);
   const [thereIsEmail, setThereIsEmail] = useState('idle');
   const [showPassword, setShowPassword] = useState(false);
   const [errorPassword, setErrorPassword] = useState(null);
 
-  const { statusCreateAccount, errorCreateAccount } = useSelector(
-    (state) => state.user
-  );
   const infEmail = useSelector(
     (state) => state.user.responseCheckEmailToRegister.infocheck
   );
@@ -78,6 +83,7 @@ const RegisterScreen = () => {
 
   const register = () => {
     dispatch(registerAccount({ data: { ...auth, ...userData } }));
+    dispatch(cleanStatusRegisterC());
   };
 
   const ShowPassW = () => {
@@ -147,6 +153,12 @@ const RegisterScreen = () => {
     handlerValue(setUserData, 'image', value);
   };
 
+  useEffect(() => {
+    return () => {
+      dispatch(cleanResponseEmailToRegister());
+    };
+  }, []);
+  
   return (
     <View
       style={
@@ -282,7 +294,7 @@ const RegisterScreen = () => {
                 Nombre
               </Text>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, styleText]}
                 onChangeText={(value) =>
                   handlerValue(setUserData, 'firstName', value)
                 }
@@ -300,7 +312,7 @@ const RegisterScreen = () => {
               </Text>
 
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, styleText]}
                 onChangeText={(value) =>
                   handlerValue(setUserData, 'lastName', value)
                 }
@@ -347,7 +359,7 @@ const RegisterScreen = () => {
                 )}
                 {userData.position === 'Manager' ? null : (
                   <BtnCustom
-                    title={'Cooperador'}
+                    title={'Colaborador'}
                     onPress={() =>
                       handlerValue(setUserData, 'position', 'Observant')
                     }

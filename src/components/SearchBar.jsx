@@ -1,29 +1,15 @@
-import React, { useState } from 'react';
 import { TextInput } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { cleanErrorSearch, searchItem, setItems } from '../redux/itemSlice';
 
-const SearchBar = () => {
-  const dispatch = useDispatch();
-  const [search, setSearch] = useState('');
-
-  const handlerSearch = (value) => {
-    setSearch(value);
-    if (!value) {
-      dispatch(setItems());
-    } else {
-      dispatch(searchItem(value));
-    }
-    dispatch(cleanErrorSearch());
-  };
-
+const SearchBar = ({ search, handlerSearch }) => {
   return (
     <TextInput
       onChangeText={handlerSearch}
       value={search}
       placeholder={`Encuentra lo que necesitas`}
       style={styles.search}
+      clearButtonMode={'while-editing'} //  iOS
+      editable={true} // Android
     />
   );
 };
@@ -37,7 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
   },
 });
 

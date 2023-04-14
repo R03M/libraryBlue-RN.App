@@ -5,13 +5,13 @@ import {
   checkEmailToRegister,
   registerAccount,
   action_UpdateProfile,
-  updateDataCompany,
   newUserSelectCompany,
   action_ChangeTypeAccount,
   createNewCompany,
   action_DeleteCompany,
   action_DisconnectOfCompany,
   action_UpdateCompany,
+  action_DisassociatedCompany,
 } from './actions';
 import { LS_USERDATA, lsSetItems } from '../utils/localStorage';
 
@@ -65,6 +65,10 @@ const initialState = {
   // ? update company
   statusUpdateCompany: 'idle',
   errorUpdateCompany: null,
+
+  // ? disassociated company
+  statusDisassociatedComp: 'idle',
+  errorDisassociatedComp: null,
 };
 
 export const userSlice = createSlice({
@@ -88,6 +92,9 @@ export const userSlice = createSlice({
     },
     cleanStatusLogin: (state) => {
       state.statusLogin = 'idle';
+    },
+    cleanStatusRegisterC: (state) => {
+      state.statusCheckEmailRegister = 'idle';
     },
     cleanErrorLogin: (state) => {
       state.errorLogin = null;
@@ -141,6 +148,7 @@ export const userSlice = createSlice({
           state.statusLogin = 'succeeded';
           state.dataUser = userData;
           state.token = token;
+          
         }
       )
       .addCase(loginAccount.rejected, (state, action) => {
@@ -281,6 +289,22 @@ export const userSlice = createSlice({
       .addCase(action_DisconnectOfCompany.rejected, (state, action) => {
         state.statusDiscOfCompany = 'failed';
         state.errorDiscOfCompany = action.payload;
+      })
+
+      // ? disassociated company
+
+      .addCase(action_DisassociatedCompany.pending, (state) => {
+        state.statusDisassociatedComp = 'loading';
+      })
+      .addCase(action_DisassociatedCompany.fulfilled, (state) => {
+        state.statusDisassociatedComp = 'succeeded';
+        state.dataUser.company.associatedCompany = null;
+        const userData = state.dataUser;
+        lsSetItems(LS_USERDATA, userData);
+      })
+      .addCase(action_DisassociatedCompany.rejected, (state, action) => {
+        state.statusDisassociatedComp = 'failed';
+        state.errorDisassociatedComp = action.payload;
       });
   },
 });

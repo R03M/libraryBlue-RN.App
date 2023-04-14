@@ -29,6 +29,7 @@ import UploadJson from './src/components/UploadJson';
 import MenuUser from './src/components/MenuUser';
 import MenuCompany from './src/components/MenuCompany';
 import ManageAssociatedCompany from './src/components/ManageAssociatedCompany';
+import { notProfile } from './src/utils/naImg';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -272,7 +273,7 @@ const MyTabs = () => {
                   }}>
                   <Image
                     source={{
-                      uri: imageUser,
+                      uri: imageUser ?? notProfile,
                     }}
                     style={{
                       flex: 1,

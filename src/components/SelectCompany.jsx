@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, Text, Alert, Button } from 'react-native';
 import handlerValue from '../utils/handlerValue';
 import IconStatus from './IconStatus';
+import { useTheme } from '../hooks/useTheme';
+import stylesGlobal from '../styles/global';
 
 const SelectCompany = ({ companies, associateCompany }) => {
   const [thereIsCompany, setThereIsCompany] = useState('idle');
   const [isCode, setIsCode] = useState('idle');
 
+  const isDarkTheme = useTheme();
+  const styleText = isDarkTheme
+    ? stylesGlobal.textDark
+    : stylesGlobal.textLight;
+
   const [associatedCompany, setAssociatedCompany] = useState({
     name: '',
     code: '',
   });
-
 
   const validateCompany = (value) => {
     if (typeof companies !== 'string') {
@@ -74,15 +80,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
 
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 16,
-          fontWeight: 'bold',
-          textTransform: 'uppercase',
-        }}>
-        selecciona la compañia
-      </Text>
+      <Text style={[styles.textTitle, styleText]}>selecciona la compañia</Text>
 
       <View
         style={{
@@ -90,7 +88,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text>Nombre</Text>
+        <Text style={styleText}>Nombre</Text>
 
         <View
           style={{
@@ -99,7 +97,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
             justifyContent: 'flex-end',
           }}>
           <TextInput
-            style={[styles.textInput, { width: '65%' }]}
+            style={[styles.textInput, { width: '65%' }, styleText]}
             onChangeText={(value) => {
               handlerValue(setAssociatedCompany, 'name', value);
               validateCompany(value);
@@ -115,7 +113,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Text>Codigo</Text>
+        <Text style={styleText}>Codigo</Text>
         <View
           style={{
             flexDirection: 'row',
@@ -123,7 +121,7 @@ const SelectCompany = ({ companies, associateCompany }) => {
             justifyContent: 'flex-end',
           }}>
           <TextInput
-            style={[styles.textInput, { width: '65%' }]}
+            style={[styles.textInput, { width: '65%' }, styleText]}
             onChangeText={(value) => {
               handlerValue(setAssociatedCompany, 'code', value);
               validateCode(value);
@@ -155,5 +153,11 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
     marginVertical: 20,
+  },
+  textTitle: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
 });

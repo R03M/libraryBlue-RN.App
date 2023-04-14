@@ -59,3 +59,23 @@ export const putPositionUser = async (data, token) => {
     throw error;
   }
 };
+
+export const deleteUser = async (idUser, token) => {
+  try {
+    const response = await axios.delete(
+      `${CORS_URL}/user/delete`,
+
+      {
+        headers: {
+          Authorization: `Beaner ${token}`,
+        },
+        data: {
+          idUser,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

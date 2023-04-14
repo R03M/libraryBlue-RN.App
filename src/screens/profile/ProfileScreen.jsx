@@ -6,6 +6,7 @@ import stylesGlobal from '../../styles/global';
 import styles from './profile.Styles';
 import useFeedback from '../../hooks/useFeedback';
 import FeedbackOfAPI from '../../components/FeedbackOfAPI';
+import { notProfile } from '../../utils/naImg';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -22,6 +23,8 @@ const ProfileScreen = () => {
     statusUpdateProfile,
     statusDiscOfCompany,
     statusUpdateCompany,
+    statusDeleteUser,
+    statusDisassociatedComp,
   } = useSelector((state) => state.user);
 
   const feedbackDisscCompany = useFeedback(selectCompanyStatus);
@@ -29,6 +32,8 @@ const ProfileScreen = () => {
   const feedbackUpdateProfile = useFeedback(statusUpdateProfile);
   const feedbackDisconnectCompany = useFeedback(statusDiscOfCompany);
   const feedbackUpdateCompany = useFeedback(statusUpdateCompany);
+  const feedbackDeleteUser = useFeedback(statusDeleteUser);
+  const feedbackDisassociatedComp = useFeedback(statusDisassociatedComp);
 
   return (
     <View
@@ -60,10 +65,22 @@ const ProfileScreen = () => {
           <FeedbackOfAPI value={statusDiscOfCompany} type={'update'} />
         </View>
       )}
-    
+
       {feedbackUpdateCompany && ( // alert update company
         <View style={stylesGlobal.feedbackContainer}>
           <FeedbackOfAPI value={statusUpdateCompany} type={'update'} />
+        </View>
+      )}
+
+      {feedbackDeleteUser && ( // alert delete user
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={feedbackDeleteUser} type={'delete'} />
+        </View>
+      )}
+
+      {feedbackDisassociatedComp && ( // alert Disassociated Comp.
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusDisassociatedComp} type={'update'} />
         </View>
       )}
 
@@ -72,7 +89,10 @@ const ProfileScreen = () => {
           <View style={styles.cards}>
             <Text style={styles.nameUser}>{dataUser.fullName}</Text>
             <View style={styles.viewImg}>
-              <Image source={{ uri: dataUser.image }} style={styles.img} />
+              <Image
+                source={{ uri: dataUser.image ?? notProfile }}
+                style={styles.img}
+              />
             </View>
             <View style={styles.viewData}>
               <View style={styles.rowsBetween}>
@@ -84,7 +104,7 @@ const ProfileScreen = () => {
                 <Text style={styleText}>
                   {dataUser.position === 'Manager'
                     ? 'Coordinador'
-                    : 'Cooperador'}
+                    : 'Colaborador'}
                 </Text>
               </View>
               <View style={styles.rowsBetween}>

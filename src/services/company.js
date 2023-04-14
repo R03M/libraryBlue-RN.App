@@ -129,3 +129,21 @@ export const deleteCompany = async (idCompany, token) => {
     throw error;
   }
 };
+
+export const disconnectCompanyAssoc = async (idCompany, token) => {
+  try {
+    const response = await axios.put(
+      `${CORS_URL}/company/disconnectCopAssoc`,
+      { idCompany },
+      {
+        headers: {
+          Authorization: `Beaner ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
