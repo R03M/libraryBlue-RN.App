@@ -8,6 +8,7 @@ export const getCompanies = async (idCompany, token) => {
       { idCompany },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -27,6 +28,7 @@ export const postNewCompany = async (company, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -46,6 +48,7 @@ export const postSelectCompany = async (selectCompanyInf, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -65,6 +68,7 @@ export const postAllCompanyUser = async (companyName, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -85,6 +89,7 @@ export const postUpdateCompany = async (dataCompany, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -103,6 +108,7 @@ export const deleteUserOfCompany = async (idUser, token) => {
         idUser,
       },
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Beaner ${token}`,
       },
     });
@@ -120,6 +126,7 @@ export const deleteCompany = async (idCompany, token) => {
         idCompany,
       },
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Beaner ${token}`,
       },
     });
@@ -137,6 +144,7 @@ export const disconnectCompanyAssoc = async (idCompany, token) => {
       { idCompany },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }

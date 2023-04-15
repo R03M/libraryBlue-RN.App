@@ -12,6 +12,7 @@ export const validateUser = async (userData, token) => {
       userData,
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -31,6 +32,7 @@ export const updateUserProfile = async (data, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -50,6 +52,7 @@ export const putPositionUser = async (data, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -67,6 +70,7 @@ export const deleteUser = async (idUser, token) => {
 
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
         data: {

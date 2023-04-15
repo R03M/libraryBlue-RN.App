@@ -11,11 +11,9 @@ import stylesGlobal, {
 import { useTheme } from '../hooks/useTheme';
 import {
   action_ChangeTypeAccount,
-  action_DeleteUser,
   action_DisconnectOfCompany,
 } from '../redux/actions';
 import logOut_CS from '../utils/logOut_CS';
-import { postLogOut } from '../services/auth';
 import { deleteUser } from '../services/user';
 
 const MenuUser = () => {

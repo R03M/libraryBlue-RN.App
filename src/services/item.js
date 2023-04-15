@@ -11,6 +11,7 @@ export const getItems = async (idCompany, associatedCompany, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -30,6 +31,7 @@ export const postNewItem = async (item, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -44,6 +46,7 @@ export const deleteAItem = async (idItem, idUser, token) => {
   try {
     const response = await axios.delete(`${CORS_URL}/item/delete`, {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Beaner ${token}`,
       },
       data: { idItem, idUser },
@@ -63,6 +66,7 @@ export const postUpdateItem = async (item, token) => {
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }
@@ -89,6 +93,7 @@ export const postCreateManyItems = async (
       },
       {
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Beaner ${token}`,
         },
       }

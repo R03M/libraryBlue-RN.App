@@ -17,29 +17,26 @@ const RenderItems = ({
   styleText,
   unalterableItems,
 }) => {
-  if (errorSearch) {
+  if (data.length === 0) {
+    return (
+      <View style={styles.centeredView}>
+        <ActivityIndicator size="large" color={principalColor} />
+      </View>
+    );
+  } else if (errorSearch) {
     return (
       <View style={styles.centeredView}>
         <AntDesign name="closesquareo" size={30} color={errorColor} />
         <Text style={[styles.notFound, styleText]}>No encontrado</Text>
       </View>
     );
-  }
-  if (data.length < 1) {
-    return (
-      <View style={styles.centeredView}>
-        <ActivityIndicator size="large" color={principalColor} />
-      </View>
-    );
-  }
-  if (unalterableItems.length < 1) {
+  } else if (unalterableItems.length === 0) {
     return (
       <View style={styles.centeredView}>
         <Text style={[styles.notItems, styleText]}>No hay items por ahora</Text>
       </View>
     );
-  }
-  if (data.length > 0) {
+  } else {
     return (
       <VirtualizedList
         data={data}

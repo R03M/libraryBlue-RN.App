@@ -21,7 +21,12 @@ import {
   postNewItem,
   postUpdateItem,
 } from '../services/item.js';
-import { postCheckEmail, postLogIn, postSignIn } from '../services/auth.js';
+import {
+  postCheckEmail,
+  postLogIn,
+  postLogOut,
+  postSignIn,
+} from '../services/auth.js';
 import {
   LS_TOKENACCESS,
   LS_USERDATA,
@@ -360,6 +365,22 @@ export const action_DisassociatedCompany = createAsyncThunk(
   async ({ idCompany, token }) => {
     try {
       const response = await disconnectCompanyAssoc(idCompany, token);
+      return response;
+    } catch (error) {
+      if (error.response) {
+        return rejectWithValue(error.response.status);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const action_CloseSession = createAsyncThunk(
+  'user/closeSession',
+  async ({ idUser }) => {
+    try {
+      const response = await postLogOut(idUser);
       return response;
     } catch (error) {
       if (error.response) {

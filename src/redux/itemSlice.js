@@ -7,6 +7,7 @@ import {
   action_CreateManyItems,
   action_DisconnectOfCompany,
   action_DisassociatedCompany,
+  action_CloseSession,
 } from './actions';
 import searchInItems from '../utils/searchInItems';
 
@@ -173,7 +174,13 @@ export const itemSlice = createSlice({
             (item) => item.companyId === idCompany
           );
         }
-      );
+      )
+
+      // ? clear items at logoff
+      .addCase(action_CloseSession.fulfilled, (state) => {
+        state.items = [];
+        state.unalterableItems = [];
+      });
   },
 });
 

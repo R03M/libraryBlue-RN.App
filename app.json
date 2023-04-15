@@ -14,7 +14,13 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mrBlue.libraryBlue"
+      "bundleIdentifier": "com.mrBlue.libraryBlue",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        },
+        "NSAllowsArbitraryLoadsForMedia": true
+      }
     },
     "android": {
       "package": "com.mrBlue.libraryBlue",
@@ -22,7 +28,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA_ROLL"]
+      "permissions": ["CAMERA_ROLL", "INTERNET"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

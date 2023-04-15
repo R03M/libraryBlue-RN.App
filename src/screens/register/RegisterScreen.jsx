@@ -12,11 +12,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import BtnCustom from '../../components/BtnCustom';
 import { positionInf } from '../../utils/positionInf';
-import {
-  checkEmailToRegister,
-  registerAccount,
-  cleanStatusRegisterC,
-} from '../../redux/actions';
+import { checkEmailToRegister, registerAccount } from '../../redux/actions';
 import { validateEmail } from '../../utils/validateEmail';
 import { cleanResponseEmailToRegister } from '../../redux/userSlice';
 import { validatePassword } from '../../utils/password';
@@ -83,7 +79,6 @@ const RegisterScreen = () => {
 
   const register = () => {
     dispatch(registerAccount({ data: { ...auth, ...userData } }));
-    dispatch(cleanStatusRegisterC());
   };
 
   const ShowPassW = () => {
@@ -158,7 +153,7 @@ const RegisterScreen = () => {
       dispatch(cleanResponseEmailToRegister());
     };
   }, []);
-  
+
   return (
     <View
       style={
