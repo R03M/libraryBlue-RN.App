@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#155a95"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -25,13 +25,18 @@
     "android": {
       "package": "com.mrBlue.libraryBlue",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": ["CAMERA_ROLL", "INTERNET"]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d7a12645-0cae-4897-be2a-28fa5f0ab1e0"
+      }
     }
   }
 }
