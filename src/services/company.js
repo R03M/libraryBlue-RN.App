@@ -113,7 +113,7 @@ export const deleteUserOfCompany = async (idUser, token) => {
       },
     });
 
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }

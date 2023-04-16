@@ -109,7 +109,9 @@ export const companySlice = createSlice({
         action_RemoveUserOfCompany.fulfilled,
         (state, { payload: { userDeleted } }) => {
           state.statusRemoveUserOfC = 'succeeded';
-          state.allUsers.filter((user) => user.id !== userDeleted);
+          state.allUsers = state.allUsers.allCompanyUsers.filter(
+            (user) => user.id !== userDeleted
+          );
         }
       )
       .addCase(action_RemoveUserOfCompany.rejected, (state, action) => {

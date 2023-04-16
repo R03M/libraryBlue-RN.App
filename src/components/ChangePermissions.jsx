@@ -22,22 +22,24 @@ const ChangePermissions = ({
     return (
       <View key={id} style={styles.viewList}>
         <Text style={[styles.text, textStyle]}>{fullName}</Text>
-        <SelectItem
-          items={POSITION}
-          onValueChange={(value) => handlerPosition({ id, position: value })}
-          value={position}
-          notItemNA={true}
-        />
-        <BtnCustom
-          title={
-            <MaterialCommunityIcons
-              name="location-exit"
-              size={34}
-              color="red"
-            />
-          }
-          onPress={() => handleRemoveToCompany(id, fullName)}
-        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <SelectItem
+            items={POSITION}
+            onValueChange={(value) => handlerPosition({ id, position: value })}
+            value={position}
+            notItemNA={true}
+          />
+          <BtnCustom
+            title={
+              <MaterialCommunityIcons
+                name="location-exit"
+                size={34}
+                color="red"
+              />
+            }
+            onPress={() => handleRemoveToCompany(id, fullName)}
+          />
+        </View>
       </View>
     );
   });

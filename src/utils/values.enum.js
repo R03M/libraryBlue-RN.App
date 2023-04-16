@@ -52,6 +52,6 @@ export const categories = [
 ];
 
 export const POSITION = [
-  { label: 'Ayudante', value: 'Helper' },
-  { label: 'Observante', value: 'Observant' },
+  { label: 'Modificar', value: 'Helper' },
+  { label: 'Visualizar', value: 'Observant' },
 ];

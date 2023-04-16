@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createNewCompany, newUserSelectCompany } from '../redux/actions';
 import AddImage from './AddImage';
 import SelectCompany from './SelectCompany';
+import { principalColor } from '../styles/global';
 
 const CreateOrSelectCompany = ({
   companies,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: principalColor,
     borderRadius: 8,
     padding: 25,
     alignItems: 'center',

@@ -74,6 +74,10 @@ const SimplifiedItem = ({ item, idCompany }) => {
     }
     setOuput(false);
     dispatch(action_UpdateItem({ updateItem, token }));
+    setUpdateItem((prevItem) => ({
+      ...prevItem,
+      currentCount: '',
+    }));
   }, [updateItem]);
 
   return (

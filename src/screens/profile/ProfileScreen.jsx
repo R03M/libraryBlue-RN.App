@@ -23,7 +23,6 @@ const ProfileScreen = () => {
     statusUpdateProfile,
     statusDiscOfCompany,
     statusUpdateCompany,
-    statusDeleteUser,
     statusDisassociatedComp,
   } = useSelector((state) => state.user);
 
@@ -32,7 +31,6 @@ const ProfileScreen = () => {
   const feedbackUpdateProfile = useFeedback(statusUpdateProfile);
   const feedbackDisconnectCompany = useFeedback(statusDiscOfCompany);
   const feedbackUpdateCompany = useFeedback(statusUpdateCompany);
-  const feedbackDeleteUser = useFeedback(statusDeleteUser);
   const feedbackDisassociatedComp = useFeedback(statusDisassociatedComp);
 
   return (
@@ -69,12 +67,6 @@ const ProfileScreen = () => {
       {feedbackUpdateCompany && ( // alert update company
         <View style={stylesGlobal.feedbackContainer}>
           <FeedbackOfAPI value={statusUpdateCompany} type={'update'} />
-        </View>
-      )}
-
-      {feedbackDeleteUser && ( // alert delete user
-        <View style={stylesGlobal.feedbackContainer}>
-          <FeedbackOfAPI value={feedbackDeleteUser} type={'delete'} />
         </View>
       )}
 
@@ -136,7 +128,11 @@ const ProfileScreen = () => {
               <View style={styles.viewData}>
                 <View style={styles.rowsBetween}>
                   <Text style={[styles.text, styleText]}>Cargo</Text>
-                  <Text style={styleText}>{dataUser.position}</Text>
+                  <Text style={styleText}>
+                    {dataUser.position === 'Manager'
+                      ? 'Coordinador'
+                      : 'Colaborador'}
+                  </Text>
                 </View>
                 <View style={styles.rowsBetween}>
                   <Text style={[styles.text, styleText]}>

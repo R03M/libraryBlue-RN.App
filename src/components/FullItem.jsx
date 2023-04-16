@@ -137,7 +137,7 @@ const FullItem = () => {
           </View>
 
           <View style={styles.rows}>
-            <Text style={stylesText}>Stock Actual</Text>
+            <Text style={stylesText}>Cantidad Actual</Text>
             <Text style={stylesText}>
               {item.currentCount ? item.currentCount : 'N/A'}
             </Text>

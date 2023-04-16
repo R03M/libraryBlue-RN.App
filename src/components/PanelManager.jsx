@@ -18,10 +18,11 @@ const PanelManager = () => {
   const dispatch = useDispatch();
 
   const { dataUser, token } = useSelector((state) => state.user);
-  const { allUsers, statusUpdatePositionUser, errorUpdatePositionUser } =
+  const { allUsers, statusUpdatePositionUser, statusRemoveUserOfC } =
     useSelector((state) => state.company);
 
   const feedbackOn = useFeedback(statusUpdatePositionUser);
+  const feedbackDeleteUser = useFeedback(statusRemoveUserOfC);
 
   const background = isDarkTheme
     ? stylesGlobal.backDark
@@ -65,11 +66,17 @@ const PanelManager = () => {
 
   return (
     <View style={[styles.card, background]}>
-      {feedbackOn && (
+      {feedbackOn && ( // alert update position
         <View style={stylesGlobal.feedbackContainer}>
           <FeedbackOfAPI value={statusUpdatePositionUser} type={'update'} />
         </View>
       )}
+      {feedbackDeleteUser && ( // alert delete user
+        <View style={stylesGlobal.feedbackContainer}>
+          <FeedbackOfAPI value={statusRemoveUserOfC} type={'delete'} />
+        </View>
+      )}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

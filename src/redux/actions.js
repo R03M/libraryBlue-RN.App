@@ -295,10 +295,7 @@ export const action_RemoveUserOfCompany = createAsyncThunk(
   async ({ idUser, token }) => {
     try {
       const response = await deleteUserOfCompany(idUser, token);
-      if (response.data) {
-        return response.data;
-      }
-      return response.status;
+      return response;
     } catch (error) {
       if (error.response) {
         return rejectWithValue(error.response.status);
