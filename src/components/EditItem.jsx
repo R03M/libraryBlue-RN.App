@@ -61,7 +61,6 @@ const EditItem = () => {
     category: oldItem.category,
     lastCount: oldItem.lastCount ? oldItem.lastCount.toString() : '',
     lastCountDate: oldItem.lastCountDate,
-    currentCount: oldItem.currentCount ? oldItem.currentCount.toString() : '',
     itemEntry: oldItem.itemEntry ? oldItem.itemEntry.toString() : '',
     itemEntryDate: oldItem.itemEntryDate,
     associatedCompany: oldItem.associatedCompany,
@@ -69,7 +68,7 @@ const EditItem = () => {
   };
 
   const [updateItem, setUpdateItem] = useState(INITIAL_ITEM_STATE);
-  
+
   function handleCode(value) {
     handlerValue(setUpdateItem, 'code', value);
     const error = validateString(value, 'código');
@@ -84,13 +83,6 @@ const EditItem = () => {
     handlerValue(setUpdateItem, 'language', value);
     const error = validateString(value, 'lenguaje');
     error ? setErrorLang(error) : setErrorLang(false);
-  }
-  function handleCurrentStock(value) {
-    const valueNoSpaces = noBlankSpaces(value);
-    const isValid = onlyNumbers(valueNoSpaces);
-    isValid
-      ? handlerValue(setUpdateItem, 'currentCount', valueNoSpaces)
-      : handlerValue(setUpdateItem, 'currentCount', '');
   }
   function handleLastCount(value) {
     const valueNoSpaces = noBlankSpaces(value);
@@ -119,6 +111,29 @@ const EditItem = () => {
       navigator.goBack();
       return;
     }
+    updateItem.code === INITIAL_ITEM_STATE.code && (updateItem.code = null);
+    updateItem.title === INITIAL_ITEM_STATE.title && (updateItem.title = null);
+    updateItem.subtitle === INITIAL_ITEM_STATE.subtitle &&
+      (updateItem.subtitle = null);
+    updateItem.language === INITIAL_ITEM_STATE.language &&
+      (updateItem.language = null);
+    updateItem.image === INITIAL_ITEM_STATE.image && (updateItem.image = null);
+    updateItem.edition === INITIAL_ITEM_STATE.edition &&
+      (updateItem.edition = null);
+    updateItem.letter === INITIAL_ITEM_STATE.letter &&
+      (updateItem.letter = null);
+    updateItem.category === INITIAL_ITEM_STATE.category &&
+      (updateItem.category = null);
+    updateItem.lastCount === INITIAL_ITEM_STATE.lastCount &&
+      (updateItem.lastCount = null);
+    updateItem.lastCountDate === INITIAL_ITEM_STATE.lastCountDate &&
+      (updateItem.lastCountDate = null);
+    updateItem.itemEntry === INITIAL_ITEM_STATE.itemEntry &&
+      (updateItem.itemEntry = null);
+    updateItem.itemEntryDate === INITIAL_ITEM_STATE.itemEntryDate &&
+      (updateItem.itemEntryDate = null);
+    updateItem.associatedCompany === INITIAL_ITEM_STATE.associatedCompany &&
+      (updateItem.associatedCompany = null);
     dispatch(action_UpdateItem({ updateItem, token }));
     navigator.navigate('ItemsScreen');
   };
@@ -185,15 +200,6 @@ const EditItem = () => {
             />
           </View>
 
-          <View style={styles.rows}>
-            <Text style={styleText}>Stock Actual</Text>
-            <TextInput
-              placeholderTextColor={pHTCGlobal}
-              style={[styles.textInput, styleText, { width: '60%' }]}
-              onChangeText={handleCurrentStock}
-              value={updateItem.currentCount}
-            />
-          </View>
           <View style={styles.rows}>
             <Text style={styleText}>Lenguaje</Text>
             <TextInput
@@ -289,7 +295,7 @@ const EditItem = () => {
               placeholderTextColor={pHTCGlobal}
               style={[styles.textInput, styleText, { width: '60%' }]}
               onChangeText={handleItemEntry}
-              value={updateItem.lastCount}
+              value={updateItem.itemEntry}
             />
           </View>
           <View style={styles.rows}>
@@ -298,7 +304,7 @@ const EditItem = () => {
               <SelectDate
                 value={updateItem.itemEntryDate}
                 handlerDate={(value) =>
-                  handlerValue(setUpdateItem, 'lastCountDate', value)
+                  handlerValue(setUpdateItem, 'itemEntryDate', value)
                 }
               />
             </View>

@@ -40,7 +40,7 @@ const useUserData = () => {
 
       try {
         const response = await validateUser(userData, token);
-        if (response.status === 200) {
+        if (response?.status === 200) {
           dispatch(setUser(user));
           dispatch(setUserToken(token));
         }

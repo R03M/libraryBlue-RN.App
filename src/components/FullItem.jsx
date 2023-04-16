@@ -59,7 +59,7 @@ const FullItem = () => {
       ]
     );
   };
-
+  
   return (
     <View
       style={
@@ -181,9 +181,15 @@ const FullItem = () => {
             Ultimo ingreso
           </Text>
           <View style={styles.rows}>
+            <Text style={stylesText}>Cantidad</Text>
+            <Text style={stylesText}>
+              {item.itemEntry ? item.itemEntry : '-'}
+            </Text>
+          </View>
+          <View style={styles.rows}>
             <Text style={stylesText}>Fecha</Text>
             <Text style={stylesText}>
-              {item.itemEntryDate ? dateFormated(item.itemEntryDate) : 'n/a'}
+              {item.itemEntryDate ? dateFormated(item.itemEntryDate) : '-'}
             </Text>
           </View>
           {fromMyCompany ? (
