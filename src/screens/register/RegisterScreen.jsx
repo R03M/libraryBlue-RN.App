@@ -294,7 +294,6 @@ const RegisterScreen = () => {
                   handlerValue(setUserData, 'firstName', value)
                 }
                 value={userData.firstName}
-                placeholder="Jhon"
                 placeholderTextColor={pHTCGlobal}
               />
             </View>
@@ -312,7 +311,6 @@ const RegisterScreen = () => {
                   handlerValue(setUserData, 'lastName', value)
                 }
                 value={userData.lastName}
-                placeholder="Smith"
                 placeholderTextColor={pHTCGlobal}
               />
             </View>
