@@ -48,9 +48,7 @@ const EditProfile = () => {
 
   return (
     <View style={[styles.cardEdit, background]}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ alignItems: 'center' }}>
           <View
             style={{
@@ -94,12 +92,14 @@ const EditProfile = () => {
         </View>
         <View style={styles.rowsBetween}>
           <Text style={textStyle}>Imagen</Text>
-          <AddImage
-            onChangeImage={(value) =>
-              handlerValue(setUpdateProfile, 'image', value)
-            }
-            value={updateProfile.image}
-          />
+          <View style={{ width: '70%' }}>
+            <AddImage
+              onChangeImage={(value) =>
+                handlerValue(setUpdateProfile, 'image', value)
+              }
+              value={updateProfile.image}
+            />
+          </View>
         </View>
         <BtnCustom
           title="Guardar"

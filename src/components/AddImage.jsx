@@ -83,7 +83,7 @@ const AddImage = ({ onChangeImage, value }) => {
           />
         )}
         {image && service === externalURL ? null : (
-          <View style={{ marginHorizontal: -10 }}>
+          <View style={{marginHorizontal: 10}}>
             <BtnCustom
               title={'Galeria'}
               onPress={selectImage}
@@ -122,13 +122,12 @@ const styles = StyleSheet.create({
   rows: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    marginVertical: 20,
+    justifyContent: 'flex-end',
   },
   textInput: {
+    flex: 1,
     borderBottomColor: principalColor,
     borderBottomWidth: 1,
-    width: '65%',
   },
 });
 

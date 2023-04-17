@@ -63,10 +63,12 @@ const UpdateCompany = () => {
 
         <View style={styles.rows}>
           <Text style={textStyle}>Imagen</Text>
-          <AddImage
-            onChangeImage={(value) => handlerValue(setUpdate, 'image', value)}
-            value={update.image}
-          />
+          <View style={{ width: '70%' }}>
+            <AddImage
+              onChangeImage={(value) => handlerValue(setUpdate, 'image', value)}
+              value={update.image}
+            />
+          </View>
         </View>
 
         <View style={styles.rows}>
