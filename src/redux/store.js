@@ -1,8 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
 import companyReducer from './companySlice';
 import itemReducer from './itemSlice';
 import settingsReducer from './settingsSlice';
+
+const middleware = getDefaultMiddleware({
+  immutableCheck: false,
+  serializableCheck: false,
+  thunk: true,
+});
 
 export const store = configureStore({
   reducer: {
@@ -11,4 +17,5 @@ export const store = configureStore({
     item: itemReducer,
     settings: settingsReducer,
   },
+  middleware,
 });
