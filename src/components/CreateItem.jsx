@@ -214,7 +214,7 @@ const CreateItem = () => {
 
         <View style={styles.rowsView}>
           <Text style={styleText}>
-            Subtítulo <Asterisk />
+            Subtítulo
           </Text>
           <TextInput
             placeholderTextColor={pHTCGlobal}
