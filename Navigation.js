@@ -263,13 +263,15 @@ const MyTabs = () => {
             options={{
               tabBarShowLabel: false,
               headerShown: false,
-              tabBarIcon: () => (
+              tabBarIcon: ({ focused }) => (
                 <View
                   style={{
-                    height: 40,
-                    width: 40,
-                    borderRadius: 40,
+                    height: 44,
+                    width: 44,
+                    borderRadius: 50,
                     overflow: 'hidden',
+                    borderWidth: focused ? 0.9 : 0,
+                    borderColor: focused && '#fff',
                   }}>
                   <Image
                     source={{
