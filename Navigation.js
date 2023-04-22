@@ -271,7 +271,7 @@ const MyTabs = () => {
                     borderRadius: 50,
                     overflow: 'hidden',
                     borderWidth: focused ? 0.9 : 0,
-                    borderColor: focused && '#fff',
+                    borderColor: focused && isDarkTheme ? '#fff' : '#5998c0',
                   }}>
                   <Image
                     source={{
