@@ -9,10 +9,11 @@ import { principalColor } from '../styles/global';
 import { cleanErrorSearch, searchItem, setItems } from '../redux/itemSlice';
 
 const NavBar = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [status, setStatus] = useState('idle');
   const { dataUser } = useSelector((state) => state.user);
+  const { unalterableItems } = useSelector((state) => state.item);
   const [search, setSearch] = useState('');
 
   const handlerSearch = (value) => {
@@ -22,7 +23,6 @@ const NavBar = () => {
     } else {
       dispatch(searchItem(value));
     }
-    // dispatch(cleanErrorSearch());
   };
 
   const Show = () => {
@@ -38,7 +38,11 @@ const NavBar = () => {
         }
         title0={status === 'idle' ? 'libraryBlue' : 'Busca algo...'}
         title2={
-          status === 'idle' ? `Hola ${dataUser.firstName} !` : 'o crea un item'
+          status === 'idle'
+            ? `Hola ${dataUser.firstName} !`
+            : dataUser.position === 'Observant'
+            ? '              '
+            : 'o crea un item'
         }
         onPress={
           status === 'idle'
@@ -55,14 +59,16 @@ const NavBar = () => {
     <>
       {status === 'active' && (
         <View style={styles.container}>
-          <SearchBar search={search} handlerSearch={handlerSearch} />
-          <BtnCustom
-            title={'CREAR'}
-            onPress={() => navigation.navigate('CreateItem')}
-            backgroundColor={principalColor}
-            textColor={'#fff'}
-            styles={{ padding: 12, marginHorizontal: 8 }}
-          />
+          <SearchBar search={search} handlerSearch={handlerSearch} areThereArt={unalterableItems}/>
+          {dataUser.position !== 'Observant' && (
+            <BtnCustom
+              title={'CREAR'}
+              onPress={() => navigation.navigate('CreateItem')}
+              backgroundColor={principalColor}
+              textColor={'#fff'}
+              styles={{ padding: 12, marginHorizontal: 8 }}
+            />
+          )}
         </View>
       )}
       <Show />
