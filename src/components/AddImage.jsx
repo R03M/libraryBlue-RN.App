@@ -35,7 +35,6 @@ const AddImage = ({ onChangeImage, value }) => {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
         allowsEditing: true,
-        aspect: [4, 3],
       });
       if (!result.canceled) {
         const response = await uploadImage(result.assets[0].uri);
