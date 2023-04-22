@@ -89,18 +89,28 @@ const SimplifiedItem = ({ item, idCompany }) => {
           });
         }}>
         <View style={styles.card}>
-          <Image
-            source={{
-              uri: item.image ? item.image : naImg,
-            }}
-            style={styles.img}
-          />
+          <View
+            style={{
+              height: '100%',
+              width: 100,
+              borderRadius: 2,
+              overflow: 'hidden',
+            }}>
+            <Image
+              source={{
+                uri: item.image ? item.image : naImg,
+              }}
+              style={styles.img}
+            />
+          </View>
           <View style={styles.textData}>
             <Text style={styleText}>{item.code}</Text>
             <Text style={styleText}>{item.title}</Text>
-            {item.subtitle !== 'N/A' && (
-              <Text style={styleText}>{item.subtitle}</Text>
-            )}
+            {item.subtitle !== 'N/A' ||
+              item.subtitle !== null ||
+              (item.subtitle === '' && (
+                <Text style={styleText}>{item.subtitle}</Text>
+              ))}
 
             <View style={styles.rowAround}>
               <Text style={styleText}>Cantidad Actual: </Text>
@@ -196,10 +206,8 @@ const styles = StyleSheet.create({
     borderColor: '#5998c0',
   },
   img: {
-    height: 130,
-    width: '22%',
-    borderRadius: 4,
-    marginVertical: 10,
+    flex: 1,
+    resizeMode: 'contain',
   },
   output: {
     marginVertical: 2,

@@ -11,8 +11,9 @@ const ModalImage = ({
     <Modal
       animationType="slide"
       visible={modalImage}
-      onRequestClose={handleShowModalImage}>
-      <View>
+      onRequestClose={handleShowModalImage}
+      transparent={true}>
+      <View style={{ backgroundColor: '#00000080' }}>
         <TouchableOpacity onPress={() => setModalImage(!modalImage)}>
           <View
             style={{
@@ -27,7 +28,7 @@ const ModalImage = ({
               }}
               style={{
                 flex: 1,
-                resizeMode: 'stretch',
+                resizeMode: 'contain',
               }}
             />
           </View>

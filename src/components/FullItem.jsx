@@ -59,7 +59,7 @@ const FullItem = () => {
       ]
     );
   };
-  
+
   return (
     <View
       style={
@@ -77,9 +77,9 @@ const FullItem = () => {
         <TouchableOpacity onPress={handleShowModalImage}>
           <View
             style={{
-              height: 250,
+              height: 200,
               width: 150,
-              borderRadius: 6,
+              borderRadius: 2,
               overflow: 'hidden',
             }}>
             <Image
@@ -88,7 +88,7 @@ const FullItem = () => {
               }}
               style={{
                 flex: 1,
-                resizeMode: 'stretch',
+                resizeMode: 'contain',
               }}
             />
           </View>
@@ -128,18 +128,24 @@ const FullItem = () => {
           </View>
           <View style={styles.rows}>
             <Text style={stylesText}>Título</Text>
-            <Text style={stylesText}>{item.title}</Text>
+            <View style={{ width: '50%', alignItems: 'flex-end' }}>
+              <Text style={stylesText}>{item.title}</Text>
+            </View>
           </View>
 
           <View style={styles.rows}>
             <Text style={stylesText}>Subtítulo</Text>
-            <Text style={stylesText}>{item.subtitle}</Text>
+            <Text style={stylesText}>
+              {item.subtitle === 'N/A' || item.subtitle === null || item.subtitle === ''
+                ? '-'
+                : item.subtitle}
+            </Text>
           </View>
 
           <View style={styles.rows}>
             <Text style={stylesText}>Cantidad Actual</Text>
             <Text style={stylesText}>
-              {item.currentCount ? item.currentCount : 'N/A'}
+              {item.currentCount ? item.currentCount : '-'}
             </Text>
           </View>
 
@@ -172,7 +178,7 @@ const FullItem = () => {
           <View style={styles.rows}>
             <Text style={stylesText}>Fecha</Text>
             <Text style={stylesText}>
-              {item.lastCountDate ? dateFormated(item.lastCountDate) : 'n/a'}
+              {item.lastCountDate ? dateFormated(item.lastCountDate) : '-'}
             </Text>
           </View>
           <View style={styles.rows}></View>
@@ -224,7 +230,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   textData: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   rows: {
     flexDirection: 'row',
