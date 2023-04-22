@@ -16,6 +16,7 @@ const ItemsList = ({ data, idCompany }) => {
     () => unalterableItems,
     [unalterableItems]
   );
+  const { statusItems } = useSelector((state) => state.item);
 
   return (
     <View style={{ flex: 1 }}>
@@ -25,6 +26,7 @@ const ItemsList = ({ data, idCompany }) => {
         errorSearch={errorSearch}
         styleText={styleText}
         unalterableItems={memoizedUnalterableItems}
+        statusGetItems={statusItems}
       />
     </View>
   );
