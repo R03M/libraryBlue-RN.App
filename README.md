@@ -1,7 +1,7 @@
 # libraryBlue
 
-<p align="center">
-  <img height="250" src="./assets/icon.png" />
+<p align='center'>
+  <img src="./assets/libraryBlue.gif" height="600px"/>
 </p>
 
 #### Es una aplicación movil para la gestión del inventario en una librería/biblioteca. Permite añadir otras librerías/bibliotecas como asociadas para compartir parte del inventario. Además, se implementan diferentes niveles de permisos para diferentes rangos dentro de la organización. La aplicación permite una rápida actualización de los registros de salida de los artículos y dispone de un buscador que permite encontrar artículos según siete etiquetas principales.
