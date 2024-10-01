@@ -9,8 +9,10 @@ const useConfig = () => {
   useEffect(() => {
     const getSettings = async () => {
       const currentTheme = await lsGetItems(LS_CONFIG);
-      dispatch(updateThemeReducer(currentTheme.theme));
-      dispatch(updateUDSReducer(currentTheme.useDeviceSettings));
+      if (currentTheme !== null) {
+        dispatch(updateThemeReducer(currentTheme.theme));
+        dispatch(updateUDSReducer(currentTheme.useDeviceSettings));
+      }
     };
     getSettings();
   }, []);
